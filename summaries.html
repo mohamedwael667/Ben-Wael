@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الملخصات | منصة بن وائل التعليمية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f6f7fb;--card:#fff;--line:#e6e9f0;--text:#101828;--muted:#667085;--orange:#ea580c;--amber:#f59e0b;--grad:linear-gradient(135deg,#f59e0b,#ea580c);--shadow:0 10px 30px rgba(16,24,40,.08)}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+.container{max-width:1200px;margin:auto;padding:0 20px}
+.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top-wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px}
+.logo img{width:46px;height:46px;object-fit:contain}
+.logo b{background:var(--grad);-webkit-background-clip:text;color:transparent}
+.top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:900;font-size:14px;font-family:inherit;cursor:pointer;transition:.3s;border:none}
+.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--text)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--orange)}
+.btn-danger{background:#fff;border:1.5px solid #fecaca;color:#b91c1c}
+.btn-danger:hover{background:#fef2f2}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 8px 20px rgba(234,88,12,.25);width:100%;justify-content:center;padding:14px;font-size:15px}
+.btn-primary:hover{transform:translateY(-3px)}
+main{position:relative;z-index:1;padding:40px 0 70px}
+.page-head{text-align:center;margin-bottom:30px}
+.page-head h1{font-size:clamp(26px,4vw,40px);font-weight:900}
+.page-head h1 i{color:var(--orange)}
+.page-head h1 span{background:var(--grad);-webkit-background-clip:text;color:transparent}
+.page-head p{color:var(--muted);margin-top:8px;font-size:16px}
+.page-head .hint{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:8px 18px;border-radius:50px;background:#fff7ed;border:1px solid #fed7aa;color:#c2410c;font-size:13px;font-weight:900}
+.filters{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:26px}
+.filters select{padding:11px 18px;border-radius:12px;background:#fff;border:1.5px solid var(--line);color:var(--text);font-family:inherit;font-size:14px;font-weight:800;outline:none;cursor:pointer;min-width:160px}
+.count{text-align:center;color:var(--muted);font-size:13.5px;font-weight:800;margin-bottom:20px}
+.count b{color:var(--orange)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.scard{background:#fff;border:1px solid var(--line);border-radius:22px;padding:28px;transition:.35s;cursor:pointer;position:relative;overflow:hidden}
+.scard:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(16,24,40,.12);border-color:rgba(245,158,11,.5)}
+.scard::before{content:'';position:absolute;top:0;right:0;left:0;height:4px;background:var(--grad);transform:scaleX(0);transform-origin:right;transition:.4s}
+.scard:hover::before{transform:scaleX(1)}
+.scard-icon{width:60px;height:60px;border-radius:16px;display:grid;place-items:center;font-size:24px;color:#fff;background:var(--grad);box-shadow:0 8px 20px rgba(234,88,12,.3);margin-bottom:16px}
+.scard h3{font-size:16px;font-weight:900;margin-bottom:8px;line-height:1.6}
+.scard-meta{color:var(--muted);font-size:12.5px;font-weight:700;display:flex;gap:12px;flex-wrap:wrap}
+.scard-meta i{color:var(--orange);margin-left:4px}
+.scard-badge{position:absolute;top:16px;left:16px;font-size:11px;font-weight:900;padding:4px 12px;border-radius:50px}
+.badge-lock{background:var(--grad);color:#fff}
+.badge-open{background:#12b76a;color:#fff}
+.empty{text-align:center;color:var(--muted);padding:60px 20px;background:#fff;border:2px dashed #fed7aa;border-radius:26px}
+.empty i{font-size:50px;color:var(--amber);display:block;margin-bottom:14px}
+.empty h3{font-size:19px;font-weight:900;margin-bottom:8px;color:var(--text)}
+
+/* المودال - عارض الملخص */
+.modal{position:fixed;inset:0;background:rgba(16,24,40,.85);backdrop-filter:blur(8px);display:none;place-items:center;z-index:100;padding:20px}
+.modal.open{display:grid}
+.viewer-box{width:min(1000px,96vw);height:min(90vh,800px);background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;animation:fadeUp .4s ease;position:relative}
+.viewer-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;background:#101828;color:#fff;flex-shrink:0}
+.viewer-head h3{font-size:15px;font-weight:900;flex:1}
+.close-x{width:38px;height:38px;border-radius:10px;background:#fff;border:none;color:#b91c1c;cursor:pointer;font-size:15px;display:grid;place-items:center;flex-shrink:0}
+.viewer-frame{flex:1;position:relative;overflow:hidden}
+.viewer-frame iframe{width:100%;height:100%;border:0}
+.watermark-overlay{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+.wm{position:absolute;color:rgba(234,88,12,.2);font-size:clamp(14px,2.5vw,22px);font-weight:900;transform:rotate(-30deg);white-space:nowrap;user-select:none}
+
+/* كود الملخص */
+.code-box{width:min(440px,95vw);background:#fff;border-radius:24px;padding:34px 28px;box-shadow:0 30px 80px rgba(16,24,40,.3);text-align:center;animation:fadeUp .4s ease}
+.code-box .icon{width:70px;height:70px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:28px;margin:0 auto 16px}
+.code-box h3{font-size:20px;font-weight:900;margin-bottom:6px}
+.code-box p{color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.8}
+.code-box input{width:100%;padding:14px;border-radius:14px;background:#f9fafb;border:2px solid var(--line);color:var(--text);font-family:inherit;font-size:20px;text-align:center;letter-spacing:8px;outline:none;font-weight:900}
+.code-box input:focus{border-color:var(--amber);background:#fff}
+.code-box .close{margin-top:14px;background:none;border:none;color:var(--muted);font-family:inherit;font-weight:800;cursor:pointer;padding:8px;font-size:14px}
+.alert{display:none;padding:12px 16px;border-radius:12px;margin-bottom:14px;font-size:14px;font-weight:800}
+.alert.error{background:#fef2f2;border:1px solid #fecaca;color:#b42318}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.wa-float{position:fixed;bottom:90px;left:28px;width:60px;height:60px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;font-size:30px;z-index:950;box-shadow:0 10px 30px rgba(37,211,102,.4);transition:.3s;animation:waFloat 2.5s ease-in-out infinite}
+@keyframes waFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media(max-width:950px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="container top-wrap">
+    <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
+    <div class="top-actions">
+      <a href="dashboard.html" class="btn btn-ghost"><i class="fa-solid fa-gauge-high"></i> لوحتك</a>
+      <button id="logoutBtn" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="page-head">
+    <h1><span>الملخصات</span> <i class="fa-solid fa-book-open"></i></h1>
+    <p>ملخصات محمية بعلامة مائية — تتعرض جوه المنصة فقط ومفيش تحميل</p>
+    <span class="hint"><i class="fa-solid fa-droplet"></i> أي تسريب بيتعرف صاحبه من العلامة المائية</span>
+  </section>
+
+  <div class="filters">
+    <select id="fTeacher"><option value="">كل المدرسين</option></select>
+    <select id="fSubject"><option value="">كل المواد</option></select>
+  </div>
+  <p class="count">عدد الملخصات: <b id="count">0</b></p>
+
+  <div id="content"><div class="grid" id="grid"></div></div>
+  <div class="empty" id="empty" style="display:none">
+    <i class="fa-solid fa-book"></i>
+    <h3>مفيش ملخصات حاليًا</h3>
+    <p>المدرسون هيضيفوا الملخصات قريبًا</p>
+  </div>
+</main>
+
+<!-- مودال الكود -->
+<div class="modal" id="codeModal">
+  <div class="code-box">
+    <div class="icon"><i class="fa-solid fa-lock"></i></div>
+    <h3 id="codeTitle">ملخص محمي</h3>
+    <p>ادخل كود الوصول الخاص بيك</p>
+    <div class="alert error" id="codeErr"></div>
+    <input id="codeInput" type="text" inputmode="numeric" maxlength="8" placeholder="••••••••" autocomplete="off">
+    <button class="btn btn-primary" id="unlockBtn" style="margin-top:16px"><i class="fa-solid fa-unlock"></i> فتح الملخص</button>
+    <button class="close" id="codeClose">إلغاء</button>
+  </div>
+</div>
+
+<!-- مودال العارض -->
+<div class="modal" id="viewerModal">
+  <div class="viewer-box">
+    <div class="viewer-head">
+      <h3 id="vTitle">—</h3>
+      <button class="close-x" id="viewerClose"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="viewer-frame" id="viewerFrame">
+      <div class="watermark-overlay" id="wmOverlay"></div>
+    </div>
+  </div>
+</div>
+
+<a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20استفسر%20عن%20منصة%20بن%20وائل" target="_blank" class="wa-float"><i class="fa-brands fa-whatsapp"></i></a>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="js/config.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+let me=null,SUMS=[],pendingSum=null;
+let unlocked=[];
+try{unlocked=JSON.parse(localStorage.getItem('bw_sum_unlocked')||'[]')}catch(e){}
+const isUnlocked=id=>unlocked.includes(id);
+const markUnlocked=id=>{if(!unlocked.includes(id)){unlocked.push(id);try{localStorage.setItem('bw_sum_unlocked',JSON.stringify(unlocked))}catch(e){}}};
+
+auth.onAuthStateChanged(async user=>{
+  if(!user){location.href='login.html';return;}
+  let data={};try{data=JSON.parse(localStorage.getItem('bw_user')||'{}')}catch(e){}
+  try{const s=await db.collection('profiles').doc(user.uid).get();if(s.exists)Object.assign(data,s.data())}catch(e){}
+  me={uid:user.uid,name:data.name||user.email.split('@')[0],email:user.email};
+  load();
+});
+
+async function load(){
+  try{
+    const snap=await db.collection('summaries').get();
+    SUMS=[];snap.forEach(d=>SUMS.push(Object.assign({id:d.id},d.data())));
+    SUMS.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  }catch(e){SUMS=[];}
+  populateFilters();render();
+}
+
+function populateFilters(){
+  const ts=new Set(),ss=new Set();
+  SUMS.forEach(s=>{if(s.teacherName)ts.add(s.teacherName);if(s.subject)ss.add(s.subject);});
+  [...ts].sort().forEach(t=>$('fTeacher').innerHTML+=`<option>${t}</option>`);
+  [...ss].sort().forEach(s=>$('fSubject').innerHTML+=`<option>${s}</option>`);
+}
+
+function render(){
+  const t=$('fTeacher').value,s=$('fSubject').value;
+  const list=SUMS.filter(x=>(!t||x.teacherName===t)&&(!s||x.subject===s));
+  $('count').textContent=list.length;
+  if(!list.length){$('content').style.display='none';$('empty').style.display='block';return;}
+  $('content').style.display='block';$('empty').style.display='none';
+  $('grid').innerHTML=list.map(x=>{
+    if(!x.open&&!isUnlocked(x.id)&&!me.vip){askCode(x);}else{viewSum(x);}
+        return `<div class="scard" data-id="${x.id}">
+      <span class="scard-badge ${locked?'badge-lock':'badge-open'}"><i class="fa-solid fa-${locked?'lock':'unlock'}"></i> ${locked?'مقفل':'مفتوح'}</span>
+      <div class="scard-icon"><i class="fa-solid fa-file-pdf"></i></div>
+      <h3>${x.title}</h3>
+      <div class="scard-meta">
+        <span><i class="fa-solid fa-chalkboard-user"></i>${x.teacherName||'مدرس'}</span>
+        <span><i class="fa-solid fa-book"></i>${x.subject||'مادة'}</span>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.scard').forEach(c=>c.onclick=()=>openSum(c.dataset.id));
+}
+
+function openSum(id){
+  const s=SUMS.find(x=>x.id===id);if(!s)return;
+  if(!s.open&&!isUnlocked(s.id)){askCode(s);}else{viewSum(s);}
+}
+
+function askCode(s){
+  pendingSum=s;
+  $('codeTitle').textContent=s.title;
+  $('codeInput').value='';$('codeErr').style.display='none';
+  $('codeModal').classList.add('open');
+  setTimeout(()=>$('codeInput').focus(),100);
+}
+
+async function tryUnlock(){
+  const val=$('codeInput').value.trim();
+  if(!val){showErr('اكتب الكود.');return;}
+  $('unlockBtn').disabled=true;
+  try{
+    const snap=await db.collection('lecture_codes').where('code','==',val).where('lectureId','==',pendingSum.id).get();
+    if(snap.empty){showErr('⚠️ الكود غلط — راجع مدرسك.');return;}
+    const doc=snap.docs[0],data=doc.data();
+    if(data.usedBy&&data.usedBy!==me.uid){showErr('⚠️ الكود مستخدم لحساب تاني.');return;}
+    if(!data.usedBy){await doc.ref.update({usedBy:me.uid,usedByName:me.name,usedAt:new Date().toISOString()});}
+    markUnlocked(pendingSum.id);
+    $('codeModal').classList.remove('open');
+    render();viewSum(pendingSum);
+  }catch(e){showErr('⚠️ '+((e&&e.message)||e));}
+  finally{$('unlockBtn').disabled=false;}
+}
+function showErr(m){$('codeErr').textContent=m;$('codeErr').style.display='block';}
+
+$('unlockBtn').onclick=tryUnlock;
+$('codeInput').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock();});
+$('codeClose').onclick=()=>$('codeModal').classList.remove('open');
+$('codeModal').onclick=e=>{if(e.target.id==='codeModal')$('codeModal').classList.remove('open');};
+
+function viewSum(s){
+  $('vTitle').textContent=s.title;
+  const frame=$('viewerFrame');
+  // أزل أي iframe قديم
+  const oldIf=frame.querySelector('iframe');if(oldIf)oldIf.remove();
+
+  // عرض PDF من Drive
+  const url=s.url||'';
+  let embedUrl='';
+  if(url.includes('drive.google.com')){
+    const m=url.match(/\/d\/([\w-]+)/)||url.match(/[?&]id=([\w-]+)/);
+    if(m)embedUrl='https://drive.google.com/file/d/'+m[1]+'/preview';
+  }else{embedUrl=url;}
+
+  if(embedUrl){
+    const ifr=document.createElement('iframe');
+    ifr.src=embedUrl;ifr.allow='autoplay';ifr.style.cssText='width:100%;height:100%;border:0;position:relative;z-index:1';
+    frame.insertBefore(ifr,frame.firstChild);
+  }
+
+  // العلامة المائية
+  const wm=$('wmOverlay');wm.innerHTML='';
+  const txt=me.name+' • '+me.email;
+  for(let row=0;row<5;row++){
+    for(let col=0;col<4;col++){
+      const d=document.createElement('div');d.className='wm';
+      d.textContent=txt;
+      d.style.top=(10+row*20)+'%';
+      d.style.left=(-5+col*28)+'%';
+      wm.appendChild(d);
+    }
+  }
+
+  $('viewerModal').classList.add('open');
+  document.body.style.overflow='hidden';
+
+  // منع كليك يمين + التصوير
+  frame.oncontextmenu=e=>e.preventDefault();
+}
+
+function closeViewer(){$('viewerModal').classList.remove('open');const f=$('viewerFrame').querySelector('iframe');if(f)f.remove();document.body.style.overflow='';}
+$('viewerClose').onclick=closeViewer;
+$('viewerModal').onclick=e=>{if(e.target.id==='viewerModal')closeViewer();};
+
+$('fTeacher').onchange=render;$('fSubject').onchange=render;
+$('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('viewerModal').classList.contains('open'))closeViewer();if($('codeModal').classList.contains('open'))$('codeModal').classList.remove('open');}});
+// منع Print Screen
+document.addEventListener('keyup',e=>{if(e.key==='PrintScreen'){navigator.clipboard.writeText('');alert('⚠️ التصوير ممنوع — المحتوى محمي بعلامة مائية باسمك');}});
+</script>
+</body>
+</html>

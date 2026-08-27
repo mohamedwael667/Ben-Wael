@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أخبار المنصة | منصة بن وائل التعليمية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f6f7fb;--card:#fff;--line:#e6e9f0;--text:#101828;--muted:#667085;--orange:#ea580c;--amber:#f59e0b;--grad:linear-gradient(135deg,#f59e0b,#ea580c);--shadow:0 10px 30px rgba(16,24,40,.08)}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{text-decoration:none;color:inherit}
+.container{max-width:850px;margin:auto;padding:0 20px}
+.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top-wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px}
+.logo img{width:46px;height:46px;object-fit:contain}
+.logo b{background:var(--grad);-webkit-background-clip:text;color:transparent}
+.top-actions{display:flex;align-items:center;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:900;font-size:14px;font-family:inherit;cursor:pointer;transition:.3s;border:none}
+.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--text)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--orange)}
+.btn-danger{background:#fff;border:1.5px solid #fecaca;color:#b91c1c}
+.btn-danger:hover{background:#fef2f2}
+main{position:relative;z-index:1;padding:40px 0 70px}
+.page-head{text-align:center;margin-bottom:34px}
+.page-head h1{font-size:clamp(26px,4vw,40px);font-weight:900}
+.page-head h1 i{color:var(--orange)}
+.page-head h1 span{background:var(--grad);-webkit-background-clip:text;color:transparent}
+.page-head p{color:var(--muted);margin-top:8px}
+.news-list{display:flex;flex-direction:column;gap:22px}
+.news{border-radius:22px;overflow:hidden;background:#fff;border:1px solid var(--line);transition:.35s;box-shadow:var(--shadow)}
+.news:hover{transform:translateY(-4px);border-color:rgba(245,158,11,.5)}
+.news img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.news-body{padding:26px}
+.news-date{color:var(--muted);font-size:12px;font-weight:800;display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.news-date i{color:var(--orange)}
+.news h3{font-size:19px;font-weight:900;margin-bottom:10px;line-height:1.7}
+.news p{color:var(--muted);line-height:2.1;font-size:15px;white-space:pre-line}
+.empty{text-align:center;color:var(--muted);padding:60px 20px;background:#fff;border:2px dashed #fed7aa;border-radius:26px;display:none}
+.empty i{font-size:50px;color:var(--amber);display:block;margin-bottom:14px}
+.empty h3{font-size:19px;font-weight:900;margin-bottom:8px;color:var(--text)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="container top-wrap">
+    <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
+    <div class="top-actions">
+      <a href="dashboard.html" class="btn btn-ghost"><i class="fa-solid fa-gauge-high"></i> لوحتك</a>
+      <button id="logoutBtn" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="page-head">
+    <h1><span>أخبار المنصة</span> <i class="fa-solid fa-bullhorn"></i></h1>
+    <p>آخر الأخبار والإعلانات الرسمية</p>
+  </section>
+  <div class="news-list" id="newsList"></div>
+  <div class="empty" id="empty"><i class="fa-solid fa-newspaper"></i><h3>مفيش أخبار حاليًا</h3><p>تابعنا قريبًا</p></div>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="js/config.js"></script>
+<script>
+  const $=id=>document.getElementById(id);
+  auth.onAuthStateChanged(user=>{
+    if(!user){location.href='login.html';return;}
+    load();
+  });
+
+  async function load(){
+    try{
+      const snap=await db.collection('news').get();
+      const arr=[];snap.forEach(d=>arr.push(d.data()));
+      arr.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+      if(!arr.length){$('empty').style.display='block';}
+      else{
+        $('newsList').innerHTML=arr.map(n=>`
+          <article class="news">
+            ${n.image?`<img src="${n.image}" alt="" onerror="this.style.display='none'">`:''}
+            <div class="news-body">
+              <div class="news-date"><i class="fa-solid fa-calendar-day"></i>${new Date(n.createdAt).toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+              <h3>${n.title}</h3>
+              <p>${n.content}</p>
+            </div>
+          </article>`).join('');
+      }
+      // علّم كل الأخبار كمقروءة — الجرس هيختفي
+      localStorage.setItem('bw_lastNewsRead',String(Date.now()));
+    }catch(e){$('empty').style.display='block';}
+  }
+
+  $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
+</script>
+</body>
+</html>

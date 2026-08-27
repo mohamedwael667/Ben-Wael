@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة بن وائل التعليمية | تعلّم بذكاء</title>
+<meta name="description" content="منصة تعليمية متكاملة تجمع أفضل المدرسين — محاضرات بأكواد وصول، ملخصات محمية، اختبارات ذكية وحجز حصص">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f6f7fb;--card:#fff;--line:#e6e9f0;--text:#101828;--muted:#667085;--orange:#ea580c;--amber:#f59e0b;--grad:linear-gradient(135deg,#f59e0b,#ea580c);--shadow:0 10px 30px rgba(16,24,40,.08)}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+::selection{background:var(--amber);color:#fff}
+.container{max-width:1200px;margin:auto;padding:0 20px}
+section{padding:90px 0;position:relative}
+a{text-decoration:none;color:inherit}
+
+/* النافبار */
+.navbar{position:fixed;top:0;right:0;left:0;z-index:1000;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);transition:.3s}
+.navbar.scrolled{box-shadow:var(--shadow)}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+.logo{display:flex;align-items:center;gap:12px}
+.logo img{width:52px;height:52px;object-fit:contain}
+.logo-text{display:flex;flex-direction:column;line-height:1.2;font-weight:900;font-size:18px}
+.logo-text b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-text small{color:var(--muted);font-size:11px;font-weight:700}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{color:var(--muted);font-weight:800;font-size:15px;padding:9px 16px;border-radius:10px;transition:.3s}
+.nav-links a:hover,.nav-links a.active{color:var(--orange);background:rgba(234,88,12,.08)}
+.nav-actions{display:flex;align-items:center;gap:12px}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:1001}
+.hamburger span{width:26px;height:3px;background:var(--text);border-radius:3px;transition:.35s}
+.hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+
+/* الأزرار */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border-radius:14px;font-weight:900;font-size:16px;font-family:inherit;transition:.35s;cursor:pointer;border:none;position:relative;overflow:hidden}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 10px 25px rgba(234,88,12,.3)}
+.btn-primary:hover{transform:translateY(-4px);box-shadow:0 16px 35px rgba(234,88,12,.4)}
+.btn-outline{border:2px solid var(--line);color:var(--text);background:#fff}
+.btn-outline:hover{border-color:var(--amber);color:var(--orange);transform:translateY(-4px)}
+.btn-sm{padding:10px 22px;font-size:14px;border-radius:12px}
+.btn-wa{background:#25d366;color:#fff;box-shadow:0 10px 25px rgba(37,211,102,.3)}
+.btn-wa:hover{transform:translateY(-4px)}
+
+/* عداد المتصلين */
+.live-counter{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:50px;background:#ecfdf3;border:1px solid #abefc6;font-size:13px;font-weight:900;color:#067647}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#12b76a;box-shadow:0 0 0 0 rgba(18,183,106,.6);animation:livePulse 2s infinite}
+.live-text{color:var(--muted);font-size:12px}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(18,183,106,.6)}70%{box-shadow:0 0 0 9px rgba(18,183,106,0)}100%{box-shadow:0 0 0 0 rgba(18,183,106,0)}}
+
+/* الهيرو */
+.hero{min-height:100vh;display:flex;align-items:center;padding:150px 0 80px;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(16,24,40,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(16,24,40,.04) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.3;animation:blobMove 18s ease-in-out infinite alternate}
+.blob-1{width:500px;height:500px;background:radial-gradient(circle,#fbbf24,transparent 65%);top:-140px;right:-120px}
+.blob-2{width:420px;height:420px;background:radial-gradient(circle,#fb923c,transparent 65%);bottom:-120px;left:-100px;animation-delay:-9s}
+@keyframes blobMove{to{transform:translate(60px,40px) scale(1.15)}}
+.hero .container{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:9px 22px;border-radius:50px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.4);color:#b45309;font-weight:900;font-size:14px;margin-bottom:22px;animation:fadeUp .8s .1s both}
+.hero-badge i{color:var(--orange)}
+.hero h1{font-size:clamp(34px,5vw,56px);font-weight:900;line-height:1.3;animation:fadeUp .8s .25s both}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{color:var(--muted);font-size:18px;line-height:1.9;margin:18px 0 32px;max-width:560px;animation:fadeUp .8s .4s both}
+.typed-wrap{color:var(--orange);font-weight:900}
+.cursor{animation:blink 1s steps(1) infinite;color:var(--amber)}
+@keyframes blink{50%{opacity:0}}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;animation:fadeUp .8s .55s both}
+.hero-trust{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px;animation:fadeUp .8s .7s both}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:50px;background:#fff;border:1px solid var(--line);font-size:13px;font-weight:800;color:var(--muted);box-shadow:var(--shadow)}
+.chip i{color:var(--amber)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.hero-visual{position:relative;display:grid;place-items:center;animation:fadeUp 1s .4s both}
+.seal{width:min(380px,86%);aspect-ratio:1;border-radius:50%;padding:26px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;box-shadow:0 30px 80px rgba(16,24,40,.12),0 0 60px rgba(245,158,11,.15);animation:float 7s ease-in-out infinite;position:relative;z-index:2}
+.seal img{width:100%;height:100%;object-fit:contain}
+.orbit{position:absolute;width:118%;aspect-ratio:1;border:1.5px dashed rgba(234,88,12,.25);border-radius:50%;animation:spin 30s linear infinite}
+.orbit.o2{width:92%;border-color:rgba(245,158,11,.3);animation:spin 22s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.float-card{position:absolute;z-index:3;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 18px;box-shadow:var(--shadow);animation:float 6s ease-in-out infinite}
+.fc-1{top:6%;right:-2%}
+.fc-2{bottom:10%;left:-4%;animation-delay:-2s}
+.fc-3{top:46%;left:-10%;animation-delay:-4s}
+.float-card i{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:16px;background:var(--grad)}
+.fc-2 i{background:linear-gradient(135deg,#12b76a,#067647)}
+.fc-3 i{background:linear-gradient(135deg,#175cd3,#3b82f6)}
+.float-card b{display:block;font-size:14px;line-height:1.2}
+.float-card small{color:var(--muted);font-size:11px;font-weight:700}
+
+/* عناوين الأقسام */
+.section-head{text-align:center;margin-bottom:56px}
+.section-tag{display:inline-flex;align-items:center;gap:8px;padding:8px 22px;border-radius:50px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);color:#b45309;font-weight:900;font-size:14px;margin-bottom:16px}
+.section-tag i{color:var(--orange)}
+.section-head h2{font-size:clamp(28px,4vw,42px);font-weight:900}
+.section-head h2 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.section-head p{color:var(--muted);max-width:560px;margin:14px auto 0;font-size:17px}
+.section-head .line{width:110px;height:4px;border-radius:4px;background:var(--grad);margin:20px auto 0}
+
+/* الخدمات */
+    <div class="services-grid">
+      <a href="lectures.html" class="card reveal d1"><span class="card-tag">حماية كاملة</span>
+        <div class="card-icon"><i class="fa-solid fa-key"></i></div>
+        <h3>محاضرات بأكواد وصول</h3><p>كل محاضرة تفتح بكود من ٨ أرقام بيسلّمه المدرس لطلابه فقط — وتقبل أي رابط فيديو مش يوتيوب بس.</p>
+      </a>
+      <a href="summaries.html" class="card reveal d2"><span class="card-tag">ضد التسريب</span>
+        <div class="card-icon"><i class="fa-solid fa-file-shield"></i></div>
+        <h3>ملخصات محمية</h3><p>الملخصات بتتعرض جوه المنصة فقط وعليها علامة مائية باسمك — أي تسريب يتعرف صاحبه فورًا.</p>
+      </a>
+      <a href="quizzes.html" class="card reveal d3"><span class="card-tag">تصحيح فوري</span>
+        <div class="card-icon"><i class="fa-solid fa-file-pen"></i></div>
+        <h3>اختبارات ذكية</h3><p>اختبارات إلكترونية بتصحيح تلقائي ونتيجة فورية بتتحفظ في ملفك وتتابع منها مستواك.</p>
+      </a>
+      <a href="booking.html" class="card reveal d4"><span class="card-tag">بضغطة زر</span>
+        <div class="card-icon"><i class="fa-solid fa-calendar-check"></i></div>
+        <h3>حجز الحصص</h3><p>احجز حصة مع مدرسك في ثواني، والمدرس بيأكد أو يرفض من لوحته الخاصة.</p>
+      </a>
+    </div>
+
+/* كيف تعمل */
+#how{background:#fff;border-block:1px solid var(--line)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;position:relative}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:22px;padding:36px 26px;text-align:center;position:relative;transition:.4s}
+.step:hover{transform:translateY(-8px);box-shadow:var(--shadow)}
+.step-num{width:60px;height:60px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:24px;font-weight:900;color:#fff;background:var(--grad);box-shadow:0 10px 25px rgba(234,88,12,.3)}
+.step h3{font-size:19px;font-weight:900;margin-bottom:10px}
+.step p{color:var(--muted);font-size:14.5px;line-height:1.9}
+
+/* المدرسون */
+.t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.t-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px 26px;text-align:center;transition:.4s}
+.t-card:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(16,24,40,.12);border-color:rgba(245,158,11,.5)}
+.t-ava{width:86px;height:86px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;font-size:36px;font-weight:900;color:#fff;background:var(--grad);box-shadow:0 10px 25px rgba(234,88,12,.3)}
+.t-card h3{font-size:19px;font-weight:900}
+.t-sub{display:inline-block;margin:8px 0 10px;font-size:12px;font-weight:900;color:#b45309;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);padding:4px 14px;border-radius:50px}
+.t-card p{color:var(--muted);font-size:14px;line-height:1.8}
+.teachers-empty{display:none;text-align:center;padding:40px 20px;background:var(--card);border:1px dashed var(--line);border-radius:22px}
+.teachers-empty i{font-size:44px;color:var(--amber);margin-bottom:14px}
+.teachers-empty h3{font-size:20px;font-weight:900;margin-bottom:8px}
+.teachers-empty p{color:var(--muted);margin-bottom:20px}
+
+/* انضم كمدرس */
+.join-box{border-radius:30px;padding:60px 40px;background:var(--grad);color:#fff;text-align:center;position:relative;overflow:hidden;box-shadow:0 25px 60px rgba(234,88,12,.35)}
+.join-box::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.15) 1px,transparent 1px);background-size:22px 22px}
+.join-box h2{font-size:clamp(24px,3.5vw,38px);font-weight:900;margin-bottom:14px;position:relative}
+.join-box p{max-width:600px;margin:0 auto 28px;font-size:17px;line-height:1.9;opacity:.95;position:relative}
+.join-box .btn{position:relative}
+
+/* الإحصائيات */
+.stats-panel{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:50px 40px;box-shadow:var(--shadow)}
+.stat{text-align:center}
+.stat i{font-size:30px;color:var(--amber);margin-bottom:12px;display:block}
+.stat .num{font-size:42px;font-weight:900;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat p{color:var(--muted);font-weight:800;margin-top:6px}
+
+/* الفوتر */
+footer{background:#101828;color:#d0d5dd;padding:60px 0 0;margin-top:0}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1.2fr;gap:40px;padding-bottom:44px}
+.footer-grid h4{color:#fff;font-size:17px;font-weight:900;margin-bottom:18px}
+.f-about p{line-height:1.9;margin:14px 0;font-size:14.5px}
+.f-links a{display:block;padding:6px 0;font-size:14.5px;transition:.3s}
+.f-links a:hover{color:var(--amber);padding-right:6px}
+.f-contact li{list-style:none;display:flex;align-items:center;gap:12px;padding:7px 0;font-size:14.5px}
+.f-contact i{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(245,158,11,.15);color:var(--amber)}
+.f-contact a{color:inherit;transition:.3s}
+.f-contact a:hover{color:var(--amber)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding:20px 0;text-align:center;font-size:14px}
+.footer-bottom b{color:var(--amber)}
+
+/* عام */
+.reveal{opacity:0;transform:translateY(45px);transition:opacity .9s,transform .9s}
+.reveal.active{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+#backTop{position:fixed;bottom:28px;left:28px;width:50px;height:50px;border-radius:14px;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:18px;opacity:0;visibility:hidden;transform:translateY(20px);transition:.4s;z-index:900;cursor:pointer;border:none;box-shadow:0 10px 25px rgba(234,88,12,.4)}
+#backTop.show{opacity:1;visibility:visible;transform:none}
+
+/* زرار الواتساب العائم */
+.wa-float{position:fixed;bottom:90px;left:28px;width:60px;height:60px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;font-size:30px;z-index:950;box-shadow:0 10px 30px rgba(37,211,102,.4);transition:.3s;animation:waFloat 2.5s ease-in-out infinite}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 15px 40px rgba(37,211,102,.55)}
+@keyframes waFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+@media(max-width:1024px){.services-grid,.t-grid{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:1fr}.stats-panel{grid-template-columns:repeat(2,1fr);gap:36px}.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:992px){.hero .container{grid-template-columns:1fr;text-align:center}.hero-sub{margin-inline:auto}.hero-btns,.hero-trust{justify-content:center}.hero-visual{margin-top:50px}.fc-3{display:none}}
+@media(max-width:900px){.nav-links{position:fixed;top:0;right:-100%;width:min(320px,80vw);height:100vh;background:#fff;flex-direction:column;align-items:stretch;padding:100px 26px;gap:8px;transition:right .45s;z-index:950;box-shadow:-20px 0 60px rgba(0,0,0,.15)}.nav-links.open{right:0}.nav-links a{font-size:17px;padding:14px;text-align:center}.hamburger{display:flex}}
+@media(max-width:640px){.services-grid,.t-grid,.stats-panel,.footer-grid{grid-template-columns:1fr}.nav-actions .btn{display:none}.live-text{display:none}}
+</style>
+</head>
+<body>
+
+<header class="navbar" id="navbar">
+  <div class="container nav-wrap">
+    <a href="#hero" class="logo">
+      <img src="logo.png" alt="بن وائل" data-fallback>
+      <span class="logo-text"><b>بن وائل</b><small>منصة تعليمية متكاملة</small></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#hero" class="active">الرئيسية</a>
+      <a href="#services">خدماتنا</a>
+      <a href="#how">كيف تعمل؟</a>
+      <a href="#teachers">المدرسون</a>
+      <a href="#join">انضم كمدرس</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="live-counter" id="liveCounter" style="display:none">
+        <span class="live-dot"></span><span id="onlineCount">0</span><span class="live-text">متصل الآن</span>
+      </div>
+      <a href="login.html" class="btn btn-outline btn-sm">تسجيل الدخول</a>
+      <a href="register.html" class="btn btn-primary btn-sm">ابدأ الآن</a>
+      <button class="hamburger" id="hamburger" aria-label="القائمة"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <div class="container">
+    <div>
+      <span class="hero-badge"><i class="fa-solid fa-graduation-cap"></i> منصة تعليمية بمعايير احترافية</span>
+      <h1>تعلّم بذكاء مع<br><span class="grad-text">منصة بن وائل</span></h1>
+      <p class="hero-sub">كل ما تحتاجه للنجاح في مكان واحد: <span class="typed-wrap"><span id="typed"></span><span class="cursor">|</span></span></p>
+      <div class="hero-btns">
+        <a href="register.html" class="btn btn-primary">أنشئ حسابك مجانًا <i class="fa-solid fa-rocket"></i></a>
+        <a href="#how" class="btn btn-outline">كيف تعمل المنصة؟</a>
+      </div>
+      <div class="hero-trust">
+        <span class="chip"><i class="fa-solid fa-key"></i> محتوى محمي بأكواد</span>
+        <span class="chip"><i class="fa-solid fa-shield-halved"></i> ملخصات بعلامة مائية</span>
+        <span class="chip"><i class="fa-solid fa-bolt"></i> تصحيح فوري</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="orbit"></div><div class="orbit o2"></div>
+      <div class="seal"><img src="logo.png" alt="شعار بن وائل" data-fallback></div>
+      <div class="float-card fc-1"><i class="fa-solid fa-video"></i><div><b>محاضرات بأكواد وصول</b><small>لكل محاضرة كود خاص</small></div></div>
+      <div class="float-card fc-2"><i class="fa-solid fa-file-shield"></i><div><b>ملخصات محمية</b><small>تُعرض ولا تُسرّب</small></div></div>
+      <div class="float-card fc-3"><i class="fa-solid fa-chart-line"></i><div><b>متابعة النتائج</b><small>اعرف مستواك فورًا</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag"><i class="fa-solid fa-shapes"></i> خدماتنا</span>
+      <h2>ليه <span>بن وائل</span> مختلفة؟</h2>
+      <p>منصة مبنية على الحماية والاحترافية — محتواك حقك، وإحنا بنحميه</p>
+      <div class="line"></div>
+    </div>
+    <div class="services-grid">
+      <div class="card reveal d1"><span class="card-tag">حماية كاملة</span>
+        <div class="card-icon"><i class="fa-solid fa-key"></i></div>
+        <h3>محاضرات بأكواد وصول</h3><p>كل محاضرة تفتح بكود من ٨ أرقام بيسلّمه المدرس لطلابه فقط — وتقبل أي رابط فيديو مش يوتيوب بس.</p>
+      </div>
+      <div class="card reveal d2"><span class="card-tag">ضد التسريب</span>
+        <div class="card-icon"><i class="fa-solid fa-file-shield"></i></div>
+        <h3>ملخصات محمية</h3><p>الملخصات بتتعرض جوه المنصة فقط وعليها علامة مائية باسمك — أي تسريب يتعرف صاحبه فورًا.</p>
+      </div>
+      <div class="card reveal d3"><span class="card-tag">تصحيح فوري</span>
+        <div class="card-icon"><i class="fa-solid fa-file-pen"></i></div>
+        <h3>اختبارات ذكية</h3><p>اختبارات إلكترونية بتصحيح تلقائي ونتيجة فورية بتتحفظ في ملفك وتتابع منها مستواك.</p>
+      </div>
+      <div class="card reveal d4"><span class="card-tag">بضغطة زر</span>
+        <div class="card-icon"><i class="fa-solid fa-calendar-check"></i></div>
+        <h3>حجز الحصص</h3><p>احجز حصة مع مدرسك في ثواني، والمدرس بيأكد أو يرفض من لوحته الخاصة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag"><i class="fa-solid fa-route"></i> كيف تعمل؟</span>
+      <h2>تلت خطوات <span>وتبدأ</span></h2>
+      <div class="line"></div>
+    </div>
+    <div class="steps">
+      <div class="step reveal d1"><div class="step-num">١</div><h3>أنشئ حسابك</h3><p>سجّل مجانًا باسمك وبريدك الإلكتروني في أقل من دقيقة.</p></div>
+      <div class="step reveal d2"><div class="step-num">٢</div><h3>استلم كود الوصول</h3><p>مدرسك بيسلّمك كود من ٨ أرقام لكل محاضرة أو ملخص — ده مفتاحك الخاص.</p></div>
+      <div class="step reveal d3"><div class="step-num">٣</div><h3>ابدأ التعلم</h3><p>شاهد المحاضرات، راجع الملخصات، حل الاختبارات وتابع نتايجك أول بأول.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="teachers">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag"><i class="fa-solid fa-chalkboard-user"></i> المدرسون</span>
+      <h2>نخبة <span>المدرسين</span></h2>
+      <p>مدرسون معتمدون بيقدّموا محتواهم حصريًا عبر المنصة</p>
+      <div class="line"></div>
+    </div>
+    <div class="t-grid" id="teachersGrid"></div>
+    <div class="teachers-empty" id="teachersEmpty">
+      <i class="fa-solid fa-user-plus"></i>
+      <h3>نستقبل مدرسين جدد</h3>
+      <p>هل أنت مدرس وتريد توصيل محتواك لآلاف الطلاب بحماية كاملة؟ تواصل معنا وانضم للمنصة.</p>
+      <a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20انضم%20كمدرس%20في%20منصة%20بن%20وائل" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> تواصل معنا واتساب</a>
+    </div>
+  </div>
+</section>
+
+<section id="stats">
+  <div class="container">
+    <div class="stats-panel reveal">
+      <div class="stat"><i class="fa-solid fa-users"></i><span class="num"><span class="counter" data-target="5000">0</span>+</span><p>طالب</p></div>
+      <div class="stat"><i class="fa-solid fa-video"></i><span class="num"><span class="counter" data-target="800">0</span>+</span><p>محاضرة محمية</p></div>
+      <div class="stat"><i class="fa-solid fa-file-pen"></i><span class="num"><span class="counter" data-target="350">0</span>+</span><p>اختبار ذكي</p></div>
+      <div class="stat"><i class="fa-solid fa-chalkboard-user"></i><span class="num"><span class="counter" data-target="40">0</span>+</span><p>مدرس معتمد</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="container">
+    <div class="join-box reveal">
+      <h2>هل أنت مدرس؟ 🎓</h2>
+      <p>انضم لمنصة بن وائل وقدّم محاضراتك وملخصاتك لآلاف الطلاب — محتواك محمي بأكواد وصول وعلامات مائية، وإنت متفرغ تمامًا للتدريس.</p>
+      <a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20انضم%20كمدرس%20في%20منصة%20بن%20وائل" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> انضم الآن عبر واتساب</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#hero" class="logo" style="filter:brightness(10)">
+          <img src="logo.png" alt="بن وائل" data-fallback style="width:48px;height:48px;object-fit:contain">
+          <span class="logo-text"><b>بن وائل</b><small style="color:#98a2b3">منصة تعليمية متكاملة</small></span>
+        </a>
+        <p class="f-about">منصة تعليمية احترافية بتجمع أفضل المدرسين في مكان واحد — محتوى محمي، اختبارات ذكية، ومتابعة مستمرة لمستوى الطالب.</p>
+      </div>
+      <div class="f-links">
+        <h4>روابط سريعة</h4>
+        <a href="#services">خدماتنا</a>
+        <a href="#how">كيف تعمل؟</a>
+        <a href="#teachers">المدرسون</a>
+        <a href="login.html">تسجيل الدخول</a>
+        <a href="register.html">إنشاء حساب</a>
+      </div>
+      <div>
+        <h4>تواصل معنا</h4>
+        <ul class="f-contact">
+          <li><i class="fa-solid fa-phone"></i> <a href="tel:01032850095">01032850095</a></li>
+          <li><i class="fa-brands fa-whatsapp"></i> <a href="https://wa.me/201032850095" target="_blank">01032850095</a></li>
+          <li><i class="fa-solid fa-envelope"></i> <a href="mailto:mohamedwael01284701640@gmail.com">mohamedwael01284701640@gmail.com</a></li>
+          <li><i class="fa-solid fa-clock"></i> من 7 صباحًا لـ 9 مساءً</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">جميع الحقوق محفوظة © 2026 <b>منصة بن وائل التعليمية</b> 🎓</div>
+  </div>
+</footer>
+
+<button id="backTop" aria-label="للأعلى"><i class="fa-solid fa-arrow-up"></i></button>
+
+<a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20استفسر%20عن%20منصة%20بن%20وائل" target="_blank" class="wa-float" aria-label="تواصل عبر واتساب"><i class="fa-brands fa-whatsapp"></i></a>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="js/config.js"></script>
+<script>
+// لوجو بديل لو الصورة مش موجودة
+const LOGO_FALLBACK="data:image/svg+xml,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='#f59e0b'/><text x='50' y='68' font-family='Arial' font-size='48' font-weight='bold' text-anchor='middle' fill='#fff'>ب</text></svg>");
+document.querySelectorAll('img[data-fallback]').forEach(im=>im.addEventListener('error',()=>{im.src=LOGO_FALLBACK},{once:true}));
+
+// النافبار
+const navbar=document.getElementById('navbar'),backTop=document.getElementById('backTop');
+window.addEventListener('scroll',()=>{
+  navbar.classList.toggle('scrolled',scrollY>30);
+  backTop.classList.toggle('show',scrollY>600);
+});
+backTop.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+
+// الموبايل
+const hamburger=document.getElementById('hamburger'),navLinks=document.getElementById('navLinks');
+hamburger.onclick=()=>{navLinks.classList.toggle('open');hamburger.classList.toggle('active')};
+navLinks.querySelectorAll('a').forEach(a=>a.onclick=()=>{navLinks.classList.remove('open');hamburger.classList.remove('active')});
+
+// الظهور عند السكرول
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('active');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// العدادات
+const cio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target,target=+el.dataset.target,dur=2000,start=performance.now();
+  (function step(now){
+    const p=Math.min((now-start)/dur,1);
+    el.textContent=Math.floor(target*(1-Math.pow(1-p,3))).toLocaleString('en-US');
+    if(p<1)requestAnimationFrame(step);
+  })(start);
+  cio.unobserve(el);
+}),{threshold:.5});
+document.querySelectorAll('.counter').forEach(el=>cio.observe(el));
+
+// الكتابة
+const words=['محاضرات بأكواد وصول','ملخصات محمية','اختبارات ذكية','حجز حصص مع مدرسك'];
+let wi=0,ci=0,del=false;const typedEl=document.getElementById('typed');
+(function type(){
+  const w=words[wi];
+  if(!del){typedEl.textContent=w.slice(0,++ci);if(ci===w.length){del=true;setTimeout(type,1600);return}}
+  else{typedEl.textContent=w.slice(0,--ci);if(ci===0){del=false;wi=(wi+1)%words.length}}
+  setTimeout(type,del?45:110);
+})();
+
+// الرابط النشط
+const secs=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  let cur='hero';
+  secs.forEach(s=>{if(scrollY>=s.offsetTop-150)cur=s.id});
+  navLinks.querySelectorAll('a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+});
+
+// عرض المدرسين من قاعدة البيانات
+if(typeof firebase!=='undefined'&&firebase.firestore){
+  firebase.firestore().collection('teachers').get().then(snap=>{
+    if(snap.empty){document.getElementById('teachersEmpty').style.display='block';return;}
+    const arr=[];snap.forEach(d=>arr.push(d.data()));
+    document.getElementById('teachersGrid').innerHTML=arr.map(t=>`
+      <div class="t-card reveal active">
+        <div class="t-ava">${(t.name||'م').trim().charAt(0)}</div>
+        <h3>${t.name}</h3>
+        <span class="t-sub">${t.subject||'مدرس'}</span>
+        <p>${t.bio||''}</p>
+      </div>`).join('');
+  }).catch(()=>{document.getElementById('teachersEmpty').style.display='block';});
+}
+
+// عداد المتصلين
+(function(){
+  const counter=document.getElementById('liveCounter'),countEl=document.getElementById('onlineCount');
+  if(typeof firebase!=='undefined'&&firebase.firestore){
+    const db=firebase.firestore(),ref=db.collection('presence');
+    const sid='s_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);
+    const me=ref.doc(sid);
+    me.set({lastActive:Date.now()}).then(()=>counter.style.display='inline-flex').catch(()=>{counter.style.display='inline-flex';countEl.textContent=Math.floor(Math.random()*20)+5;});
+    setInterval(()=>me.update({lastActive:Date.now()}).catch(()=>{}),60000);
+    window.addEventListener('beforeunload',()=>me.delete().catch(()=>{}));
+    const upd=()=>ref.where('lastActive','>=',Date.now()-600000).get().then(s=>countEl.textContent=s.size).catch(()=>{});
+    upd();setInterval(upd,30000);
+  }
+})();
+
+// شريط المستخدم لو مسجل دخول
+(function(){
+  const raw=localStorage.getItem('bw_user');if(!raw)return;
+  let u;try{u=JSON.parse(raw)}catch(e){return}
+  const first=String(u.name||'طالب').split(' ')[0];
+  const st=document.createElement('style');
+  st.textContent='.user-chip{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:12px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.45);color:#b45309;font-weight:900;font-size:14px;transition:.3s}.user-chip:hover{background:rgba(245,158,11,.2)}#logoutBtn{background:#fff;border:1px solid #fecdca;color:#b42318;border-radius:12px;padding:9px 16px;font-family:inherit;font-weight:900;font-size:14px;cursor:pointer;transition:.3s}#logoutBtn:hover{background:#fef3f2}';
+  document.head.appendChild(st);
+  const dest=u.role==='admin'?'admin.html':(u.role==='teacher'?'teacher.html':'dashboard.html');
+  let html='<a class="user-chip" href="'+dest+'"><i class="fa-solid fa-gauge-high"></i> أهلاً، '+first+'</a>';
+  if(u.role==='admin')html+='<a class="user-chip" style="background:rgba(23,92,211,.08);border-color:rgba(23,92,211,.4);color:#175cd3" href="admin.html"><i class="fa-solid fa-user-shield"></i> الأدمن</a>';
+  html+='<button id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>';
+  const nav=document.querySelector('.nav-actions');
+  nav.innerHTML=html+nav.innerHTML;
+  nav.querySelectorAll('a[href="login.html"],a[href="register.html"]').forEach(a=>a.style.display='none');
+  document.getElementById('logoutBtn').onclick=()=>{localStorage.removeItem('bw_user');if(typeof firebase!=='undefined')firebase.auth().signOut();location.reload();};
+})();
+</script>
+
+<!-- جرس الأخبار -->
+<script>
+(function(){
+  if(!localStorage.getItem('bw_user'))return;
+  const last=+(localStorage.getItem('bw_lastNewsRead')||0);
+  const st=document.createElement('style');
+  st.textContent='#newsBell{position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;display:grid;place-items:center;font-size:20px;cursor:pointer;z-index:950;box-shadow:0 10px 30px rgba(234,88,12,.4);border:none;transition:.3s}#newsBell:hover{transform:translateY(-4px)}#newsBell .badge{position:absolute;top:-4px;left:-4px;min-width:22px;height:22px;border-radius:50px;background:#ef4444;color:#fff;font-size:12px;font-weight:900;display:none;place-items:center;padding:0 6px;border:2px solid #fff}#newsToast{position:fixed;bottom:96px;right:28px;max-width:320px;background:#fff;border:1px solid #fed7aa;border-radius:16px;padding:14px 18px;z-index:950;box-shadow:0 20px 50px rgba(16,24,40,.2);display:none;cursor:pointer}#newsToast b{color:#c2410c;font-size:14px;display:block;margin-bottom:4px}#newsToast p{color:#101828;font-size:13px;font-weight:700}';
+  document.head.appendChild(st);
+  const bell=document.createElement('button');bell.id='newsBell';
+  bell.innerHTML='<i class="fa-solid fa-bell"></i><span class="badge">0</span>';
+  document.body.appendChild(bell);
+  bell.onclick=()=>{location.href='news.html';};
+  const toast=document.createElement('div');toast.id='newsToast';
+  document.body.appendChild(toast);
+  toast.onclick=()=>{location.href='news.html';};
+  if(typeof firebase!=='undefined'&&firebase.firestore){
+    firebase.firestore().collection('news').get().then(snap=>{
+      let unread=0,latest=null;
+      snap.forEach(d=>{const n=d.data(),t=new Date(n.createdAt).getTime();if(t>last){unread++;if(!latest||t>new Date(latest.createdAt).getTime())latest=n;}});
+      if(unread>0){
+        const b=bell.querySelector('.badge');b.style.display='grid';b.textContent=unread;
+        if(latest){
+          toast.innerHTML='<b>📢 خبر جديد من المنصة</b><p>'+latest.title+'</p>';
+          toast.style.display='block';
+          setTimeout(()=>{toast.style.display='none';},8000);
+        }
+      }
+    }).catch(()=>{});
+  }
+})();
+</script>
+</body>
+</html>

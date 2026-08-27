@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الأدمن | منصة بن وائل التعليمية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f6f7fb;--card:#fff;--line:#e6e9f0;--text:#101828;--muted:#667085;--orange:#ea580c;--amber:#f59e0b;--grad:linear-gradient(135deg,#f59e0b,#ea580c);--shadow:0 10px 30px rgba(16,24,40,.08)}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{text-decoration:none;color:inherit}
+.container{max-width:1200px;margin:auto;padding:0 20px}
+.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top-wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px}
+.logo img{width:46px;height:46px;object-fit:contain}
+.logo b{background:var(--grad);-webkit-background-clip:text;color:transparent}
+.top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:900;font-size:14px;font-family:inherit;cursor:pointer;transition:.3s;border:none}
+.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--text)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--orange)}
+.btn-danger{background:#fff;border:1.5px solid #fecaca;color:#b91c1c}
+.btn-danger:hover{background:#fef2f2}
+main{padding:40px 0 70px;position:relative;z-index:1}
+.page-head{margin-bottom:28px}
+.page-head h1{font-size:clamp(24px,4vw,36px);font-weight:900}
+.page-head h1 i{color:var(--orange)}
+.page-head p{color:var(--muted);margin-top:6px}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:30px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;text-align:center;transition:.3s}
+.stat:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.stat i{font-size:24px;color:var(--orange);margin-bottom:10px;display:block}
+.stat b{display:block;font-size:24px;font-weight:900}
+.stat span{color:var(--muted);font-size:12px;font-weight:800}
+.mgmt{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:30px}
+.mgmt a{background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:26px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;transition:.35s}
+.mgmt a:hover{transform:translateY(-6px);border-color:var(--amber);box-shadow:0 15px 35px rgba(16,24,40,.1)}
+.mgmt i{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:22px;color:#fff;background:var(--grad);box-shadow:0 8px 20px rgba(234,88,12,.3)}
+.mgmt b{font-size:15px;font-weight:900}
+.mgmt small{color:var(--muted);font-size:12px;font-weight:700}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:26px;align-items:start}
+.card-glass{background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:var(--shadow)}
+.card-glass h2{font-size:17px;font-weight:900;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.card-glass h2 i{color:var(--orange)}
+.list{display:flex;flex-direction:column;gap:12px}
+.item{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.item-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:4px}
+.item-top b{font-size:14.5px;font-weight:900}
+.item-meta{color:var(--muted);font-size:12.5px;font-weight:700}
+.st{font-size:11px;font-weight:900;padding:4px 12px;border-radius:50px}
+.st.pending{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.st.approved{background:#ecfdf3;color:#067647;border:1px solid #abefc6}
+.st.cancelled{background:#fef2f2;color:#b42318;border:1px solid #fecaca}
+.item-actions{display:flex;gap:8px;margin-top:10px}
+.ok,.no{border-radius:10px;padding:7px 14px;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer;transition:.3s;background:none}
+.ok{border:1.5px solid #abefc6;color:#067647}.ok:hover{background:#ecfdf3}
+.no{border:1.5px solid #fecaca;color:#b91c1c}.no:hover{background:#fef2f2}
+.muted{color:var(--muted);font-size:14px}
+@media(max-width:1024px){.stats{grid-template-columns:repeat(3,1fr)}.mgmt{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}.mgmt{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="container top-wrap">
+    <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
+    <div class="top-actions">
+      <a href="index.html" class="btn btn-ghost"><i class="fa-solid fa-house"></i> عرض الموقع</a>
+      <a href="dashboard.html" class="btn btn-ghost"><i class="fa-solid fa-gauge-high"></i> لوحتي</a>
+      <button id="logoutBtn" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="page-head">
+    <h1>لوحة الأدمن <i class="fa-solid fa-user-shield"></i></h1>
+    <p>تحكم كامل في المنصة: المحتوى، الأكواد، الحجوزات، الاشتراكات، والطلاب</p>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><i class="fa-solid fa-users"></i><b id="cStudents">0</b><span>طالب مسجل</span></div>
+    <div class="stat"><i class="fa-solid fa-chalkboard-user"></i><b id="cTeachers">0</b><span>مدرس</span></div>
+    <div class="stat"><i class="fa-solid fa-video"></i><b id="cLectures">0</b><span>محاضرة</span></div>
+    <div class="stat"><i class="fa-solid fa-book-open"></i><b id="cSummaries">0</b><span>ملخص</span></div>
+    <div class="stat"><i class="fa-solid fa-key"></i><b id="cUsed">0</b><span>أكواد مستخدمة</span></div>
+    <div class="stat"><i class="fa-solid fa-hourglass-half"></i><b id="cPending">0</b><span>حجوزات معلقة</span></div>
+  </div>
+
+  <div class="mgmt">
+    <a href="admin-lectures.html"><i class="fa-solid fa-video"></i><b>إدارة المحاضرات</b><small>إضافة + توليد أكواد فردية</small></a>
+    <a href="admin-summaries.html"><i class="fa-solid fa-book-open"></i><b>إدارة الملخصات</b><small>ملخصات محمية بعلامة مائية</small></a>
+    <a href="admin-quizzes.html"><i class="fa-solid fa-file-pen"></i><b>صانع الاختبارات</b><small>أسئلة + تصحيح فوري</small></a>
+    <a href="admin-news.html"><i class="fa-solid fa-bullhorn"></i><b>نشر الأخبار</b><small>إشعارات فورية للطلاب</small></a>
+    <a href="admin-teachers.html"><i class="fa-solid fa-chalkboard-user"></i><b>إدارة المدرسين</b><small>حسابات دخول للمدرسين</small></a>
+    <a href="admin-subs.html"><i class="fa-solid fa-crown"></i><b>إدارة الاشتراكات</b><small>تفعيل VIP / رفض</small></a>
+    <a href="#bookings"><i class="fa-solid fa-calendar-check"></i><b>إدارة الحجوزات</b><small>تأكيد / رفض</small></a>
+  </div>
+
+  <div class="grid2">
+    <div class="card-glass" id="bookings">
+      <h2><i class="fa-solid fa-calendar-check"></i> حجوزات الطلاب</h2>
+      <div id="booksList" class="list"><p class="muted">ثواني بنحمّل…</p></div>
+    </div>
+    <div class="card-glass">
+      <h2><i class="fa-solid fa-users"></i> آخر الطلاب المسجلين</h2>
+      <div id="studentsList" class="list"><p class="muted">ثواني بنحمّل…</p></div>
+    </div>
+  </div>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="js/config.js"></script>
+<script>
+  const $=id=>document.getElementById(id);
+  const ADMIN_EMAIL="admin@academy.com";
+
+  auth.onAuthStateChanged(user=>{
+    if(!user){location.href='login.html';return;}
+    if(user.email!==ADMIN_EMAIL){alert('⚠️ الصفحة دي للأدمن بس.');location.href='dashboard.html';return;}
+    loadStats();loadBookings();
+  });
+
+  async function loadStats(){
+    try{
+      const [stu,tea,lec,sum,codes,books]=await Promise.all([
+        db.collection('profiles').where('role','==','student').get(),
+        db.collection('profiles').where('role','==','teacher').get(),
+        db.collection('lectures').get(),
+        db.collection('summaries').get(),
+        db.collection('lecture_codes').get(),
+        db.collection('bookings').where('status','==','pending').get()
+      ]);
+      let used=0;codes.forEach(c=>{if(c.data().usedBy)used++;});
+      $('cStudents').textContent=stu.size;
+      $('cTeachers').textContent=tea.size;
+      $('cLectures').textContent=lec.size;
+      $('cSummaries').textContent=sum.size;
+      $('cUsed').textContent=used+'/'+codes.size;
+      $('cPending').textContent=books.size;
+
+      const arr=[];stu.forEach(d=>arr.push(d.data()));
+      arr.sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0));
+      if(!arr.length){$('studentsList').innerHTML='<p class="muted">لسه مفيش طلاب مسجلين.</p>';}
+      else{
+        $('studentsList').innerHTML=arr.slice(0,8).map(s=>`
+          <div class="item">
+            <div class="item-top"><b>${s.name||'—'}</b></div>
+            <p class="item-meta">${s.email||''} • انضم ${s.createdAt?new Date(s.createdAt).toLocaleDateString('ar-EG',{day:'numeric',month:'long'}):'—'}</p>
+          </div>`).join('');
+      }
+    }catch(e){console.warn(e);}
+  }
+
+  async function loadBookings(){
+    const box=$('booksList');
+    try{
+      const snap=await db.collection('bookings').get();
+      const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
+      arr.sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0));
+      if(!arr.length){box.innerHTML='<p class="muted">مفيش حجوزات حاليًا.</p>';return;}
+      box.innerHTML=arr.map(b=>{
+        const st=b.status==='approved'?'مؤكد':b.status==='cancelled'?'مرفوض':'قيد المراجعة';
+        return `<div class="item">
+          <div class="item-top"><b>${b.student||'طالب'}</b><span class="st ${b.status||'pending'}">${st}</span></div>
+          <p class="item-meta">${b.doctor||''} • ${b.date?new Date(b.date).toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'}):''} • ${b.time||''}</p>
+          <div class="item-actions">
+            ${b.status!=='approved'?`<button class="ok" data-a="ok" data-id="${b.id}"><i class="fa-solid fa-check"></i> تأكيد</button>`:''}
+            ${b.status!=='cancelled'?`<button class="no" data-a="no" data-id="${b.id}"><i class="fa-solid fa-xmark"></i> رفض</button>`:''}
+          </div>
+        </div>`;
+      }).join('');
+      box.querySelectorAll('button').forEach(btn=>btn.onclick=async()=>{
+        btn.disabled=true;
+        await db.collection('bookings').doc(btn.dataset.id).update({status:btn.dataset.a==='ok'?'approved':'cancelled'});
+        loadBookings();loadStats();
+      });
+    }catch(e){box.innerHTML='<p class="muted">خطأ في تحميل الحجوزات.</p>';}
+  }
+
+  $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
+</script>
+</body>
+</html>
