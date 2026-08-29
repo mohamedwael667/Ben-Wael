@@ -75,7 +75,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 </style>
 </head>
 <body>
-
 <header class="top">
   <div class="container top-wrap">
     <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
@@ -85,13 +84,11 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </header>
-
 <main class="container">
   <section class="page-head">
     <h1><span>الاختبارات</span> <i class="fa-solid fa-file-pen"></i></h1>
     <p>حل الاختبارات واعرف نتيجتك فورًا — نتايجك بتتحفظ في ملفك</p>
   </section>
-
   <div id="listView">
     <div class="filters">
       <select id="fTeacher"><option value="">كل المدرسين</option></select>
@@ -101,7 +98,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     <div class="quizzes" id="quizCards"></div>
     <div class="empty" id="empty"><i class="fa-solid fa-file-circle-question"></i><h3>مفيش اختبارات حاليًا</h3></div>
   </div>
-
   <div id="takeView" style="display:none">
     <div class="card-glass">
       <div class="take-head"><h2 id="takeTitle"></h2><button class="btn btn-danger" id="backBtn"><i class="fa-solid fa-arrow-right"></i> رجوع</button></div>
@@ -110,7 +106,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       <div class="alert error" id="terr"></div>
     </div>
   </div>
-
   <div id="resultView" style="display:none">
     <div class="card-glass result">
       <i id="resIcon"></i>
@@ -119,13 +114,11 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       <button class="btn btn-ghost" id="againBtn" style="width:auto;margin-inline:auto"><i class="fa-solid fa-backward"></i> الرجوع للاختبارات</button>
     </div>
   </div>
-
   <div class="card-glass mt" id="myResultsCard">
-    <h2><i class="fa-solid fa-chart-line"></i> نتائجي</h2>
+    <h2 style="font-size:17px;font-weight:900;margin-bottom:16px;display:flex;align-items:center;gap:10px"><i class="fa-solid fa-chart-line" style="color:var(--orange)"></i> نتائجي</h2>
     <div id="myResults" class="list"><p class="muted">ثواني بنحمّل…</p></div>
   </div>
 </main>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -133,7 +126,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 <script>
   const $=id=>document.getElementById(id);
   let me=null,ALL=[],CURRENT=null;
-
   auth.onAuthStateChanged(async user=>{
     if(!user){location.href='login.html';return;}
     let data={};try{data=JSON.parse(localStorage.getItem('bw_user')||'{}')}catch(e){}
@@ -141,76 +133,44 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     me={uid:user.uid,name:data.name||user.email.split('@')[0]};
     loadQuizzes();loadResults();
   });
-
   async function loadQuizzes(){
-    try{
-      const snap=await db.collection('quizzes').get();
-      ALL=[];snap.forEach(d=>ALL.push(Object.assign({id:d.id},d.data())));
-    }catch(e){ALL=[];}
-    const ts=new Set(),ss=new Set();
-    ALL.forEach(z=>{if(z.teacherName)ts.add(z.teacherName);if(z.subject)ss.add(z.subject);});
+    try{const snap=await db.collection('quizzes').get();ALL=[];snap.forEach(d=>ALL.push(Object.assign({id:d.id},d.data())));}catch(e){ALL=[];}
+    const ts=new Set(),ss=new Set();ALL.forEach(z=>{if(z.teacherName)ts.add(z.teacherName);if(z.subject)ss.add(z.subject);});
     [...ts].sort().forEach(t=>$('fTeacher').innerHTML+=`<option>${t}</option>`);
     [...ss].sort().forEach(s=>$('fSubject').innerHTML+=`<option>${s}</option>`);
     renderList();
   }
-
   function renderList(){
     const t=$('fTeacher').value,s=$('fSubject').value;
     const list=ALL.filter(z=>(!t||z.teacherName===t)&&(!s||z.subject===s));
-    $('count').textContent=list.length;
-    $('empty').style.display=list.length?'none':'block';
-    $('quizCards').innerHTML=list.map(z=>`
-      <div class="qz">
-        <span class="tag">${z.subject} • ${z.teacherName}</span>
-        <h3>${z.title}</h3>
-        <div class="qz-meta"><span><i class="fa-solid fa-list-check"></i>${z.questions.length} سؤال</span></div>
-        <button class="start" data-id="${z.id}">ابدأ الاختبار <i class="fa-solid fa-pen"></i></button>
-      </div>`).join('');
+    $('count').textContent=list.length;$('empty').style.display=list.length?'none':'block';
+    $('quizCards').innerHTML=list.map(z=>`<div class="qz"><span class="tag">${z.subject} • ${z.teacherName}</span><h3>${z.title}</h3><div class="qz-meta"><span><i class="fa-solid fa-list-check"></i>${z.questions.length} سؤال</span></div><button class="start" data-id="${z.id}">ابدأ الاختبار <i class="fa-solid fa-pen"></i></button></div>`).join('');
     document.querySelectorAll('.start').forEach(b=>b.onclick=()=>startQuiz(b.dataset.id));
   }
-
   function startQuiz(id){
     CURRENT=ALL.find(z=>z.id===id);if(!CURRENT)return;
     $('takeTitle').textContent=CURRENT.title;
-    $('takeBody').innerHTML=CURRENT.questions.map((q,i)=>`
-      <div class="q-item">
-        <p class="q-title">${i+1}. ${q.q}</p>
-        <div class="opt-list">
-          ${q.opts.map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"><span>${o}</span></label>`).join('')}
-        </div>
-      </div>`).join('');
+    $('takeBody').innerHTML=CURRENT.questions.map((q,i)=>`<div class="q-item"><p class="q-title">${i+1}. ${q.q}</p><div class="opt-list">${q.opts.map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"><span>${o}</span></label>`).join('')}</div></div>`).join('');
     $('terr').style.display='none';
-    $('listView').style.display='none';$('myResultsCard').style.display='none';$('resultView').style.display='none';
-    $('takeView').style.display='block';
+    $('listView').style.display='none';$('myResultsCard').style.display='none';$('resultView').style.display='none';$('takeView').style.display='block';
     scrollTo({top:0,behavior:'smooth'});
   }
-
   $('submitQuizBtn').onclick=async()=>{
-    if(!CURRENT)return;
-    let score=0,unanswered=0;
-    CURRENT.questions.forEach((q,i)=>{
-      const sel=document.querySelector('input[name="q'+i+'"]:checked');
-      if(!sel){unanswered++;return;}
-      if(+sel.value===q.ans)score++;
-    });
+    if(!CURRENT)return;let score=0,unanswered=0;
+    CURRENT.questions.forEach((q,i)=>{const sel=document.querySelector('input[name="q'+i+'"]:checked');if(!sel){unanswered++;return;}if(+sel.value===q.ans)score++;});
     if(unanswered){$('terr').textContent='⚠️ فاضل '+unanswered+' سؤال من غير إجابة.';$('terr').style.display='block';return;}
     const total=CURRENT.questions.length,percent=Math.round(score/total*100);
-    try{
-      await db.collection('results').add({user_id:me.uid,student:me.name,quizId:CURRENT.id,title:CURRENT.title,score,total,percent,createdAt:new Date().toISOString()});
-    }catch(e){}
+    try{await db.collection('results').add({user_id:me.uid,student:me.name,quizId:CURRENT.id,title:CURRENT.title,score,total,percent,createdAt:new Date().toISOString()});}catch(e){}
     $('takeView').style.display='none';$('resultView').style.display='block';
     const icon=$('resIcon');
     if(percent>=85){icon.className='fa-solid fa-trophy';icon.style.color='var(--amber)';$('resTitle').textContent='ممتاز! 🏆';}
     else if(percent>=50){icon.className='fa-solid fa-face-smile';icon.style.color='#12b76a';$('resTitle').textContent='جيد جدًا! 👏';}
     else{icon.className='fa-solid fa-book-open-reader';icon.style.color='#ea580c';$('resTitle').textContent='محتاج مراجعة شوية 📚';}
     $('resScore').textContent='نتيجتك: '+score+' من '+total+' ('+percent+'%)';
-    scrollTo({top:0,behavior:'smooth'});
-    loadResults();
+    scrollTo({top:0,behavior:'smooth'});loadResults();
   };
-
   $('backBtn').onclick=()=>{$('takeView').style.display='none';$('listView').style.display='block';$('myResultsCard').style.display='block';};
   $('againBtn').onclick=()=>{$('resultView').style.display='none';$('listView').style.display='block';$('myResultsCard').style.display='block';};
-
   async function loadResults(){
     const box=$('myResults');
     try{
@@ -218,13 +178,9 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       const arr=[];snap.forEach(d=>arr.push(d.data()));
       arr.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
       if(!arr.length){box.innerHTML='<p class="muted">لسه مفيش نتايج — حل أول اختبار! 📝</p>';return;}
-      box.innerHTML=arr.slice(0,6).map(r=>{
-        const cls=r.percent>=85?'gold':r.percent>=50?'green':'red';
-        return `<div class="res-item"><div class="info"><b>${r.title}</b><p>${r.score} من ${r.total} • ${new Date(r.createdAt).toLocaleDateString('ar-EG',{day:'numeric',month:'long'})}</p></div><span class="score-badge ${cls}">${r.percent}%</span></div>`;
-      }).join('');
+      box.innerHTML=arr.slice(0,6).map(r=>{const cls=r.percent>=85?'gold':r.percent>=50?'green':'red';return `<div class="res-item"><div class="info"><b>${r.title}</b><p>${r.score} من ${r.total} • ${new Date(r.createdAt).toLocaleDateString('ar-EG',{day:'numeric',month:'long'})}</p></div><span class="score-badge ${cls}">${r.percent}%</span></div>`;}).join('');
     }catch(e){box.innerHTML='<p class="muted">خطأ في تحميل النتائج.</p>';}
   }
-
   $('fTeacher').onchange=renderList;$('fSubject').onchange=renderList;
   $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
 </script>
