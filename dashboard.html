@@ -75,7 +75,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 </head>
 <body>
 <div class="blob blob-1"></div><div class="blob blob-2"></div>
-
 <header class="top">
   <div class="container top-wrap">
     <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
@@ -85,7 +84,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </header>
-
 <main class="container">
   <section class="welcome">
     <div class="avatar" id="avatar">…</div>
@@ -98,7 +96,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       </div>
     </div>
   </section>
-
   <div class="admin-bar" id="adminBar">
     <span class="label"><i class="fa-solid fa-user-shield"></i> أدوات الأدمن:</span>
     <a href="admin.html"><i class="fa-solid fa-gauge-high"></i> لوحة الأدمن</a>
@@ -109,7 +106,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     <a href="admin-teachers.html"><i class="fa-solid fa-chalkboard-user"></i> المدرسين</a>
     <a href="admin-subs.html"><i class="fa-solid fa-crown"></i> الاشتراكات</a>
   </div>
-
   <section class="grid">
     <div class="card-glass profile">
       <h2><i class="fa-solid fa-id-card"></i> بياناتك الشخصية</h2>
@@ -120,7 +116,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
         <li><span>تاريخ الانضمام</span><b id="pDate">—</b></li>
       </ul>
     </div>
-
     <div class="card-glass">
       <h2><i class="fa-solid fa-compass"></i> ابدأ التعلم</h2>
       <div class="acts">
@@ -132,46 +127,33 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       </div>
     </div>
   </section>
-
   <section class="card-glass">
     <h2><i class="fa-solid fa-chart-line"></i> آخر نتايجك في الاختبارات</h2>
     <div class="results-list" id="myResults"><p class="empty-res">ثواني بنحمّل نتايجك…</p></div>
   </section>
 </main>
-
 <a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20استفسر%20عن%20منصة%20بن%20وائل" target="_blank" class="wa-float" aria-label="تواصل عبر واتساب"><i class="fa-brands fa-whatsapp"></i></a>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="js/config.js"></script>
 <script>
   const $=id=>document.getElementById(id);
-  const ADMIN_EMAIL="admin@academy.com";
-
+  const ADMIN_EMAIL="admin@benwael.com";
   auth.onAuthStateChanged(async user=>{
     if(!user){location.href='login.html';return;}
     if(user.email===ADMIN_EMAIL)$('adminBar').style.display='flex';
-
-    let data={};
-    try{data=JSON.parse(localStorage.getItem('bw_user')||'{}')}catch(e){}
-    try{
-      const snap=await db.collection('profiles').doc(user.uid).get();
-      if(snap.exists)Object.assign(data,snap.data());
-    }catch(e){console.warn(e)}
-
+    let data={};try{data=JSON.parse(localStorage.getItem('bw_user')||'{}')}catch(e){}
+    try{const snap=await db.collection('profiles').doc(user.uid).get();if(snap.exists)Object.assign(data,snap.data())}catch(e){console.warn(e)}
     const name=data.name||user.email.split('@')[0];
     $('avatar').textContent=name.trim().charAt(0);
     $('wName').textContent='أهلاً، '+name+' 👋';
     $('wSub').textContent=data.subject?'مادة: '+data.subject:'طالب في منصة بن وائل';
-    $('pName').textContent=data.name||'—';
-    $('pEmail').textContent=data.email||user.email;
+    $('pName').textContent=data.name||'—';$('pEmail').textContent=data.email||user.email;
     $('pPhone').textContent=data.phone||'—';
     $('pDate').textContent=data.createdAt?new Date(data.createdAt).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'}):'—';
-
     loadResults(user.uid);
   });
-
   async function loadResults(uid){
     const box=$('myResults');
     try{
@@ -179,21 +161,11 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       const arr=[];snap.forEach(d=>arr.push(d.data()));
       arr.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
       if(!arr.length){box.innerHTML='<p class="empty-res">لسه مفيش نتايج — حل أول اختبار من بنك الأسئلة! 📝</p>';return;}
-      box.innerHTML=arr.slice(0,5).map(r=>{
-        const cls=r.percent>=85?'gold':r.percent>=50?'green':'red';
-        return '<div class="res-item"><div class="info"><b>'+r.title+'</b><p>'+new Date(r.createdAt).toLocaleDateString('ar-EG',{day:'numeric',month:'long'})+'</p></div><span class="score-badge '+cls+'">'+r.percent+'%</span></div>';
-      }).join('');
+      box.innerHTML=arr.slice(0,5).map(r=>{const cls=r.percent>=85?'gold':r.percent>=50?'green':'red';return '<div class="res-item"><div class="info"><b>'+r.title+'</b><p>'+new Date(r.createdAt).toLocaleDateString('ar-EG',{day:'numeric',month:'long'})+'</p></div><span class="score-badge '+cls+'">'+r.percent+'%</span></div>';}).join('');
     }catch(e){box.innerHTML='<p class="empty-res">مش قادرين نجيب نتايجك حاليًا.</p>';}
   }
-
-  $('logoutBtn').onclick=async()=>{
-    localStorage.removeItem('bw_user');
-    await auth.signOut();
-    location.href='index.html';
-  };
+  $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
 </script>
-
-<!-- جرس الأخبار -->
 <script>
 (function(){
   if(!localStorage.getItem('bw_user'))return;
@@ -203,23 +175,13 @@ main{position:relative;z-index:1;padding:40px 0 70px}
   document.head.appendChild(st);
   const bell=document.createElement('button');bell.id='newsBell';
   bell.innerHTML='<i class="fa-solid fa-bell"></i><span class="badge">0</span>';
-  document.body.appendChild(bell);
-  bell.onclick=()=>{location.href='news.html';};
-  const toast=document.createElement('div');toast.id='newsToast';
-  document.body.appendChild(toast);
-  toast.onclick=()=>{location.href='news.html';};
+  document.body.appendChild(bell);bell.onclick=()=>{location.href='news.html';};
+  const toast=document.createElement('div');toast.id='newsToast';document.body.appendChild(toast);toast.onclick=()=>{location.href='news.html';};
   if(typeof firebase!=='undefined'&&firebase.firestore){
     firebase.firestore().collection('news').get().then(snap=>{
       let unread=0,latest=null;
       snap.forEach(d=>{const n=d.data(),t=new Date(n.createdAt).getTime();if(t>last){unread++;if(!latest||t>new Date(latest.createdAt).getTime())latest=n;}});
-      if(unread>0){
-        const b=bell.querySelector('.badge');b.style.display='grid';b.textContent=unread;
-        if(latest){
-          toast.innerHTML='<b>📢 خبر جديد من المنصة</b><p>'+latest.title+'</p>';
-          toast.style.display='block';
-          setTimeout(()=>{toast.style.display='none';},8000);
-        }
-      }
+      if(unread>0){const b=bell.querySelector('.badge');b.style.display='grid';b.textContent=unread;if(latest){toast.innerHTML='<b>📢 خبر جديد من المنصة</b><p>'+latest.title+'</p>';toast.style.display='block';setTimeout(()=>{toast.style.display='none';},8000);}}
     }).catch(()=>{});
   }
 })();
