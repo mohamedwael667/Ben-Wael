@@ -431,12 +431,14 @@ if(typeof firebase!=='undefined'&&firebase.firestore){
   const raw=localStorage.getItem('bw_user');if(!raw)return;
   let u;try{u=JSON.parse(raw)}catch(e){return}
   const first=String(u.name||'طالب').split(' ')[0];
+  const ADMIN_EMAIL="admin@benwael.com";
+  const isAdmin=(u.email===ADMIN_EMAIL || u.role==='admin');
   const st=document.createElement('style');
-  st.textContent='.user-chip{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:12px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.45);color:#d4af37;font-weight:900;font-size:14px;transition:.3s}.user-chip:hover{background:rgba(212,175,55,.22)}#logoutBtn{background:transparent;border:1px solid rgba(239,68,68,.4);color:#fca5a5;border-radius:12px;padding:9px 16px;font-family:inherit;font-weight:900;font-size:14px;cursor:pointer;transition:.3s}#logoutBtn:hover{background:rgba(239,68,68,.12)}';
+  st.textContent='.user-chip{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:12px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.45);color:#d4af37;font-weight:900;font-size:14px;transition:.3s}.user-chip:hover{background:rgba(212,175,55,.22)}.admin-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:12px;background:linear-gradient(135deg,#1e3a5f,#d4af37);color:#fff;font-weight:900;font-size:14px;transition:.3s;box-shadow:0 6px 18px rgba(30,58,95,.35)}.admin-btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(30,58,95,.45)}#logoutBtn{background:transparent;border:1px solid rgba(239,68,68,.4);color:#fca5a5;border-radius:12px;padding:9px 16px;font-family:inherit;font-weight:900;font-size:14px;cursor:pointer;transition:.3s}#logoutBtn:hover{background:rgba(239,68,68,.12)}';
   document.head.appendChild(st);
-  const dest=u.role==='admin'?'admin.html':(u.role==='teacher'?'teacher.html':'dashboard.html');
+  const dest=isAdmin?'admin.html':(u.role==='teacher'?'teacher.html':'dashboard.html');
   let html='<a class="user-chip" href="'+dest+'"><i class="fa-solid fa-gauge-high"></i> أهلاً، '+first+'</a>';
-  if(u.role==='admin')html+='<a class="user-chip" style="background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.4);color:#7dd3fc" href="admin.html"><i class="fa-solid fa-user-shield"></i> الأدمن</a>';
+  if(isAdmin)html+='<a class="admin-btn" href="admin.html"><i class="fa-solid fa-user-shield"></i> لوحة الأدمن</a>';
   html+='<button id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>';
   const nav=document.querySelector('.nav-actions');
   nav.innerHTML=html+nav.innerHTML;
