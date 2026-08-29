@@ -58,7 +58,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 </style>
 </head>
 <body>
-
 <header class="top">
   <div class="container top-wrap">
     <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
@@ -68,14 +67,12 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </header>
-
 <main class="container">
   <section class="page-head"><h1>إدارة المدرسين <i class="fa-solid fa-chalkboard-user"></i></h1></section>
-
   <div id="adminArea">
     <div class="card-glass">
       <h2><i class="fa-solid fa-user-plus"></i> إضافة مدرس + حساب دخول</h2>
-      <div class="info-box"><i class="fa-solid fa-circle-info"></i> لما تضيف مدرس، بيتعمله <b>حساب دخول خاص</b> بيه يقدر يدير مادته بس (محاضراته وملخصاته واختباراته) — سلّمه الإيميل والباسورد.</div>
+      <div class="info-box"><i class="fa-solid fa-circle-info"></i> لما تضيف مدرس، بيتعمله <b>حساب دخول خاص</b> بيه يقدر يدير مادته بس — سلّمه الإيميل والباسورد.</div>
       <div class="alert error" id="errBox"></div>
       <div class="alert success" id="okBox"></div>
       <form id="tForm" novalidate>
@@ -91,31 +88,26 @@ main{position:relative;z-index:1;padding:40px 0 70px}
         <button class="btn btn-primary" id="submitBtn" type="submit"><span>إضافة المدرس <i class="fa-solid fa-plus"></i></span><span class="spinner"></span></button>
       </form>
     </div>
-
     <div class="card-glass mt">
       <h2><i class="fa-solid fa-chalkboard-user"></i> المدرسون على المنصة</h2>
       <div id="tList" class="list"><p class="muted">ثواني بنحمّل…</p></div>
     </div>
   </div>
 </main>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="js/config.js"></script>
 <script>
-  const ADMIN_EMAIL="admin@academy.com";
+  const ADMIN_EMAIL="admin@benwael.com";
   const $=id=>document.getElementById(id);
-
   auth.onAuthStateChanged(user=>{
     if(!user){location.href='login.html';return;}
     if(user.email!==ADMIN_EMAIL){$('adminArea').innerHTML='<div style="text-align:center;padding:60px"><i class="fa-solid fa-lock" style="font-size:44px;color:var(--amber);display:block;margin-bottom:16px"></i><h2>مفيش صلاحية أدمن</h2></div>';return;}
     loadTeachers();
   });
-
   $('tForm').addEventListener('submit',async e=>{
-    e.preventDefault();
-    $('errBox').style.display='none';$('okBox').style.display='none';
+    e.preventDefault();$('errBox').style.display='none';$('okBox').style.display='none';
     const name=$('tName').value.trim(),subject=$('tSubject').value.trim(),bio=$('tBio').value.trim();
     const email=$('tEmail').value.trim().toLowerCase(),pass=$('tPass').value;
     if(!name||!subject){$('errBox').textContent='⚠️ اكتب اسم المدرس والمادة.';$('errBox').style.display='block';return;}
@@ -123,26 +115,17 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     if(pass.length<6){$('errBox').textContent='⚠️ الباسورد لازم ٦ أحرف على الأقل.';$('errBox').style.display='block';return;}
     $('submitBtn').classList.add('loading');
     try{
-      // إنشاء حساب الدخول بدون ما تأثر على جلسة الأدمن
       let uid;
       const sec=firebase.initializeApp(firebase.app().options,'bw-sec'+Date.now());
-      try{
-        const cred=await sec.auth().createUserWithEmailAndPassword(email,pass);
-        uid=cred.user.uid;
-        await sec.auth().signOut();
-      }catch(er){
-        if(er.code==='auth/email-already-in-use'){$('errBox').textContent='⚠️ الإيميل ده مستخدم قبل كده.';$('errBox').style.display='block';$('submitBtn').classList.remove('loading');return;}
-        throw er;
-      }
+      try{const cred=await sec.auth().createUserWithEmailAndPassword(email,pass);uid=cred.user.uid;await sec.auth().signOut();}
+      catch(er){if(er.code==='auth/email-already-in-use'){$('errBox').textContent='⚠️ الإيميل ده مستخدم قبل كده.';$('errBox').style.display='block';$('submitBtn').classList.remove('loading');return;}throw er;}
       await db.collection('profiles').doc(uid).set({name,email,phone:'',role:'teacher',subject,createdAt:new Date().toISOString()});
       await db.collection('teachers').add({name,subject,bio,email,createdAt:new Date().toISOString()});
-      $('okBox').innerHTML='✅ حساب المدرس اتعمل!<br>الإيميل: <b>'+email+'</b> • الباسورد: <b>'+pass+'</b><br>سلّمهم للمدرس — هيدخل ويدير مادته بس.';
-      $('okBox').style.display='block';
+      $('okBox').innerHTML='✅ حساب المدرس اتعمل!<br>الإيميل: <b>'+email+'</b> • الباسورد: <b>'+pass+'</b><br>سلّمهم للمدرس — هيدخل ويدير مادته بس.';$('okBox').style.display='block';
       $('tForm').reset();loadTeachers();
     }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}
     finally{$('submitBtn').classList.remove('loading');}
   });
-
   async function loadTeachers(){
     const box=$('tList');
     try{
@@ -150,22 +133,10 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       arr.sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0));
       if(!arr.length){box.innerHTML='<p class="muted">لسه مفيش مدرسين.</p>';return;}
-      box.innerHTML=arr.map(t=>`
-        <div class="t-item">
-          <div class="t-ava">${(t.name||'م').trim().charAt(0)}</div>
-          <div class="t-info">
-            <b>${t.name}</b>
-            <span class="t-sub">${t.subject||'مدرس'}</span>
-            <p>${t.email?'🔑 '+t.email+' • ':''}${t.bio||''}</p>
-          </div>
-          <button class="no" data-id="${t.id}"><i class="fa-solid fa-trash"></i> حذف</button>
-        </div>`).join('');
-      box.querySelectorAll('.no').forEach(btn=>btn.onclick=async()=>{
-        if(confirm('حذف المدرس من الرئيسية؟ (حساب الدخول لازم يتمسح من Firebase Console → Authentication)')){btn.disabled=true;await db.collection('teachers').doc(btn.dataset.id).delete();loadTeachers();}
-      });
+      box.innerHTML=arr.map(t=>`<div class="t-item"><div class="t-ava">${(t.name||'م').trim().charAt(0)}</div><div class="t-info"><b>${t.name}</b><span class="t-sub">${t.subject||'مدرس'}</span><p>${t.email?'🔑 '+t.email+' • ':''}${t.bio||''}</p></div><button class="no" data-id="${t.id}"><i class="fa-solid fa-trash"></i> حذف</button></div>`).join('');
+      box.querySelectorAll('.no').forEach(btn=>btn.onclick=async()=>{if(confirm('حذف المدرس من الرئيسية؟ (حساب الدخول لازم يتمسح من Firebase Console → Authentication)')){btn.disabled=true;await db.collection('teachers').doc(btn.dataset.id).delete();loadTeachers();}});
     }catch(e){box.innerHTML='<p class="muted">خطأ في التحميل.</p>';}
   }
-
   $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
 </script>
 </body>
