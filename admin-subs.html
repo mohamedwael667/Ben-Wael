@@ -49,7 +49,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 </style>
 </head>
 <body>
-
 <header class="top">
   <div class="container top-wrap">
     <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
@@ -59,10 +58,8 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </header>
-
 <main class="container">
   <section class="page-head"><h1>إدارة الاشتراكات <i class="fa-solid fa-crown"></i></h1></section>
-
   <div id="adminArea">
     <div class="card-glass">
       <h2><i class="fa-solid fa-hourglass-half"></i> طلبات قيد المراجعة</h2>
@@ -74,46 +71,26 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </main>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="js/config.js"></script>
 <script>
-  const ADMIN_EMAIL="admin@academy.com";
+  const ADMIN_EMAIL="admin@benwael.com";
   const $=id=>document.getElementById(id);
-
   auth.onAuthStateChanged(user=>{
     if(!user){location.href='login.html';return;}
     if(user.email!==ADMIN_EMAIL){$('adminArea').innerHTML='<div style="text-align:center;padding:60px"><i class="fa-solid fa-lock" style="font-size:44px;color:var(--amber);display:block;margin-bottom:16px"></i><h2>مفيش صلاحية أدمن</h2></div>';return;}
     load();
   });
-
   async function load(){
     try{
       const snap=await db.collection('subscriptions').get();
       const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       arr.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-      const pend=arr.filter(s=>s.status==='pending');
-      const act=arr.filter(s=>s.status==='active');
-
-      $('pendList').innerHTML=pend.length?pend.map(s=>`
-        <div class="item">
-          <div class="item-top"><b>${s.student}</b><span class="st pending">قيد المراجعة</span></div>
-          <p class="item-meta">${s.plan==='term'?'ترم كامل — 200ج':'شهري — 75ج'} • 📱 ${s.phone}${s.ref?' • رقم العملية: '+s.ref:''} • ${new Date(s.createdAt).toLocaleDateString('ar-EG',{day:'numeric',month:'long'})}</p>
-          <div class="item-actions">
-            <button class="ok" data-act="ok" data-id="${s.id}" data-uid="${s.user_id}" data-plan="${s.plan}"><i class="fa-solid fa-check"></i> تفعيل الاشتراك</button>
-            <a class="wa" href="https://wa.me/2${s.phone}" target="_blank"><i class="fa-brands fa-whatsapp"></i> واتساب الطالب</a>
-            <button class="no" data-act="no" data-id="${s.id}"><i class="fa-solid fa-xmark"></i> رفض</button>
-          </div>
-        </div>`).join(''):'<p class="muted">مفيش طلبات معلقة 🎉</p>';
-
-      $('actList').innerHTML=act.length?act.map(s=>`
-        <div class="item">
-          <div class="item-top"><b>${s.student}</b><span class="st active">نشط</span></div>
-          <p class="item-meta">${s.plan==='term'?'ترم كامل':'شهري'} • بيخلص ${s.expiresAt?new Date(s.expiresAt).toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'}):'—'}</p>
-        </div>`).join(''):'<p class="muted">لسه مفيش اشتراكات نشطة.</p>';
-
+      const pend=arr.filter(s=>s.status==='pending'),act=arr.filter(s=>s.status==='active');
+      $('pendList').innerHTML=pend.length?pend.map(s=>`<div class="item"><div class="item-top"><b>${s.student}</b><span class="st pending">قيد المراجعة</span></div><p class="item-meta">${s.plan==='term'?'ترم كامل — 200ج':'شهري — 75ج'} • 📱 ${s.phone}${s.ref?' • رقم العملية: '+s.ref:''} • ${new Date(s.createdAt).toLocaleDateString('ar-EG',{day:'numeric',month:'long'})}</p><div class="item-actions"><button class="ok" data-act="ok" data-id="${s.id}" data-uid="${s.user_id}" data-plan="${s.plan}"><i class="fa-solid fa-check"></i> تفعيل الاشتراك</button><a class="wa" href="https://wa.me/2${s.phone}" target="_blank"><i class="fa-brands fa-whatsapp"></i> واتساب الطالب</a><button class="no" data-act="no" data-id="${s.id}"><i class="fa-solid fa-xmark"></i> رفض</button></div></div>`).join(''):'<p class="muted">مفيش طلبات معلقة 🎉</p>';
+      $('actList').innerHTML=act.length?act.map(s=>`<div class="item"><div class="item-top"><b>${s.student}</b><span class="st active">نشط</span></div><p class="item-meta">${s.plan==='term'?'ترم كامل':'شهري'} • بيخلص ${s.expiresAt?new Date(s.expiresAt).toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'}):'—'}</p></div>`).join(''):'<p class="muted">لسه مفيش اشتراكات نشطة.</p>';
       document.querySelectorAll('[data-act]').forEach(btn=>btn.onclick=async()=>{
         const id=btn.dataset.id;
         if(btn.dataset.act==='ok'){
@@ -123,13 +100,10 @@ main{position:relative;z-index:1;padding:40px 0 70px}
           await db.collection('subscriptions').doc(id).update({status:'active',activatedAt:new Date().toISOString(),expiresAt});
           await db.collection('profiles').doc(btn.dataset.uid).update({subExpires:expiresAt});
           load();
-        }else{
-          if(confirm('رفض الطلب ده؟')){btn.disabled=true;await db.collection('subscriptions').doc(id).update({status:'rejected'});load();}
-        }
+        }else{if(confirm('رفض الطلب ده؟')){btn.disabled=true;await db.collection('subscriptions').doc(id).update({status:'rejected'});load();}}
       });
     }catch(e){console.warn(e);}
   }
-
   $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
 </script>
 </body>
