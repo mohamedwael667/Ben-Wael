@@ -402,9 +402,9 @@ if(typeof firebase!=='undefined'&&firebase.firestore){
   firebase.firestore().collection('teachers').get().then(snap=>{
     if(snap.empty){document.getElementById('teachersEmpty').style.display='block';return;}
     const arr=[];snap.forEach(d=>arr.push(d.data()));
-    document.getElementById('teachersGrid').innerHTML=arr.map(t=>`
+       document.getElementById('teachersGrid').innerHTML=arr.map(t=>`
       <div class="t-card reveal active">
-        <div class="t-ava">${(t.name||'م').trim().charAt(0)}</div>
+        <div class="t-ava">${t.photo?`<img src="${t.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.outerHTML='${(t.name||'م').trim().charAt(0)}'">`:(t.name||'م').trim().charAt(0)}</div>
         <h3>${t.name}</h3>
         <span class="t-sub">${t.subject||'مدرس'}</span>
         <p>${t.bio||''}</p>
