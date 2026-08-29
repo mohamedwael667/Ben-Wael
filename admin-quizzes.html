@@ -63,7 +63,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 </style>
 </head>
 <body>
-
 <header class="top">
   <div class="container top-wrap">
     <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
@@ -73,15 +72,12 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </header>
-
 <main class="container">
   <section class="page-head"><h1>صانع الاختبارات <i class="fa-solid fa-file-pen"></i></h1></section>
-
   <div class="card-glass" id="noAccess" style="display:none;text-align:center;padding:50px">
     <i class="fa-solid fa-lock" style="font-size:44px;color:var(--amber);margin-bottom:16px;display:block"></i>
     <h2 style="justify-content:center">مفيش صلاحية</h2>
   </div>
-
   <div id="adminArea">
     <div class="card-glass">
       <h2><i class="fa-solid fa-circle-plus"></i> اختبار جديد</h2>
@@ -99,84 +95,52 @@ main{position:relative;z-index:1;padding:40px 0 70px}
         <button class="btn btn-primary" id="submitQuiz" type="submit"><span>نشر الاختبار <i class="fa-solid fa-paper-plane"></i></span><span class="spinner"></span></button>
       </form>
     </div>
-
     <div class="card-glass mt">
       <h2><i class="fa-solid fa-file-pen"></i> الاختبارات المنشورة</h2>
       <div id="quizList" class="list"><p class="muted">ثواني بنحمّل…</p></div>
     </div>
   </div>
 </main>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="js/config.js"></script>
 <script>
-  const ADMIN_EMAIL="admin@academy.com";
+  const ADMIN_EMAIL="admin@benwael.com";
   const $=id=>document.getElementById(id);
   let qCount=0,IS_ADMIN=false,MY_EMAIL='';
-
   auth.onAuthStateChanged(async user=>{
     if(!user){location.href='login.html';return;}
     MY_EMAIL=user.email;IS_ADMIN=user.email===ADMIN_EMAIL;
     let role='',myName='';
     try{const s=await db.collection('profiles').doc(user.uid).get();if(s.exists){role=s.data().role||'';myName=s.data().name||'';}}catch(e){}
-    if(!IS_ADMIN){
-      $('backAdmin').style.display='none';
-      if(role!=='teacher'){$('adminArea').style.display='none';$('noAccess').style.display='block';return;}
-      const f=$('qzTeacher');if(f){f.value=myName;f.disabled=true;}
-    }
+    if(!IS_ADMIN){$('backAdmin').style.display='none';if(role!=='teacher'){$('adminArea').style.display='none';$('noAccess').style.display='block';return;}const f=$('qzTeacher');if(f){f.value=myName;f.disabled=true;}}
     if(!document.querySelector('#qWrap .qblock'))addBlock();
     loadQuizzes();
   });
-
   function addBlock(){
-    qCount++;
-    const div=document.createElement('div');
-    div.className='qblock';
-    div.innerHTML=`
-      <div class="head"><b>سؤال ${qCount}</b><button type="button" class="no delQ"><i class="fa-solid fa-trash"></i> حذف</button></div>
-      <div class="field"><input class="q-text" placeholder="اكتب نص السؤال هنا"></div>
-      <div class="opts">
-        <input class="q-opt" placeholder="الاختيار 1"><input class="q-opt" placeholder="الاختيار 2">
-        <input class="q-opt" placeholder="الاختيار 3"><input class="q-opt" placeholder="الاختيار 4">
-      </div>
-      <div class="field"><label>الإجابة الصحيحة</label>
-        <select class="q-ans"><option value="0">الاختيار 1</option><option value="1">الاختيار 2</option><option value="2">الاختيار 3</option><option value="3">الاختيار 4</option></select>
-      </div>`;
-    $('qWrap').appendChild(div);
-    div.querySelector('.delQ').onclick=()=>div.remove();
+    qCount++;const div=document.createElement('div');div.className='qblock';
+    div.innerHTML=`<div class="head"><b>سؤال ${qCount}</b><button type="button" class="no delQ"><i class="fa-solid fa-trash"></i> حذف</button></div><div class="field"><input class="q-text" placeholder="اكتب نص السؤال هنا"></div><div class="opts"><input class="q-opt" placeholder="الاختيار 1"><input class="q-opt" placeholder="الاختيار 2"><input class="q-opt" placeholder="الاختيار 3"><input class="q-opt" placeholder="الاختيار 4"></div><div class="field"><label>الإجابة الصحيحة</label><select class="q-ans"><option value="0">الاختيار 1</option><option value="1">الاختيار 2</option><option value="2">الاختيار 3</option><option value="3">الاختيار 4</option></select></div>`;
+    $('qWrap').appendChild(div);div.querySelector('.delQ').onclick=()=>div.remove();
   }
   $('addQ').onclick=addBlock;
-
   $('quizForm').addEventListener('submit',async e=>{
-    e.preventDefault();
-    $('errBox').style.display='none';$('okBox').style.display='none';
+    e.preventDefault();$('errBox').style.display='none';$('okBox').style.display='none';
     const title=$('qzTitle').value.trim(),subject=$('qzSubject').value.trim(),teacherName=$('qzTeacher').value.trim();
     if(!title||!subject||!teacherName){$('errBox').textContent='⚠️ كمّل عنوان الاختبار والمادة والمدرس.';$('errBox').style.display='block';return;}
     const blocks=[...document.querySelectorAll('#qWrap .qblock')];
     if(!blocks.length){$('errBox').textContent='⚠️ ضيف سؤال واحد على الأقل.';$('errBox').style.display='block';return;}
     const questions=[];
-    for(const b of blocks){
-      const q=b.querySelector('.q-text').value.trim();
-      const opts=[...b.querySelectorAll('.q-opt')].map(i=>i.value.trim());
-      const ans=+b.querySelector('.q-ans').value;
-      if(!q||opts.some(o=>!o)){$('errBox').textContent='⚠️ كمّل نص السؤال والـ٤ اختيارات في كل الأسئلة.';$('errBox').style.display='block';return;}
-      questions.push({q,opts,ans});
-    }
+    for(const b of blocks){const q=b.querySelector('.q-text').value.trim();const opts=[...b.querySelectorAll('.q-opt')].map(i=>i.value.trim());const ans=+b.querySelector('.q-ans').value;if(!q||opts.some(o=>!o)){$('errBox').textContent='⚠️ كمّل نص السؤال والـ٤ اختيارات في كل الأسئلة.';$('errBox').style.display='block';return;}questions.push({q,opts,ans});}
     $('submitQuiz').classList.add('loading');
     try{
       await db.collection('quizzes').add({title,subject,teacherName,questions,teacherEmail:IS_ADMIN?'':MY_EMAIL,createdAt:new Date().toISOString()});
-      $('okBox').textContent='✅ الاختبار اتنشر! الطلاب هيلاقوه في صفحة الاختبارات.';
-      $('okBox').style.display='block';
-      const tName=teacherName;
-      $('quizForm').reset();$('qWrap').innerHTML='';qCount=0;addBlock();
-      if(!IS_ADMIN){const f=$('qzTeacher');f.value=tName;f.disabled=true;}
+      $('okBox').textContent='✅ الاختبار اتنشر! الطلاب هيلاقوه في صفحة الاختبارات.';$('okBox').style.display='block';
+      const tName=teacherName;$('quizForm').reset();$('qWrap').innerHTML='';qCount=0;addBlock();if(!IS_ADMIN){const f=$('qzTeacher');f.value=tName;f.disabled=true;}
       loadQuizzes();
     }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}
     finally{$('submitQuiz').classList.remove('loading');}
   });
-
   async function loadQuizzes(){
     const box=$('quizList');
     try{
@@ -184,18 +148,10 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       arr.sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0));
       if(!arr.length){box.innerHTML='<p class="muted">لسه مفيش اختبارات.</p>';return;}
-      box.innerHTML=arr.map(z=>`
-        <div class="item">
-          <div class="item-top"><b>${z.title}</b><span class="st">${z.subject} • ${z.teacherName}</span></div>
-          <p class="item-meta">${z.questions.length} سؤال</p>
-          <button class="no" data-id="${z.id}"><i class="fa-solid fa-trash"></i> حذف</button>
-        </div>`).join('');
-      box.querySelectorAll('.no').forEach(btn=>btn.onclick=async()=>{
-        if(confirm('حذف الاختبار ده؟')){btn.disabled=true;await db.collection('quizzes').doc(btn.dataset.id).delete();loadQuizzes();}
-      });
+      box.innerHTML=arr.map(z=>`<div class="item"><div class="item-top"><b>${z.title}</b><span class="st">${z.subject} • ${z.teacherName}</span></div><p class="item-meta">${z.questions.length} سؤال</p><button class="no" data-id="${z.id}"><i class="fa-solid fa-trash"></i> حذف</button></div>`).join('');
+      box.querySelectorAll('.no').forEach(btn=>btn.onclick=async()=>{if(confirm('حذف الاختبار ده؟')){btn.disabled=true;await db.collection('quizzes').doc(btn.dataset.id).delete();loadQuizzes();}});
     }catch(e){box.innerHTML='<p class="muted">خطأ في التحميل.</p>';}
   }
-
   $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
 </script>
 </body>
