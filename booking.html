@@ -57,7 +57,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 </style>
 </head>
 <body>
-
 <header class="top">
   <div class="container top-wrap">
     <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
@@ -67,13 +66,11 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </header>
-
 <main class="container">
   <section class="page-head">
     <h1>حجز حصة <i class="fa-solid fa-calendar-check"></i></h1>
     <p>اختار مدرسك وموعدك — وهنأكدلك الحجز في أقرب وقت</p>
   </section>
-
   <div class="card-glass">
     <h2><i class="fa-solid fa-circle-plus"></i> حجز جديد</h2>
     <div class="alert error" id="errBox"></div>
@@ -87,13 +84,11 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       <button class="btn btn-primary" id="submitBtn" type="submit"><span>إرسال الحجز <i class="fa-solid fa-paper-plane"></i></span></button>
     </form>
   </div>
-
   <div class="card-glass mt">
     <h2><i class="fa-solid fa-list-check"></i> حجوزاتي</h2>
     <div id="myBooks" class="list"><p class="muted">ثواني بنحمّل…</p></div>
   </div>
 </main>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -101,7 +96,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 <script>
   const $=id=>document.getElementById(id);
   let me=null;
-
   auth.onAuthStateChanged(async user=>{
     if(!user){location.href='login.html';return;}
     let data={};try{data=JSON.parse(localStorage.getItem('bw_user')||'{}')}catch(e){}
@@ -109,33 +103,25 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     me={uid:user.uid,name:data.name||user.email.split('@')[0]};
     loadTeachers();loadMyBooks();
   });
-
   async function loadTeachers(){
     try{
       const snap=await db.collection('teachers').get();
       const arr=[];snap.forEach(d=>arr.push(d.data()));
-      if(arr.length){
-        $('doctor').innerHTML='<option value="">اختار المدرس…</option>'+arr.map(t=>`<option>${t.name} — ${t.subject||''}</option>`).join('');
-      }else{
-        $('doctor').innerHTML='<option value="">مفيش مدرسين حاليًا</option>';
-      }
+      if(arr.length){$('doctor').innerHTML='<option value="">اختار المدرس…</option>'+arr.map(t=>`<option>${t.name} — ${t.subject||''}</option>`).join('');}
+      else{$('doctor').innerHTML='<option value="">مفيش مدرسين حاليًا</option>';}
     }catch(e){}
   }
-
   $('bookForm').addEventListener('submit',async e=>{
-    e.preventDefault();
-    $('errBox').style.display='none';$('okBox').style.display='none';
+    e.preventDefault();$('errBox').style.display='none';$('okBox').style.display='none';
     const doctor=$('doctor').value,date=$('date').value,time=$('time').value;
     if(!doctor){$('errBox').textContent='⚠️ اختار المدرس الأول.';$('errBox').style.display='block';return;}
     if(!date||!time){$('errBox').textContent='⚠️ اختار التاريخ والوقت.';$('errBox').style.display='block';return;}
     try{
       await db.collection('bookings').add({user_id:me.uid,student:me.name,doctor,date,time,status:'pending',createdAt:new Date().toISOString()});
-      $('okBox').textContent='✅ حجزك اتبعت! هنأكدلك في أقرب وقت.';
-      $('okBox').style.display='block';
+      $('okBox').textContent='✅ حجزك اتبعت! هنأكدلك في أقرب وقت.';$('okBox').style.display='block';
       $('bookForm').reset();loadMyBooks();
     }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}
   });
-
   async function loadMyBooks(){
     const box=$('myBooks');
     try{
@@ -143,20 +129,10 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       arr.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
       if(!arr.length){box.innerHTML='<p class="muted">لسه مفيش حجوزات.</p>';return;}
-      box.innerHTML=arr.map(b=>{
-        const st=b.status==='approved'?'مؤكد':b.status==='cancelled'?'مرفوض':'قيد المراجعة';
-        return `<div class="item">
-          <div class="item-top"><b>${b.doctor}</b><span class="st ${b.status||'pending'}">${st}</span></div>
-          <p class="item-meta">${b.date?new Date(b.date).toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'}):''} • ${b.time||''}</p>
-          ${b.status==='pending'?`<button class="no" data-id="${b.id}"><i class="fa-solid fa-xmark"></i> إلغاء الحجز</button>`:''}
-        </div>`;
-      }).join('');
-      box.querySelectorAll('.no').forEach(btn=>btn.onclick=async()=>{
-        if(confirm('إلغاء الحجز ده؟')){btn.disabled=true;await db.collection('bookings').doc(btn.dataset.id).delete();loadMyBooks();}
-      });
+      box.innerHTML=arr.map(b=>{const st=b.status==='approved'?'مؤكد':b.status==='cancelled'?'مرفوض':'قيد المراجعة';return `<div class="item"><div class="item-top"><b>${b.doctor}</b><span class="st ${b.status||'pending'}">${st}</span></div><p class="item-meta">${b.date?new Date(b.date).toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'}):''} • ${b.time||''}</p>${b.status==='pending'?`<button class="no" data-id="${b.id}"><i class="fa-solid fa-xmark"></i> إلغاء الحجز</button>`:''}</div>`;}).join('');
+      box.querySelectorAll('.no').forEach(btn=>btn.onclick=async()=>{if(confirm('إلغاء الحجز ده؟')){btn.disabled=true;await db.collection('bookings').doc(btn.dataset.id).delete();loadMyBooks();}});
     }catch(e){box.innerHTML='<p class="muted">خطأ في التحميل.</p>';}
   }
-
   $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
 </script>
 </body>
