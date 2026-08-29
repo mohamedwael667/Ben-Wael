@@ -75,7 +75,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 </style>
 </head>
 <body>
-
 <header class="top">
   <div class="container top-wrap">
     <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
@@ -85,15 +84,12 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </header>
-
 <main class="container">
   <section class="page-head">
     <h1>الاشتراك الذهبي <i class="fa-solid fa-crown"></i></h1>
     <p>افتح كل المحاضرات والملخصات بدون أكواد — اشتراك واحد ويخلصك</p>
   </section>
-
   <div id="statusBox"></div>
-
   <div class="plans">
     <div class="plan">
       <h3>اشتراك شهري</h3>
@@ -119,7 +115,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       <button class="btn btn-primary" data-plan="term" style="margin:0">اختار الترم</button>
     </div>
   </div>
-
   <div class="pay-card">
     <h2><i class="fa-solid fa-wallet"></i> طرق الدفع</h2>
     <div class="pay-methods">
@@ -133,7 +128,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       <b>٤.</b> ابعت صورة الإيصال واتساب عشان نفعّل أسرع
     </div>
   </div>
-
   <div class="form-card">
     <h2><i class="fa-solid fa-paper-plane"></i> إرسال طلب الاشتراك</h2>
     <div class="alert error" id="errBox"></div>
@@ -151,7 +145,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </main>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -159,26 +152,15 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 <script>
   const $=id=>document.getElementById(id);
   let me=null,latest=null;
-
-  document.querySelectorAll('.copy-btn').forEach(b=>b.onclick=()=>{
-    const t=b.dataset.copy;
-    if(navigator.clipboard)navigator.clipboard.writeText(t);
-    const o=b.innerHTML;b.innerHTML='<i class="fa-solid fa-check"></i> اتنسخ';setTimeout(()=>b.innerHTML=o,1200);
-  });
-  document.querySelectorAll('[data-plan]').forEach(b=>b.onclick=()=>{
-    $('plan').value=b.dataset.plan;
-    document.querySelector('.form-card').scrollIntoView({behavior:'smooth'});
-  });
-
+  document.querySelectorAll('.copy-btn').forEach(b=>b.onclick=()=>{const t=b.dataset.copy;if(navigator.clipboard)navigator.clipboard.writeText(t);const o=b.innerHTML;b.innerHTML='<i class="fa-solid fa-check"></i> اتنسخ';setTimeout(()=>b.innerHTML=o,1200);});
+  document.querySelectorAll('[data-plan]').forEach(b=>b.onclick=()=>{$('plan').value=b.dataset.plan;document.querySelector('.form-card').scrollIntoView({behavior:'smooth'});});
   auth.onAuthStateChanged(async user=>{
     if(!user){location.href='login.html';return;}
     let data={};try{data=JSON.parse(localStorage.getItem('bw_user')||'{}')}catch(e){}
     try{const s=await db.collection('profiles').doc(user.uid).get();if(s.exists)Object.assign(data,s.data())}catch(e){}
     me={uid:user.uid,name:data.name||user.email.split('@')[0],phone:data.phone||'',subExpires:data.subExpires||null};
-    $('phone').value=me.phone;
-    loadMySub();
+    $('phone').value=me.phone;loadMySub();
   });
-
   async function loadMySub(){
     try{
       const snap=await db.collection('subscriptions').where('user_id','==',me.uid).get();
@@ -188,37 +170,24 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     }catch(e){latest=null;}
     renderStatus();
   }
-
   function renderStatus(){
     const box=$('statusBox');
     const vip=me.subExpires&&new Date(me.subExpires).getTime()>Date.now();
-    if(vip){
-      box.innerHTML='<div class="status-card st-active"><i class="fa-solid fa-crown"></i><div><b>اشتراكك الذهبي فعال 👑</b><p>مستمتع بكل المحتوى بدون أكواد لحد '+new Date(me.subExpires).toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'})+'</p></div></div>';
-      $('subForm').style.display='none';
-    }else if(latest&&latest.status==='pending'){
-      box.innerHTML='<div class="status-card st-pending"><i class="fa-solid fa-hourglass-half"></i><div><b>طلبك قيد المراجعة</b><p>بعد ما تأكد التحويل هنفعّل اشتراكك — ابعت الإيصال واتساب عشان نسرّع العملية</p></div></div>';
-      $('subForm').style.display='none';
-    }else if(latest&&latest.status==='rejected'){
-      box.innerHTML='<div class="status-card st-rejected"><i class="fa-solid fa-circle-xmark"></i><div><b>طلبك الأخير اترفض</b><p>غالبًا التحويل موصلناش — تواصل معنا واتساب وابعت طلب جديد</p></div></div>';
-    }else{
-      box.innerHTML='<div class="status-card st-none"><i class="fa-solid fa-lock"></i><div><b>لسه مشتركش</b><p>اختار باقة من اللي فوق وحوّل وابعث طلبك — التفعيل خلال ساعات</p></div></div>';
-    }
+    if(vip){box.innerHTML='<div class="status-card st-active"><i class="fa-solid fa-crown"></i><div><b>اشتراكك الذهبي فعال 👑</b><p>مستمتع بكل المحتوى بدون أكواد لحد '+new Date(me.subExpires).toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'})+'</p></div></div>';$('subForm').style.display='none';}
+    else if(latest&&latest.status==='pending'){box.innerHTML='<div class="status-card st-pending"><i class="fa-solid fa-hourglass-half"></i><div><b>طلبك قيد المراجعة</b><p>بعد ما تأكد التحويل هنفعّل اشتراكك — ابعت الإيصال واتساب عشان نسرّع العملية</p></div></div>';$('subForm').style.display='none';}
+    else if(latest&&latest.status==='rejected'){box.innerHTML='<div class="status-card st-rejected"><i class="fa-solid fa-circle-xmark"></i><div><b>طلبك الأخير اترفض</b><p>غالبًا التحويل موصلناش — تواصل معنا واتساب وابعت طلب جديد</p></div></div>';}
+    else{box.innerHTML='<div class="status-card st-none"><i class="fa-solid fa-lock"></i><div><b>لسه مشتركش</b><p>اختار باقة من اللي فوق وحوّل وابعث طلبك — التفعيل خلال ساعات</p></div></div>';}
   }
-
   $('subForm').addEventListener('submit',async e=>{
-    e.preventDefault();
-    $('errBox').style.display='none';$('okBox').style.display='none';
+    e.preventDefault();$('errBox').style.display='none';$('okBox').style.display='none';
     const plan=$('plan').value,phone=$('phone').value.trim(),ref=$('ref').value.trim();
     if(phone.length<10){$('errBox').textContent='⚠️ اكتب رقم موبايل صحيح.';$('errBox').style.display='block';return;}
     try{
       await db.collection('subscriptions').add({user_id:me.uid,student:me.name,phone,plan,ref,status:'pending',createdAt:new Date().toISOString()});
-      $('okBox').textContent='✅ طلبك اتبعت! هنراجعه ونفعّل اشتراكك — ابعت الإيصال واتساب عشان أسرع.';
-      $('okBox').style.display='block';
-      $('subForm').reset();$('phone').value=phone;
-      loadMySub();
+      $('okBox').textContent='✅ طلبك اتبعت! هنراجعه ونفعّل اشتراكك — ابعت الإيصال واتساب عشان أسرع.';$('okBox').style.display='block';
+      $('subForm').reset();$('phone').value=phone;loadMySub();
     }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}
   });
-
   $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
 </script>
 </body>
