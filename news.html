@@ -44,7 +44,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 </style>
 </head>
 <body>
-
 <header class="top">
   <div class="container top-wrap">
     <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
@@ -54,7 +53,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </header>
-
 <main class="container">
   <section class="page-head">
     <h1><span>أخبار المنصة</span> <i class="fa-solid fa-bullhorn"></i></h1>
@@ -63,40 +61,23 @@ main{position:relative;z-index:1;padding:40px 0 70px}
   <div class="news-list" id="newsList"></div>
   <div class="empty" id="empty"><i class="fa-solid fa-newspaper"></i><h3>مفيش أخبار حاليًا</h3><p>تابعنا قريبًا</p></div>
 </main>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="js/config.js"></script>
 <script>
   const $=id=>document.getElementById(id);
-  auth.onAuthStateChanged(user=>{
-    if(!user){location.href='login.html';return;}
-    load();
-  });
-
+  auth.onAuthStateChanged(user=>{if(!user){location.href='login.html';return;}load();});
   async function load(){
     try{
       const snap=await db.collection('news').get();
       const arr=[];snap.forEach(d=>arr.push(d.data()));
       arr.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
       if(!arr.length){$('empty').style.display='block';}
-      else{
-        $('newsList').innerHTML=arr.map(n=>`
-          <article class="news">
-            ${n.image?`<img src="${n.image}" alt="" onerror="this.style.display='none'">`:''}
-            <div class="news-body">
-              <div class="news-date"><i class="fa-solid fa-calendar-day"></i>${new Date(n.createdAt).toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
-              <h3>${n.title}</h3>
-              <p>${n.content}</p>
-            </div>
-          </article>`).join('');
-      }
-      // علّم كل الأخبار كمقروءة — الجرس هيختفي
+      else{$('newsList').innerHTML=arr.map(n=>`<article class="news">${n.image?`<img src="${n.image}" alt="" onerror="this.style.display='none'">`:''}<div class="news-body"><div class="news-date"><i class="fa-solid fa-calendar-day"></i>${new Date(n.createdAt).toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><h3>${n.title}</h3><p>${n.content}</p></div></article>`).join('');}
       localStorage.setItem('bw_lastNewsRead',String(Date.now()));
     }catch(e){$('empty').style.display='block';}
   }
-
   $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
 </script>
 </body>
