@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إنشاء حساب | منصة بن وائل التعليمية</title>
+<title>إنشاء حساب | منصة مشكاة التعليمية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f6f7fb;--line:#e6e9f0;--text:#101828;--muted:#667085;--grad:linear-gradient(135deg,#f59e0b,#ea580c)}
+:root{--bg:#f4f6fb;--line:#e3e8f0;--text:#14233f;--muted:#64748b;--navy:#1e3a5f;--gold:#d4af37;--grad:linear-gradient(135deg,#1e3a5f,#d4af37)}
 body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:grid;place-items:center;padding:40px 16px;position:relative;overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 .blob{position:fixed;border-radius:50%;filter:blur(90px);z-index:0}
-.blob-1{width:420px;height:420px;background:radial-gradient(circle,#fbbf24,transparent 65%);top:-120px;right:-100px;opacity:.25}
-.blob-2{width:380px;height:380px;background:radial-gradient(circle,#fb923c,transparent 65%);bottom:-120px;left:-100px;opacity:.2}
+.blob-1{width:420px;height:420px;background:radial-gradient(circle,#1e3a5f,transparent 65%);top:-120px;right:-100px;opacity:.2}
+.blob-2{width:380px;height:380px;background:radial-gradient(circle,#d4af37,transparent 65%);bottom:-120px;left:-100px;opacity:.18}
 .home-link{position:fixed;top:20px;right:22px;color:var(--muted);font-weight:800;font-size:14px;z-index:5}
-.home-link:hover{color:#ea580c}
-.auth-card{position:relative;z-index:2;width:min(470px,94vw);background:#fff;border:1px solid var(--line);border-radius:24px;padding:38px 32px;box-shadow:0 20px 60px rgba(16,24,40,.08)}
+.home-link:hover{color:var(--navy)}
+.auth-card{position:relative;z-index:2;width:min(470px,94vw);background:#fff;border:1px solid var(--line);border-radius:24px;padding:38px 32px;box-shadow:0 20px 60px rgba(20,35,63,.1)}
 .auth-logo{width:100px;height:100px;object-fit:contain;display:block;margin:0 auto 6px}
 h1{text-align:center;font-size:22px;font-weight:900}
 .sub{text-align:center;color:var(--muted);font-size:14px;margin:6px 0 22px}
@@ -26,25 +26,25 @@ h1{text-align:center;font-size:22px;font-weight:900}
 .field{margin-bottom:14px;text-align:right}
 .field label{display:block;font-weight:800;font-size:13px;margin-bottom:6px;color:#344054}
 .field input{width:100%;padding:12px 14px;border-radius:12px;background:#fff;border:1.5px solid var(--line);color:var(--text);font-family:inherit;font-size:15px;outline:none;transition:.3s}
-.field input:focus{border-color:#f59e0b;box-shadow:0 0 0 4px rgba(245,158,11,.15)}
+.field input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(212,175,55,.15)}
 .pass-wrap{position:relative}
 .pass-wrap input{direction:ltr;text-align:left;padding-right:46px}
 .eye{position:absolute;top:50%;right:10px;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;padding:6px}
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:14px;font-weight:900;font-size:16px;font-family:inherit;border:none;cursor:pointer;background:var(--grad);color:#fff;box-shadow:0 10px 25px rgba(234,88,12,.3);transition:.3s}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:14px;font-weight:900;font-size:16px;font-family:inherit;border:none;cursor:pointer;background:var(--grad);color:#fff;box-shadow:0 10px 25px rgba(30,58,95,.3);transition:.3s}
 .btn:hover{transform:translateY(-3px)}
 .spinner{display:none;width:18px;height:18px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
 .btn.loading .spinner{display:inline-block}.btn.loading{pointer-events:none;opacity:.8}
 @keyframes spin{to{transform:rotate(360deg)}}
 .switch{text-align:center;color:var(--muted);font-size:14px;margin-top:18px}
-.switch a{color:#ea580c;font-weight:900}
+.switch a{color:var(--navy);font-weight:900}
 </style>
 </head>
 <body>
 <a href="index.html" class="home-link"><i class="fa-solid fa-arrow-right"></i> الرئيسية</a>
 <div class="blob blob-1"></div><div class="blob blob-2"></div>
 <div class="auth-card">
-  <img class="auth-logo" src="logo.png" alt="بن وائل" onerror="this.style.display='none'">
-  <h1>منصة بن وائل التعليمية</h1>
+  <img class="auth-logo" src="logo.png" alt="مشكاة" onerror="this.style.display='none'">
+  <h1>منصة مشكاة التعليمية</h1>
   <p class="sub">أنشئ حسابك وابدأ التعلم مع أفضل المدرسين</p>
   <div class="alert error" id="errBox"></div>
   <div class="alert success" id="okBox"></div>
@@ -77,14 +77,12 @@ h1{text-align:center;font-size:22px;font-weight:900}
     if(pass.length<6)return showErr('كلمة المرور لازم تكون ٦ أحرف على الأقل.');
     if(pass!==confirm)return showErr('كلمتا المرور مش متطابقتين.');
     btn.classList.add('loading');
-    try{
-      const cred=await auth.createUserWithEmailAndPassword(email,pass);
+    try{const cred=await auth.createUserWithEmailAndPassword(email,pass);
       try{await Promise.race([db.collection('profiles').doc(cred.user.uid).set({name,email,phone,role:'student',createdAt:new Date().toISOString()}),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))]);}catch(dbErr){console.warn(dbErr)}
       localStorage.setItem('bw_user',JSON.stringify({name,email,role:'student'}));
-      okBox.textContent='🎉 تم إنشاء حسابك بنجاح! جاري تحويلك...';okBox.style.display='block';
+      okBox.textContent='🎉 تم إنشاء حسابك في مشكاة! جاري تحويلك...';okBox.style.display='block';
       setTimeout(()=>location.href='dashboard.html',1000);
-    }catch(err){showErr(arError(err));}
-    finally{btn.classList.remove('loading');}
+    }catch(err){showErr(arError(err));}finally{btn.classList.remove('loading');}
   });
 </script>
 </body>
