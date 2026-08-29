@@ -54,10 +54,8 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 .item-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .cnt{width:80px;padding:8px 10px;border-radius:10px;border:1.5px solid var(--line);font-family:inherit;font-weight:900;text-align:center;font-size:14px;outline:none}
 .copy-btn,.no{border-radius:10px;padding:8px 14px;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer;transition:.3s;background:none}
-.copy-btn{border:1.5px solid #abefc6;color:#067647}
-.copy-btn:hover{background:#ecfdf3}
-.no{border:1.5px solid #fecaca;color:#b91c1c}
-.no:hover{background:#fef2f2}
+.copy-btn{border:1.5px solid #abefc6;color:#067647}.copy-btn:hover{background:#ecfdf3}
+.no{border:1.5px solid #fecaca;color:#b91c1c}.no:hover{background:#fef2f2}
 .codes-area{display:none;margin-top:14px;background:#fff;border:1px dashed var(--line);border-radius:12px;padding:14px;max-height:280px;overflow-y:auto}
 .codes-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
 .codes-head b{font-size:13px}
@@ -74,7 +72,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 </style>
 </head>
 <body>
-
 <header class="top">
   <div class="container top-wrap">
     <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
@@ -84,15 +81,12 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </header>
-
 <main class="container">
   <section class="page-head"><h1>إدارة المحاضرات <i class="fa-solid fa-video"></i></h1></section>
-
   <div class="card-glass" id="noAccess" style="display:none;text-align:center;padding:50px">
     <i class="fa-solid fa-lock" style="font-size:44px;color:var(--amber);margin-bottom:16px;display:block"></i>
     <h2 style="justify-content:center">مفيش صلاحية</h2>
   </div>
-
   <div id="adminArea">
     <div class="card-glass">
       <h2><i class="fa-solid fa-circle-plus"></i> إضافة محاضرة جديدة</h2>
@@ -113,7 +107,6 @@ main{position:relative;z-index:1;padding:40px 0 70px}
         <button class="btn btn-primary" id="submitBtn" type="submit"><span>نشر المحاضرة <i class="fa-solid fa-paper-plane"></i></span><span class="spinner"></span></button>
       </form>
     </div>
-
     <div class="card-glass mt">
       <h2><i class="fa-solid fa-clapperboard"></i> المحاضرات + الأكواد</h2>
       <p class="muted" style="margin-bottom:14px">لكل محاضرة مقفولة: ولّد دفعة أكواد ووزّعها على طلابك — كل كود بيشتغل مرة واحدة بس.</p>
@@ -121,101 +114,56 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     </div>
   </div>
 </main>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="js/config.js"></script>
 <script>
-  const ADMIN_EMAIL="admin@academy.com";
+  const ADMIN_EMAIL="admin@benwael.com";
   const $=id=>document.getElementById(id);
   let IS_ADMIN=false,MY_EMAIL='';
-
   auth.onAuthStateChanged(async user=>{
     if(!user){location.href='login.html';return;}
     MY_EMAIL=user.email;IS_ADMIN=user.email===ADMIN_EMAIL;
     let role='',myName='';
     try{const s=await db.collection('profiles').doc(user.uid).get();if(s.exists){role=s.data().role||'';myName=s.data().name||'';}}catch(e){}
-    if(!IS_ADMIN){
-      $('backAdmin').style.display='none';
-      if(role!=='teacher'){$('adminArea').style.display='none';$('noAccess').style.display='block';return;}
-      const f=$('teacherName');if(f){f.value=myName;f.disabled=true;}
-    }
+    if(!IS_ADMIN){$('backAdmin').style.display='none';if(role!=='teacher'){$('adminArea').style.display='none';$('noAccess').style.display='block';return;}const f=$('teacherName');if(f){f.value=myName;f.disabled=true;}}
     loadLecs();
   });
-
-  function toImg(u){
-    if(!u)return'';
-    if(u.includes('drive.google.com')){const m=u.match(/\/d\/([\w-]+)/)||u.match(/[?&]id=([\w-]+)/);if(m)return'https://lh3.googleusercontent.com/d/'+m[1];}
-    return u;
-  }
-  function copyText(t,btn){
-    const done=()=>{if(btn){const o=btn.innerHTML;btn.innerHTML='<i class="fa-solid fa-check"></i> تم';setTimeout(()=>btn.innerHTML=o,1200);}};
-    if(navigator.clipboard){navigator.clipboard.writeText(t).then(done);}
-    else{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(ta);done();}
-  }
-
+  function toImg(u){if(!u)return'';if(u.includes('drive.google.com')){const m=u.match(/\/d\/([\w-]+)/)||u.match(/[?&]id=([\w-]+)/);if(m)return'https://lh3.googleusercontent.com/d/'+m[1];}return u;}
+  function copyText(t,btn){const done=()=>{if(btn){const o=btn.innerHTML;btn.innerHTML='<i class="fa-solid fa-check"></i> تم';setTimeout(()=>btn.innerHTML=o,1200);}};if(navigator.clipboard){navigator.clipboard.writeText(t).then(done);}else{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(ta);done();}}
   $('lecForm').addEventListener('submit',async e=>{
-    e.preventDefault();
-    $('errBox').style.display='none';$('okBox').style.display='none';
+    e.preventDefault();$('errBox').style.display='none';$('okBox').style.display='none';
     const title=$('title').value.trim(),subject=$('subject').value.trim(),teacherName=$('teacherName').value.trim();
-    const duration=$('duration').value.trim(),url=$('url').value.trim(),thumb=toImg($('thumb').value.trim());
-    const open=$('openChk').checked;
+    const duration=$('duration').value.trim(),url=$('url').value.trim(),thumb=toImg($('thumb').value.trim()),open=$('openChk').checked;
     if(!title||!subject||!teacherName){$('errBox').textContent='⚠️ كمّل العنوان والمادة واسم المدرس.';$('errBox').style.display='block';return;}
     if(!url){$('errBox').textContent='⚠️ حط رابط الفيديو.';$('errBox').style.display='block';return;}
     $('submitBtn').classList.add('loading');
     try{
       await db.collection('lectures').add({title,subject,teacherName,duration,url,thumbnail:thumb,open,teacherEmail:IS_ADMIN?'':MY_EMAIL,createdAt:new Date().toISOString()});
-      $('okBox').textContent=open?'✅ المحاضرة اتنشرت ومفتوحة للجميع!':'✅ المحاضرة اتنشرت! دلوقتي ولّد أكواد ووزّعها على طلابك من القائمة تحت.';
-      $('okBox').style.display='block';
-      const tName=teacherName;
-      $('lecForm').reset();
-      if(!IS_ADMIN){const f=$('teacherName');f.value=tName;f.disabled=true;}
+      $('okBox').textContent=open?'✅ المحاضرة اتنشرت ومفتوحة للجميع!':'✅ المحاضرة اتنشرت! دلوقتي ولّد أكواد ووزّعها على طلابك من القائمة تحت.';$('okBox').style.display='block';
+      const tName=teacherName;$('lecForm').reset();if(!IS_ADMIN){const f=$('teacherName');f.value=tName;f.disabled=true;}
       loadLecs();
     }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}
     finally{$('submitBtn').classList.remove('loading');}
   });
-
   async function genBatch(lid,count,btn){
     btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> جاري التوليد…';
-    try{
-      const batch=db.batch();const seen=new Set();
-      for(let i=0;i<count;i++){
-        let c;do{c=String(Math.floor(10000000+Math.random()*90000000));}while(seen.has(c));
-        seen.add(c);
-        batch.set(db.collection('lecture_codes').doc(),{code:c,lectureId:lid,usedBy:null,usedByName:'',usedAt:null,createdAt:new Date().toISOString()});
-      }
-      await batch.commit();
-      loadCodes(lid);
-    }catch(e){alert('خطأ: '+e.message);}
-    finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-key"></i> توليد أكواد';}
+    try{const batch=db.batch();const seen=new Set();for(let i=0;i<count;i++){let c;do{c=String(Math.floor(10000000+Math.random()*90000000));}while(seen.has(c));seen.add(c);batch.set(db.collection('lecture_codes').doc(),{code:c,lectureId:lid,usedBy:null,usedByName:'',usedAt:null,createdAt:new Date().toISOString()});}await batch.commit();loadCodes(lid);}
+    catch(e){alert('خطأ: '+e.message);}finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-key"></i> توليد أكواد';}
   }
-
   async function loadCodes(lid){
-    const area=$('codes-'+lid);
-    area.style.display='block';
-    area.innerHTML='<p class="muted">ثواني…</p>';
+    const area=$('codes-'+lid);area.style.display='block';area.innerHTML='<p class="muted">ثواني…</p>';
     try{
       const snap=await db.collection('lecture_codes').where('lectureId','==',lid).get();
       const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       if(!arr.length){area.innerHTML='<p class="muted">لسه مفيش أكواد — دوس "توليد أكواد".</p>';return;}
       const free=arr.filter(c=>!c.usedBy);
-      area.innerHTML=`
-        <div class="codes-head">
-          <b>المتاح: ${free.length} • المستخدم: ${arr.length-free.length}</b>
-          <button class="copy-btn" id="copyfree-${lid}"><i class="fa-solid fa-copy"></i> نسخ كل المتاح</button>
-        </div>`+
-        arr.map(c=>`
-          <div class="code-line">
-            <span class="code-chip">${c.code}</span>
-            ${c.usedBy?`<span class="status-used">مستخدم: ${c.usedByName||'طالب'}</span>`:`<span class="status-free">متاح</span>`}
-            <button class="copy-btn" data-c="${c.code}"><i class="fa-solid fa-copy"></i></button>
-          </div>`).join('');
+      area.innerHTML=`<div class="codes-head"><b>المتاح: ${free.length} • المستخدم: ${arr.length-free.length}</b><button class="copy-btn" id="copyfree-${lid}"><i class="fa-solid fa-copy"></i> نسخ كل المتاح</button></div>`+arr.map(c=>`<div class="code-line"><span class="code-chip">${c.code}</span>${c.usedBy?`<span class="status-used">مستخدم: ${c.usedByName||'طالب'}</span>`:`<span class="status-free">متاح</span>`}<button class="copy-btn" data-c="${c.code}"><i class="fa-solid fa-copy"></i></button></div>`).join('');
       area.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>copyText(b.dataset.c,b));
       $('copyfree-'+lid).onclick=e=>copyText(free.map(c=>c.code).join('\n'),e.currentTarget);
     }catch(e){area.innerHTML='<p class="muted">خطأ في تحميل الأكواد.</p>';}
   }
-
   async function loadLecs(){
     const box=$('lecsList');
     try{
@@ -223,28 +171,12 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       arr.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
       if(!arr.length){box.innerHTML='<p class="muted">لسه مفيش محاضرات.</p>';return;}
-      box.innerHTML=arr.map(l=>`
-        <div class="item">
-          <div class="item-top"><b>${l.title}</b><span class="st ${l.open?'open':''}">${l.open?'مفتوحة':'محمية بأكواد'} • ${l.subject}</span></div>
-          <p class="item-meta">${l.teacherName} • ${l.duration||'—'}</p>
-          <div class="item-actions">
-            ${l.open?'':`
-              <input type="number" class="cnt" id="cnt-${l.id}" value="30" min="1" max="200">
-              <button class="copy-btn genb" data-id="${l.id}"><i class="fa-solid fa-key"></i> توليد أكواد</button>
-              <button class="copy-btn viewb" data-id="${l.id}"><i class="fa-solid fa-list"></i> عرض الأكواد</button>
-            `}
-            <button class="no delb" data-id="${l.id}"><i class="fa-solid fa-trash"></i> حذف</button>
-          </div>
-          <div class="codes-area" id="codes-${l.id}"></div>
-        </div>`).join('');
+      box.innerHTML=arr.map(l=>`<div class="item"><div class="item-top"><b>${l.title}</b><span class="st ${l.open?'open':''}">${l.open?'مفتوحة':'محمية بأكواد'} • ${l.subject}</span></div><p class="item-meta">${l.teacherName} • ${l.duration||'—'}</p><div class="item-actions">${l.open?'':`<input type="number" class="cnt" id="cnt-${l.id}" value="30" min="1" max="200"><button class="copy-btn genb" data-id="${l.id}"><i class="fa-solid fa-key"></i> توليد أكواد</button><button class="copy-btn viewb" data-id="${l.id}"><i class="fa-solid fa-list"></i> عرض الأكواد</button>`}<button class="no delb" data-id="${l.id}"><i class="fa-solid fa-trash"></i> حذف</button></div><div class="codes-area" id="codes-${l.id}"></div></div>`).join('');
       box.querySelectorAll('.genb').forEach(b=>b.onclick=()=>genBatch(b.dataset.id,Math.min(200,Math.max(1,+$('cnt-'+b.dataset.id).value||30)),b));
       box.querySelectorAll('.viewb').forEach(b=>b.onclick=()=>loadCodes(b.dataset.id));
-      box.querySelectorAll('.delb').forEach(b=>b.onclick=async()=>{
-        if(confirm('متأكد إنك عايز تحذف المحاضرة دي؟')){b.disabled=true;await db.collection('lectures').doc(b.dataset.id).delete();loadLecs();}
-      });
+      box.querySelectorAll('.delb').forEach(b=>b.onclick=async()=>{if(confirm('متأكد إنك عايز تحذف المحاضرة دي؟')){b.disabled=true;await db.collection('lectures').doc(b.dataset.id).delete();loadLecs();}});
     }catch(e){box.innerHTML='<p class="muted">خطأ في التحميل.</p>';}
   }
-
   $('logoutBtn').onclick=async()=>{localStorage.removeItem('bw_user');await auth.signOut();location.href='index.html';};
 </script>
 </body>
