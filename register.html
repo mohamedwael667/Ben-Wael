@@ -42,7 +42,6 @@ h1{text-align:center;font-size:22px;font-weight:900}
 <body>
 <a href="index.html" class="home-link"><i class="fa-solid fa-arrow-right"></i> الرئيسية</a>
 <div class="blob blob-1"></div><div class="blob blob-2"></div>
-
 <div class="auth-card">
   <img class="auth-logo" src="logo.png" alt="بن وائل" onerror="this.style.display='none'">
   <h1>منصة بن وائل التعليمية</h1>
@@ -59,32 +58,19 @@ h1{text-align:center;font-size:22px;font-weight:900}
   </form>
   <p class="switch">عندك حساب بالفعل؟ <a href="login.html">سجّل دخولك</a></p>
 </div>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="js/config.js"></script>
 <script>
   const $=id=>document.getElementById(id);
-  document.querySelectorAll('.eye').forEach(b=>b.onclick=()=>{
-    const i=document.getElementById(b.dataset.t);
-    i.type=i.type==='password'?'text':'password';
-    b.querySelector('i').className=i.type==='password'?'fa-solid fa-eye':'fa-solid fa-eye-slash';
-  });
+  document.querySelectorAll('.eye').forEach(b=>b.onclick=()=>{const i=document.getElementById(b.dataset.t);i.type=i.type==='password'?'text':'password';b.querySelector('i').className=i.type==='password'?'fa-solid fa-eye':'fa-solid fa-eye-slash';});
   const errBox=$('errBox'),okBox=$('okBox'),btn=$('submitBtn');
   const showErr=m=>{errBox.textContent='⚠️ '+m;errBox.style.display='block';okBox.style.display='none'};
-  function arError(e){
-    const c=(e&&e.code)||'';
-    if(c==='auth/email-already-in-use')return 'البريد ده مسجل قبل كده — سجّل دخول.';
-    if(c==='auth/invalid-email')return 'اكتب بريد إلكتروني صحيح.';
-    if(c==='auth/weak-password')return 'كلمة المرور لازم تكون ٦ أحرف على الأقل.';
-    if(c==='auth/network-request-failed')return 'مشكلة اتصال بالإنترنت.';
-    return 'حصلت مشكلة: '+((e&&e.message)||e);
-  }
+  function arError(e){const c=(e&&e.code)||'';if(c==='auth/email-already-in-use')return 'البريد ده مسجل قبل كده — سجّل دخول.';if(c==='auth/invalid-email')return 'اكتب بريد إلكتروني صحيح.';if(c==='auth/weak-password')return 'كلمة المرور لازم تكون ٦ أحرف على الأقل.';if(c==='auth/network-request-failed')return 'مشكلة اتصال بالإنترنت.';return 'حصلت مشكلة: '+((e&&e.message)||e);}
   $('regForm').addEventListener('submit',async e=>{
     e.preventDefault();errBox.style.display='none';
-    const name=$('name').value.trim(),email=$('email').value.trim().toLowerCase(),phone=$('phone').value.trim();
-    const pass=$('pass').value,confirm=$('confirm').value;
+    const name=$('name').value.trim(),email=$('email').value.trim().toLowerCase(),phone=$('phone').value.trim(),pass=$('pass').value,confirm=$('confirm').value;
     if(name.length<3)return showErr('اكتب اسمك الكامل.');
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return showErr('اكتب بريد إلكتروني صحيح.');
     if(phone.length<10)return showErr('اكتب رقم موبايل صحيح.');
@@ -93,15 +79,9 @@ h1{text-align:center;font-size:22px;font-weight:900}
     btn.classList.add('loading');
     try{
       const cred=await auth.createUserWithEmailAndPassword(email,pass);
-      try{
-        await Promise.race([
-          db.collection('profiles').doc(cred.user.uid).set({name,email,phone,role:'student',createdAt:new Date().toISOString()}),
-          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
-        ]);
-      }catch(dbErr){console.warn(dbErr)}
+      try{await Promise.race([db.collection('profiles').doc(cred.user.uid).set({name,email,phone,role:'student',createdAt:new Date().toISOString()}),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))]);}catch(dbErr){console.warn(dbErr)}
       localStorage.setItem('bw_user',JSON.stringify({name,email,role:'student'}));
-      okBox.textContent='🎉 تم إنشاء حسابك بنجاح! جاري تحويلك...';
-      okBox.style.display='block';
+      okBox.textContent='🎉 تم إنشاء حسابك بنجاح! جاري تحويلك...';okBox.style.display='block';
       setTimeout(()=>location.href='dashboard.html',1000);
     }catch(err){showErr(arError(err));}
     finally{btn.classList.remove('loading');}
