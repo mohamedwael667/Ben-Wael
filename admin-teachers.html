@@ -40,10 +40,10 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 .field input,.field textarea{width:100%;padding:11px 13px;border-radius:12px;background:#fff;border:1.5px solid var(--line);color:var(--text);font-family:inherit;font-size:14px;outline:none;resize:vertical}
 .field input:focus,.field textarea:focus{border-color:var(--gold)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.info-box{background:#eef4ff;border:1px solid #bcd4f5;border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:#1e3a5f;font-weight:700;line-height:1.9}
+.info-box{background:#eef4ff;border:1px solid #bcd4f5;border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:var(--navy);font-weight:700;line-height:1.9}
 .list{display:flex;flex-direction:column;gap:14px}
 .t-item{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-.t-ava{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:26px;font-weight:900;color:#fff;background:var(--grad);flex-shrink:0}
+.t-ava{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:26px;font-weight:900;color:#fff;background:var(--grad);flex-shrink:0;overflow:hidden}
 .t-info{flex:1;min-width:200px}
 .t-info b{font-size:16px;font-weight:900;display:block}
 .t-sub{display:inline-block;margin:6px 0;font-size:11px;font-weight:900;color:#92400e;background:#fef3c7;border:1px solid #fcd34d;padding:3px 12px;border-radius:50px}
@@ -72,14 +72,15 @@ main{position:relative;z-index:1;padding:40px 0 70px}
   <div id="adminArea">
     <div class="card-glass">
       <h2><i class="fa-solid fa-user-plus"></i> إضافة مدرس + حساب دخول</h2>
-      <div class="info-box"><i class="fa-solid fa-circle-info"></i> لما تضيف مدرس، بيتعمله <b>حساب دخول خاص</b> بيه يقدر يدير مادته بس — سلّمه الإيميل والباسورد.</div>
+      <div class="info-box"><i class="fa-solid fa-circle-info"></i> لما تضيف مدرس، بيتعمله <b>حساب دخول خاص</b> بيه يقدر يدير مادته بس — سلّمه الإيميل والباسورد. الصورة اختياريًا من Google Drive.</div>
       <div class="alert error" id="errBox"></div>
       <div class="alert success" id="okBox"></div>
       <form id="tForm" novalidate>
         <div class="row">
           <div class="field"><label>اسم المدرس</label><input id="tName" placeholder="مثال: أ. محمد أحمد"></div>
           <div class="field"><label>المادة / التخصص</label><input id="tSubject" placeholder="مثال: رياضيات"></div>
-                <div class="field"><label>نبذة قصيرة (تظهر في الرئيسية)</label><textarea id="tBio" rows="2" placeholder="خبرة ١٠ سنوات..."></textarea></div>
+        </div>
+        <div class="field"><label>نبذة قصيرة (تظهر في الرئيسية)</label><textarea id="tBio" rows="2" placeholder="خبرة ١٠ سنوات..."></textarea></div>
         <div class="field"><label>صورة المدرس (رابط من Google Drive — اختياري)</label><input id="tPhoto" dir="ltr" placeholder="https://drive.google.com/file/d/..."></div>
         <div class="row">
           <div class="field"><label>إيميل دخول المدرس</label><input id="tEmail" dir="ltr" placeholder="teacher@example.com"></div>
@@ -110,6 +111,8 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     e.preventDefault();$('errBox').style.display='none';$('okBox').style.display='none';
     const name=$('tName').value.trim(),subject=$('tSubject').value.trim(),bio=$('tBio').value.trim();
     const email=$('tEmail').value.trim().toLowerCase(),pass=$('tPass').value;
+    let photo=$('tPhoto').value.trim();
+    if(photo.includes('drive.google.com')){const m=photo.match(/\/d\/([\w-]+)/)||photo.match(/[?&]id=([\w-]+)/);if(m)photo='https://lh3.googleusercontent.com/d/'+m[1];}
     if(!name||!subject){$('errBox').textContent='⚠️ اكتب اسم المدرس والمادة.';$('errBox').style.display='block';return;}
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){$('errBox').textContent='⚠️ اكتب إيميل صحيح للمدرس.';$('errBox').style.display='block';return;}
     if(pass.length<6){$('errBox').textContent='⚠️ الباسورد لازم ٦ أحرف على الأقل.';$('errBox').style.display='block';return;}
@@ -119,10 +122,8 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       try{const cred=await sec.auth().createUserWithEmailAndPassword(email,pass);uid=cred.user.uid;await sec.auth().signOut();}
       catch(er){if(er.code==='auth/email-already-in-use'){$('errBox').textContent='⚠️ الإيميل ده مستخدم قبل كده.';$('errBox').style.display='block';$('submitBtn').classList.remove('loading');return;}throw er;}
       await db.collection('profiles').doc(uid).set({name,email,phone:'',role:'teacher',subject,createdAt:new Date().toISOString()});
-      let photo=$('tPhoto').value.trim();
-      if(photo.includes('drive.google.com')){const m=photo.match(/\/d\/([\w-]+)/)||photo.match(/[?&]id=([\w-]+)/);if(m)photo='https://lh3.googleusercontent.com/d/'+m[1];}
       await db.collection('teachers').add({name,subject,bio,email,photo,createdAt:new Date().toISOString()});
-            $('okBox').innerHTML='✅ حساب المدرس اتعمل!<br>الإيميل: <b>'+email+'</b> • الباسورد: <b>'+pass+'</b><br>سلّمهم للمدرس — هيدخل ويدير مادته بس.';$('okBox').style.display='block';
+      $('okBox').innerHTML='✅ حساب المدرس اتعمل!<br>الإيميل: <b>'+email+'</b> • الباسورد: <b>'+pass+'</b><br>سلّمهم للمدرس — هيدخل ويدير مادته بس.';$('okBox').style.display='block';
       $('tForm').reset();loadTeachers();
     }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}
     finally{$('submitBtn').classList.remove('loading');}
@@ -133,7 +134,7 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       const snap=await db.collection('teachers').get();const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       arr.sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0));
       if(!arr.length){box.innerHTML='<p class="muted">لسه مفيش مدرسين.</p>';return;}
-      box.innerHTML=arr.map(t=>`<div class="t-item"><div class="t-ava">${t.photo?`<img src="${t.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.outerHTML='${(t.name||'م').trim().charAt(0)}'">`:(t.name||'م').trim().charAt(0)}</div>  <div class="t-info"><b>${t.name}</b><span class="t-sub">${t.subject||'مدرس'}</span><p>${t.email?'🔑 '+t.email+' • ':''}${t.bio||''}</p></div><button class="no" data-id="${t.id}"><i class="fa-solid fa-trash"></i> حذف</button></div>`).join('');
+      box.innerHTML=arr.map(t=>`<div class="t-item"><div class="t-ava">${t.photo?`<img src="${t.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.outerHTML='${(t.name||'م').trim().charAt(0)}'">`:(t.name||'م').trim().charAt(0)}</div><div class="t-info"><b>${t.name}</b><span class="t-sub">${t.subject||'مدرس'}</span><p>${t.email?'🔑 '+t.email+' • ':''}${t.bio||''}</p></div><button class="no" data-id="${t.id}"><i class="fa-solid fa-trash"></i> حذف</button></div>`).join('');
       box.querySelectorAll('.no').forEach(btn=>btn.onclick=async()=>{if(confirm('حذف المدرس من الرئيسية؟ (حساب الدخول لازم يتمسح من Firebase Console → Authentication)')){btn.disabled=true;await db.collection('teachers').doc(btn.dataset.id).delete();loadTeachers();}});
     }catch(e){box.innerHTML='<p class="muted">خطأ في التحميل.</p>';}
   }
