@@ -3,44 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>صانع الاختبارات | منصة بن وائل التعليمية</title>
+<title>صانع الاختبارات | منصة مشكاة التعليمية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f6f7fb;--card:#fff;--line:#e6e9f0;--text:#101828;--muted:#667085;--orange:#ea580c;--amber:#f59e0b;--grad:linear-gradient(135deg,#f59e0b,#ea580c);--shadow:0 10px 30px rgba(16,24,40,.08)}
+:root{--bg:#f4f6fb;--card:#fff;--line:#e3e8f0;--text:#14233f;--muted:#64748b;--navy:#1e3a5f;--navy-d:#14233f;--gold:#d4af37;--grad:linear-gradient(135deg,#1e3a5f,#d4af37);--shadow:0 10px 30px rgba(20,35,63,.08)}
 body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 a{text-decoration:none;color:inherit}
 .container{max-width:900px;margin:auto;padding:0 20px}
-.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top{position:sticky;top:0;z-index:10;background:var(--navy-d);border-bottom:1px solid rgba(212,175,55,.2)}
 .top-wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;gap:14px;flex-wrap:wrap}
-.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px;color:#fff}
 .logo img{width:46px;height:46px;object-fit:contain}
-.logo b{background:var(--grad);-webkit-background-clip:text;color:transparent}
+.logo b{background:linear-gradient(90deg,#d4af37,#f5e6a8);-webkit-background-clip:text;color:transparent}
 .top-actions{display:flex;align-items:center;gap:10px}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:900;font-size:14px;font-family:inherit;cursor:pointer;transition:.3s;border:none}
-.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--text)}
-.btn-ghost:hover{border-color:var(--amber);color:var(--orange)}
-.btn-danger{background:#fff;border:1.5px solid #fecaca;color:#b91c1c}
-.btn-danger:hover{background:#fef2f2}
-.btn-primary{width:100%;justify-content:center;padding:14px;background:var(--grad);color:#fff;box-shadow:0 10px 25px rgba(234,88,12,.3);font-size:15px}
+.btn-ghost{background:rgba(255,255,255,.08);border:1.5px solid rgba(212,175,55,.3);color:#f5e6a8}
+.btn-ghost:hover{background:rgba(212,175,55,.15)}
+.btn-danger{background:rgba(255,255,255,.05);border:1.5px solid rgba(239,68,68,.4);color:#fca5a5}
+.btn-danger:hover{background:rgba(239,68,68,.15)}
+.btn-primary{width:100%;justify-content:center;padding:14px;background:var(--grad);color:#fff;box-shadow:0 10px 25px rgba(30,58,95,.3);font-size:15px}
 .btn-primary:hover{transform:translateY(-3px)}
-.btn-add{width:100%;justify-content:center;padding:12px;background:#fff;border:2px dashed var(--amber);color:var(--orange);border-radius:14px;font-weight:900;font-size:14px;font-family:inherit;cursor:pointer;margin-bottom:14px;transition:.3s}
-.btn-add:hover{background:#fff7ed}
+.btn-add{width:100%;justify-content:center;padding:12px;background:#fff;border:2px dashed var(--gold);color:var(--navy);border-radius:14px;font-weight:900;font-size:14px;font-family:inherit;cursor:pointer;margin-bottom:14px;transition:.3s}
+.btn-add:hover{background:#eef4ff}
 main{position:relative;z-index:1;padding:40px 0 70px}
 .page-head{text-align:center;margin-bottom:28px}
 .page-head h1{font-size:clamp(22px,4vw,34px);font-weight:900}
-.page-head h1 i{color:var(--orange)}
+.page-head h1 i{color:var(--gold)}
 .card-glass{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:var(--shadow)}
 .card-glass h2{font-size:17px;font-weight:900;margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.card-glass h2 i{color:var(--orange)}
+.card-glass h2 i{color:var(--gold)}
 .alert{display:none;padding:12px 16px;border-radius:12px;margin-bottom:14px;font-size:14px;font-weight:700}
 .alert.error{background:#fef2f2;border:1px solid #fecaca;color:#b42318}
 .alert.success{background:#ecfdf3;border:1px solid #abefc6;color:#067647}
 .field{margin-bottom:12px;text-align:right}
 .field label{display:block;font-weight:800;font-size:12.5px;margin-bottom:5px;color:#344054}
 .field input,.field select{width:100%;padding:11px 13px;border-radius:12px;background:#fff;border:1.5px solid var(--line);color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:.3s}
-.field input:focus,.field select:focus{border-color:var(--amber)}
+.field input:focus,.field select:focus{border-color:var(--gold)}
 .field input:disabled{background:var(--bg);color:var(--muted)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .qblock{background:var(--bg);border:1.5px dashed var(--line);border-radius:16px;padding:16px;margin-bottom:16px}
@@ -53,7 +53,7 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 .item{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:16px}
 .item-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px;align-items:center}
 .item-top b{font-size:15px;font-weight:900}
-.st{font-size:11px;font-weight:900;padding:4px 12px;border-radius:50px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
+.st{font-size:11px;font-weight:900;padding:4px 12px;border-radius:50px;background:#eef4ff;color:var(--navy);border:1px solid #bcd4f5}
 .item-meta{color:var(--muted);font-size:12.5px;font-weight:700;margin-bottom:10px}
 .muted{color:var(--muted);font-size:14px}
 .mt{margin-top:26px}
@@ -65,7 +65,7 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 <body>
 <header class="top">
   <div class="container top-wrap">
-    <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
+    <a href="index.html" class="logo"><img src="logo.png" alt="مشكاة" onerror="this.style.display='none'"><span>منصة <b>مشكاة</b></span></a>
     <div class="top-actions">
       <a href="admin.html" class="btn btn-ghost" id="backAdmin"><i class="fa-solid fa-gauge-high"></i> لوحة الأدمن</a>
       <button id="logoutBtn" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
@@ -75,7 +75,7 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 <main class="container">
   <section class="page-head"><h1>صانع الاختبارات <i class="fa-solid fa-file-pen"></i></h1></section>
   <div class="card-glass" id="noAccess" style="display:none;text-align:center;padding:50px">
-    <i class="fa-solid fa-lock" style="font-size:44px;color:var(--amber);margin-bottom:16px;display:block"></i>
+    <i class="fa-solid fa-lock" style="font-size:44px;color:var(--gold);margin-bottom:16px;display:block"></i>
     <h2 style="justify-content:center">مفيش صلاحية</h2>
   </div>
   <div id="adminArea">
@@ -106,23 +106,17 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="js/config.js"></script>
 <script>
-  const ADMIN_EMAIL="admin@benwael.com";
-  const $=id=>document.getElementById(id);
-  let qCount=0,IS_ADMIN=false,MY_EMAIL='';
+  const ADMIN_EMAIL="admin@benwael.com";const $=id=>document.getElementById(id);let qCount=0,IS_ADMIN=false,MY_EMAIL='';
   auth.onAuthStateChanged(async user=>{
     if(!user){location.href='login.html';return;}
     MY_EMAIL=user.email;IS_ADMIN=user.email===ADMIN_EMAIL;
-    let role='',myName='';
-    try{const s=await db.collection('profiles').doc(user.uid).get();if(s.exists){role=s.data().role||'';myName=s.data().name||'';}}catch(e){}
+    let role='',myName='';try{const s=await db.collection('profiles').doc(user.uid).get();if(s.exists){role=s.data().role||'';myName=s.data().name||'';}}catch(e){}
     if(!IS_ADMIN){$('backAdmin').style.display='none';if(role!=='teacher'){$('adminArea').style.display='none';$('noAccess').style.display='block';return;}const f=$('qzTeacher');if(f){f.value=myName;f.disabled=true;}}
-    if(!document.querySelector('#qWrap .qblock'))addBlock();
-    loadQuizzes();
+    if(!document.querySelector('#qWrap .qblock'))addBlock();loadQuizzes();
   });
-  function addBlock(){
-    qCount++;const div=document.createElement('div');div.className='qblock';
+  function addBlock(){qCount++;const div=document.createElement('div');div.className='qblock';
     div.innerHTML=`<div class="head"><b>سؤال ${qCount}</b><button type="button" class="no delQ"><i class="fa-solid fa-trash"></i> حذف</button></div><div class="field"><input class="q-text" placeholder="اكتب نص السؤال هنا"></div><div class="opts"><input class="q-opt" placeholder="الاختيار 1"><input class="q-opt" placeholder="الاختيار 2"><input class="q-opt" placeholder="الاختيار 3"><input class="q-opt" placeholder="الاختيار 4"></div><div class="field"><label>الإجابة الصحيحة</label><select class="q-ans"><option value="0">الاختيار 1</option><option value="1">الاختيار 2</option><option value="2">الاختيار 3</option><option value="3">الاختيار 4</option></select></div>`;
-    $('qWrap').appendChild(div);div.querySelector('.delQ').onclick=()=>div.remove();
-  }
+    $('qWrap').appendChild(div);div.querySelector('.delQ').onclick=()=>div.remove();}
   $('addQ').onclick=addBlock;
   $('quizForm').addEventListener('submit',async e=>{
     e.preventDefault();$('errBox').style.display='none';$('okBox').style.display='none';
@@ -133,19 +127,14 @@ main{position:relative;z-index:1;padding:40px 0 70px}
     const questions=[];
     for(const b of blocks){const q=b.querySelector('.q-text').value.trim();const opts=[...b.querySelectorAll('.q-opt')].map(i=>i.value.trim());const ans=+b.querySelector('.q-ans').value;if(!q||opts.some(o=>!o)){$('errBox').textContent='⚠️ كمّل نص السؤال والـ٤ اختيارات في كل الأسئلة.';$('errBox').style.display='block';return;}questions.push({q,opts,ans});}
     $('submitQuiz').classList.add('loading');
-    try{
-      await db.collection('quizzes').add({title,subject,teacherName,questions,teacherEmail:IS_ADMIN?'':MY_EMAIL,createdAt:new Date().toISOString()});
+    try{await db.collection('quizzes').add({title,subject,teacherName,questions,teacherEmail:IS_ADMIN?'':MY_EMAIL,createdAt:new Date().toISOString()});
       $('okBox').textContent='✅ الاختبار اتنشر! الطلاب هيلاقوه في صفحة الاختبارات.';$('okBox').style.display='block';
-      const tName=teacherName;$('quizForm').reset();$('qWrap').innerHTML='';qCount=0;addBlock();if(!IS_ADMIN){const f=$('qzTeacher');f.value=tName;f.disabled=true;}
-      loadQuizzes();
-    }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}
-    finally{$('submitQuiz').classList.remove('loading');}
+      const tName=teacherName;$('quizForm').reset();$('qWrap').innerHTML='';qCount=0;addBlock();if(!IS_ADMIN){const f=$('qzTeacher');f.value=tName;f.disabled=true;}loadQuizzes();
+    }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}finally{$('submitQuiz').classList.remove('loading');}
   });
   async function loadQuizzes(){
     const box=$('quizList');
-    try{
-      const snap=IS_ADMIN?await db.collection('quizzes').get():await db.collection('quizzes').where('teacherEmail','==',MY_EMAIL).get();
-      const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
+    try{const snap=IS_ADMIN?await db.collection('quizzes').get():await db.collection('quizzes').where('teacherEmail','==',MY_EMAIL).get();const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       arr.sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0));
       if(!arr.length){box.innerHTML='<p class="muted">لسه مفيش اختبارات.</p>';return;}
       box.innerHTML=arr.map(z=>`<div class="item"><div class="item-top"><b>${z.title}</b><span class="st">${z.subject} • ${z.teacherName}</span></div><p class="item-meta">${z.questions.length} سؤال</p><button class="no" data-id="${z.id}"><i class="fa-solid fa-trash"></i> حذف</button></div>`).join('');
