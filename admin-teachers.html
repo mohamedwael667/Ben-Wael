@@ -79,8 +79,8 @@ main{position:relative;z-index:1;padding:40px 0 70px}
         <div class="row">
           <div class="field"><label>اسم المدرس</label><input id="tName" placeholder="مثال: أ. محمد أحمد"></div>
           <div class="field"><label>المادة / التخصص</label><input id="tSubject" placeholder="مثال: رياضيات"></div>
-        </div>
-        <div class="field"><label>نبذة قصيرة (تظهر في الرئيسية)</label><textarea id="tBio" rows="2" placeholder="خبرة ١٠ سنوات..."></textarea></div>
+                <div class="field"><label>نبذة قصيرة (تظهر في الرئيسية)</label><textarea id="tBio" rows="2" placeholder="خبرة ١٠ سنوات..."></textarea></div>
+        <div class="field"><label>صورة المدرس (رابط من Google Drive — اختياري)</label><input id="tPhoto" dir="ltr" placeholder="https://drive.google.com/file/d/..."></div>
         <div class="row">
           <div class="field"><label>إيميل دخول المدرس</label><input id="tEmail" dir="ltr" placeholder="teacher@example.com"></div>
           <div class="field"><label>باسورد مؤقت</label><input id="tPass" dir="ltr" placeholder="مثال: teacher123"></div>
@@ -119,8 +119,10 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       try{const cred=await sec.auth().createUserWithEmailAndPassword(email,pass);uid=cred.user.uid;await sec.auth().signOut();}
       catch(er){if(er.code==='auth/email-already-in-use'){$('errBox').textContent='⚠️ الإيميل ده مستخدم قبل كده.';$('errBox').style.display='block';$('submitBtn').classList.remove('loading');return;}throw er;}
       await db.collection('profiles').doc(uid).set({name,email,phone:'',role:'teacher',subject,createdAt:new Date().toISOString()});
-      await db.collection('teachers').add({name,subject,bio,email,createdAt:new Date().toISOString()});
-      $('okBox').innerHTML='✅ حساب المدرس اتعمل!<br>الإيميل: <b>'+email+'</b> • الباسورد: <b>'+pass+'</b><br>سلّمهم للمدرس — هيدخل ويدير مادته بس.';$('okBox').style.display='block';
+      let photo=$('tPhoto').value.trim();
+      if(photo.includes('drive.google.com')){const m=photo.match(/\/d\/([\w-]+)/)||photo.match(/[?&]id=([\w-]+)/);if(m)photo='https://lh3.googleusercontent.com/d/'+m[1];}
+      await db.collection('teachers').add({name,subject,bio,email,photo,createdAt:new Date().toISOString()});
+            $('okBox').innerHTML='✅ حساب المدرس اتعمل!<br>الإيميل: <b>'+email+'</b> • الباسورد: <b>'+pass+'</b><br>سلّمهم للمدرس — هيدخل ويدير مادته بس.';$('okBox').style.display='block';
       $('tForm').reset();loadTeachers();
     }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}
     finally{$('submitBtn').classList.remove('loading');}
@@ -131,7 +133,7 @@ main{position:relative;z-index:1;padding:40px 0 70px}
       const snap=await db.collection('teachers').get();const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       arr.sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0));
       if(!arr.length){box.innerHTML='<p class="muted">لسه مفيش مدرسين.</p>';return;}
-      box.innerHTML=arr.map(t=>`<div class="t-item"><div class="t-ava">${(t.name||'م').trim().charAt(0)}</div><div class="t-info"><b>${t.name}</b><span class="t-sub">${t.subject||'مدرس'}</span><p>${t.email?'🔑 '+t.email+' • ':''}${t.bio||''}</p></div><button class="no" data-id="${t.id}"><i class="fa-solid fa-trash"></i> حذف</button></div>`).join('');
+      box.innerHTML=arr.map(t=>`<div class="t-item"><div class="t-ava">${t.photo?`<img src="${t.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.outerHTML='${(t.name||'م').trim().charAt(0)}'">`:(t.name||'م').trim().charAt(0)}</div>  <div class="t-info"><b>${t.name}</b><span class="t-sub">${t.subject||'مدرس'}</span><p>${t.email?'🔑 '+t.email+' • ':''}${t.bio||''}</p></div><button class="no" data-id="${t.id}"><i class="fa-solid fa-trash"></i> حذف</button></div>`).join('');
       box.querySelectorAll('.no').forEach(btn=>btn.onclick=async()=>{if(confirm('حذف المدرس من الرئيسية؟ (حساب الدخول لازم يتمسح من Firebase Console → Authentication)')){btn.disabled=true;await db.collection('teachers').doc(btn.dataset.id).delete();loadTeachers();}});
     }catch(e){box.innerHTML='<p class="muted">خطأ في التحميل.</p>';}
   }
