@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -45,7 +45,6 @@ main{padding:40px 0 70px;position:relative;z-index:1}
 </style>
 </head>
 <body>
-
 <header class="top">
   <div class="container top-wrap">
     <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
@@ -55,41 +54,35 @@ main{padding:40px 0 70px;position:relative;z-index:1}
     </div>
   </div>
 </header>
-
 <main class="container">
   <section class="welcome">
     <div class="avatar" id="avatar">…</div>
-    <div>
-      <h1 id="wName">ثواني…</h1>
-      <p class="muted" id="wSub">لوحة تحكم المدرس — تدير مادتك بس</p>
-    </div>
+    <div><h1 id="wName">ثواني…</h1><p class="muted" id="wSub">لوحة تحكم المدرس — تدير مادتك بس</p></div>
   </section>
-
   <div class="stats">
     <div class="stat"><i class="fa-solid fa-video"></i><b id="cLec">0</b><span>محاضراتي</span></div>
     <div class="stat"><i class="fa-solid fa-book-open"></i><b id="cSum">0</b><span>ملخصاتي</span></div>
     <div class="stat"><i class="fa-solid fa-file-pen"></i><b id="cQuiz">0</b><span>اختباراتي</span></div>
     <div class="stat"><i class="fa-solid fa-key"></i><b id="cUsed">0</b><span>أكواد مستخدمة</span></div>
   </div>
-
   <div class="mgmt">
     <a href="admin-lectures.html"><i class="fa-solid fa-video"></i><b>محاضراتي</b><small>إضافة + أكواد الوصول</small></a>
     <a href="admin-summaries.html"><i class="fa-solid fa-book-open"></i><b>ملخصاتي</b><small>ملخصات محمية</small></a>
     <a href="admin-quizzes.html"><i class="fa-solid fa-file-pen"></i><b>اختباراتي</b><small>أسئلة + تصحيح فوري</small></a>
   </div>
 </main>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="js/config.js"></script>
 <script>
   const $=id=>document.getElementById(id);
+  const ADMIN_EMAIL="admin@benwael.com";
   auth.onAuthStateChanged(async user=>{
     if(!user){location.href='login.html';return;}
     let role='',name='';
     try{const s=await db.collection('profiles').doc(user.uid).get();if(s.exists){role=s.data().role||'';name=s.data().name||'';}}catch(e){}
-    if(role!=='teacher'&&user.email!=='admin@academy.com'){location.href='dashboard.html';return;}
+    if(role!=='teacher'&&user.email!==ADMIN_EMAIL){location.href='dashboard.html';return;}
     $('avatar').textContent=(name||'م').charAt(0);
     $('wName').textContent='أهلاً، '+(name||'مدرس')+' 👋';
     try{
