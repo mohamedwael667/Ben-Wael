@@ -3,52 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إدارة المحاضرات | منصة بن وائل التعليمية</title>
+<title>إدارة المحاضرات | منصة مشكاة التعليمية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f6f7fb;--card:#fff;--line:#e6e9f0;--text:#101828;--muted:#667085;--orange:#ea580c;--amber:#f59e0b;--grad:linear-gradient(135deg,#f59e0b,#ea580c);--shadow:0 10px 30px rgba(16,24,40,.08)}
+:root{--bg:#f4f6fb;--card:#fff;--line:#e3e8f0;--text:#14233f;--muted:#64748b;--navy:#1e3a5f;--navy-d:#14233f;--gold:#d4af37;--grad:linear-gradient(135deg,#1e3a5f,#d4af37);--shadow:0 10px 30px rgba(20,35,63,.08)}
 body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 .container{max-width:900px;margin:auto;padding:0 20px}
-.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top{position:sticky;top:0;z-index:10;background:var(--navy-d);border-bottom:1px solid rgba(212,175,55,.2)}
 .top-wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;gap:14px;flex-wrap:wrap}
-.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px;color:#fff}
 .logo img{width:46px;height:46px;object-fit:contain}
-.logo b{background:var(--grad);-webkit-background-clip:text;color:transparent}
+.logo b{background:linear-gradient(90deg,#d4af37,#f5e6a8);-webkit-background-clip:text;color:transparent}
 .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:900;font-size:14px;font-family:inherit;cursor:pointer;transition:.3s;border:none}
-.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--text)}
-.btn-ghost:hover{border-color:var(--amber);color:var(--orange)}
-.btn-danger{background:#fff;border:1.5px solid #fecaca;color:#b91c1c}
-.btn-danger:hover{background:#fef2f2}
-.btn-primary{width:100%;justify-content:center;padding:14px;background:var(--grad);color:#fff;box-shadow:0 10px 25px rgba(234,88,12,.3);font-size:15px}
+.btn-ghost{background:rgba(255,255,255,.08);border:1.5px solid rgba(212,175,55,.3);color:#f5e6a8}
+.btn-ghost:hover{background:rgba(212,175,55,.15)}
+.btn-danger{background:rgba(255,255,255,.05);border:1.5px solid rgba(239,68,68,.4);color:#fca5a5}
+.btn-danger:hover{background:rgba(239,68,68,.15)}
+.btn-primary{width:100%;justify-content:center;padding:14px;background:var(--grad);color:#fff;box-shadow:0 10px 25px rgba(30,58,95,.3);font-size:15px}
 .btn-primary:hover{transform:translateY(-3px)}
 main{position:relative;z-index:1;padding:40px 0 70px}
 .page-head{text-align:center;margin-bottom:28px}
 .page-head h1{font-size:clamp(22px,4vw,34px);font-weight:900}
-.page-head h1 i{color:var(--orange)}
+.page-head h1 i{color:var(--gold)}
 .card-glass{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:var(--shadow)}
 .card-glass h2{font-size:17px;font-weight:900;margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.card-glass h2 i{color:var(--orange)}
+.card-glass h2 i{color:var(--gold)}
 .alert{display:none;padding:12px 16px;border-radius:12px;margin-bottom:14px;font-size:14px;font-weight:700}
 .alert.error{background:#fef2f2;border:1px solid #fecaca;color:#b42318}
 .alert.success{background:#ecfdf3;border:1px solid #abefc6;color:#067647}
 .field{margin-bottom:12px;text-align:right}
 .field label{display:block;font-weight:800;font-size:12.5px;margin-bottom:5px;color:#344054}
 .field input{width:100%;padding:11px 13px;border-radius:12px;background:#fff;border:1.5px solid var(--line);color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:.3s}
-.field input:focus{border-color:var(--amber);box-shadow:0 0 0 4px rgba(245,158,11,.12)}
+.field input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(212,175,55,.15)}
 .field input:disabled{background:var(--bg);color:var(--muted)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.check{display:flex;align-items:center;gap:10px;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:12px;margin-bottom:12px;cursor:pointer}
-.check input{width:18px;height:18px;accent-color:var(--orange);cursor:pointer}
-.check span{font-weight:800;font-size:13.5px;color:#c2410c}
+.check{display:flex;align-items:center;gap:10px;background:#eef4ff;border:1px solid #bcd4f5;border-radius:12px;padding:12px;margin-bottom:12px;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--navy);cursor:pointer}
+.check span{font-weight:800;font-size:13.5px;color:var(--navy)}
 .list{display:flex;flex-direction:column;gap:14px}
 .item{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:16px}
 .item-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px;align-items:center}
 .item-top b{font-size:15px;font-weight:900}
-.st{font-size:11px;font-weight:900;padding:4px 12px;border-radius:50px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
+.st{font-size:11px;font-weight:900;padding:4px 12px;border-radius:50px;background:#eef4ff;color:var(--navy);border:1px solid #bcd4f5}
 .st.open{background:#ecfdf3;color:#067647;border-color:#abefc6}
 .item-meta{color:var(--muted);font-size:12.5px;font-weight:700;margin-bottom:10px}
 .item-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -61,7 +61,7 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 .codes-head b{font-size:13px}
 .code-line{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:7px 0;border-bottom:1px dashed var(--line)}
 .code-line:last-child{border-bottom:none}
-.code-chip{background:#101828;color:#fbbf24;font-weight:900;font-size:14px;letter-spacing:3px;padding:5px 12px;border-radius:8px}
+.code-chip{background:var(--navy-d);color:var(--gold);font-weight:900;font-size:14px;letter-spacing:3px;padding:5px 12px;border-radius:8px}
 .status-free{color:#067647;font-size:12px;font-weight:800}
 .status-used{color:#b42318;font-size:12px;font-weight:800}
 .muted{color:var(--muted);font-size:14px}
@@ -74,7 +74,7 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 <body>
 <header class="top">
   <div class="container top-wrap">
-    <a href="index.html" class="logo"><img src="logo.png" alt="بن وائل" onerror="this.style.display='none'"><span>منصة <b>بن وائل</b></span></a>
+    <a href="index.html" class="logo"><img src="logo.png" alt="مشكاة" onerror="this.style.display='none'"><span>منصة <b>مشكاة</b></span></a>
     <div class="top-actions">
       <a href="admin.html" class="btn btn-ghost" id="backAdmin"><i class="fa-solid fa-gauge-high"></i> لوحة الأدمن</a>
       <button id="logoutBtn" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
@@ -84,7 +84,7 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 <main class="container">
   <section class="page-head"><h1>إدارة المحاضرات <i class="fa-solid fa-video"></i></h1></section>
   <div class="card-glass" id="noAccess" style="display:none;text-align:center;padding:50px">
-    <i class="fa-solid fa-lock" style="font-size:44px;color:var(--amber);margin-bottom:16px;display:block"></i>
+    <i class="fa-solid fa-lock" style="font-size:44px;color:var(--gold);margin-bottom:16px;display:block"></i>
     <h2 style="justify-content:center">مفيش صلاحية</h2>
   </div>
   <div id="adminArea">
@@ -119,14 +119,11 @@ main{position:relative;z-index:1;padding:40px 0 70px}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="js/config.js"></script>
 <script>
-  const ADMIN_EMAIL="admin@benwael.com";
-  const $=id=>document.getElementById(id);
-  let IS_ADMIN=false,MY_EMAIL='';
+  const ADMIN_EMAIL="admin@benwael.com";const $=id=>document.getElementById(id);let IS_ADMIN=false,MY_EMAIL='';
   auth.onAuthStateChanged(async user=>{
     if(!user){location.href='login.html';return;}
     MY_EMAIL=user.email;IS_ADMIN=user.email===ADMIN_EMAIL;
-    let role='',myName='';
-    try{const s=await db.collection('profiles').doc(user.uid).get();if(s.exists){role=s.data().role||'';myName=s.data().name||'';}}catch(e){}
+    let role='',myName='';try{const s=await db.collection('profiles').doc(user.uid).get();if(s.exists){role=s.data().role||'';myName=s.data().name||'';}}catch(e){}
     if(!IS_ADMIN){$('backAdmin').style.display='none';if(role!=='teacher'){$('adminArea').style.display='none';$('noAccess').style.display='block';return;}const f=$('teacherName');if(f){f.value=myName;f.disabled=true;}}
     loadLecs();
   });
@@ -134,18 +131,14 @@ main{position:relative;z-index:1;padding:40px 0 70px}
   function copyText(t,btn){const done=()=>{if(btn){const o=btn.innerHTML;btn.innerHTML='<i class="fa-solid fa-check"></i> تم';setTimeout(()=>btn.innerHTML=o,1200);}};if(navigator.clipboard){navigator.clipboard.writeText(t).then(done);}else{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(ta);done();}}
   $('lecForm').addEventListener('submit',async e=>{
     e.preventDefault();$('errBox').style.display='none';$('okBox').style.display='none';
-    const title=$('title').value.trim(),subject=$('subject').value.trim(),teacherName=$('teacherName').value.trim();
-    const duration=$('duration').value.trim(),url=$('url').value.trim(),thumb=toImg($('thumb').value.trim()),open=$('openChk').checked;
+    const title=$('title').value.trim(),subject=$('subject').value.trim(),teacherName=$('teacherName').value.trim(),duration=$('duration').value.trim(),url=$('url').value.trim(),thumb=toImg($('thumb').value.trim()),open=$('openChk').checked;
     if(!title||!subject||!teacherName){$('errBox').textContent='⚠️ كمّل العنوان والمادة واسم المدرس.';$('errBox').style.display='block';return;}
     if(!url){$('errBox').textContent='⚠️ حط رابط الفيديو.';$('errBox').style.display='block';return;}
     $('submitBtn').classList.add('loading');
-    try{
-      await db.collection('lectures').add({title,subject,teacherName,duration,url,thumbnail:thumb,open,teacherEmail:IS_ADMIN?'':MY_EMAIL,createdAt:new Date().toISOString()});
+    try{await db.collection('lectures').add({title,subject,teacherName,duration,url,thumbnail:thumb,open,teacherEmail:IS_ADMIN?'':MY_EMAIL,createdAt:new Date().toISOString()});
       $('okBox').textContent=open?'✅ المحاضرة اتنشرت ومفتوحة للجميع!':'✅ المحاضرة اتنشرت! دلوقتي ولّد أكواد ووزّعها على طلابك من القائمة تحت.';$('okBox').style.display='block';
-      const tName=teacherName;$('lecForm').reset();if(!IS_ADMIN){const f=$('teacherName');f.value=tName;f.disabled=true;}
-      loadLecs();
-    }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}
-    finally{$('submitBtn').classList.remove('loading');}
+      const tName=teacherName;$('lecForm').reset();if(!IS_ADMIN){const f=$('teacherName');f.value=tName;f.disabled=true;}loadLecs();
+    }catch(er){$('errBox').textContent='⚠️ '+((er&&er.message)||er);$('errBox').style.display='block';}finally{$('submitBtn').classList.remove('loading');}
   });
   async function genBatch(lid,count,btn){
     btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> جاري التوليد…';
@@ -154,21 +147,16 @@ main{position:relative;z-index:1;padding:40px 0 70px}
   }
   async function loadCodes(lid){
     const area=$('codes-'+lid);area.style.display='block';area.innerHTML='<p class="muted">ثواني…</p>';
-    try{
-      const snap=await db.collection('lecture_codes').where('lectureId','==',lid).get();
-      const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
+    try{const snap=await db.collection('lecture_codes').where('lectureId','==',lid).get();const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       if(!arr.length){area.innerHTML='<p class="muted">لسه مفيش أكواد — دوس "توليد أكواد".</p>';return;}
       const free=arr.filter(c=>!c.usedBy);
       area.innerHTML=`<div class="codes-head"><b>المتاح: ${free.length} • المستخدم: ${arr.length-free.length}</b><button class="copy-btn" id="copyfree-${lid}"><i class="fa-solid fa-copy"></i> نسخ كل المتاح</button></div>`+arr.map(c=>`<div class="code-line"><span class="code-chip">${c.code}</span>${c.usedBy?`<span class="status-used">مستخدم: ${c.usedByName||'طالب'}</span>`:`<span class="status-free">متاح</span>`}<button class="copy-btn" data-c="${c.code}"><i class="fa-solid fa-copy"></i></button></div>`).join('');
-      area.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>copyText(b.dataset.c,b));
-      $('copyfree-'+lid).onclick=e=>copyText(free.map(c=>c.code).join('\n'),e.currentTarget);
+      area.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>copyText(b.dataset.c,b));$('copyfree-'+lid).onclick=e=>copyText(free.map(c=>c.code).join('\n'),e.currentTarget);
     }catch(e){area.innerHTML='<p class="muted">خطأ في تحميل الأكواد.</p>';}
   }
   async function loadLecs(){
     const box=$('lecsList');
-    try{
-      const snap=IS_ADMIN?await db.collection('lectures').get():await db.collection('lectures').where('teacherEmail','==',MY_EMAIL).get();
-      const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
+    try{const snap=IS_ADMIN?await db.collection('lectures').get():await db.collection('lectures').where('teacherEmail','==',MY_EMAIL).get();const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
       arr.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
       if(!arr.length){box.innerHTML='<p class="muted">لسه مفيش محاضرات.</p>';return;}
       box.innerHTML=arr.map(l=>`<div class="item"><div class="item-top"><b>${l.title}</b><span class="st ${l.open?'open':''}">${l.open?'مفتوحة':'محمية بأكواد'} • ${l.subject}</span></div><p class="item-meta">${l.teacherName} • ${l.duration||'—'}</p><div class="item-actions">${l.open?'':`<input type="number" class="cnt" id="cnt-${l.id}" value="30" min="1" max="200"><button class="copy-btn genb" data-id="${l.id}"><i class="fa-solid fa-key"></i> توليد أكواد</button><button class="copy-btn viewb" data-id="${l.id}"><i class="fa-solid fa-list"></i> عرض الأكواد</button>`}<button class="no delb" data-id="${l.id}"><i class="fa-solid fa-trash"></i> حذف</button></div><div class="codes-area" id="codes-${l.id}"></div></div>`).join('');
