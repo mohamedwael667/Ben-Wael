@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>طباعة كارنيهات مشكاة</title>
+<link rel="icon" type="image/png" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -11,10 +12,18 @@ body{font-family:'Cairo',sans-serif;background:#eef1f7;padding:20px}
 .toolbar h1{font-size:20px;margin-bottom:6px;color:#14233f}
 .toolbar p{color:#64748b;font-size:13px;margin-bottom:12px;line-height:1.9}
 .toolbar p b{color:#1e3a5f}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab{padding:10px 22px;border-radius:10px;background:#eef1f7;color:#64748b;font-weight:800;font-size:14px;border:none;cursor:pointer;font-family:inherit;transition:.3s}
+.tab.on{background:linear-gradient(135deg,#1e3a5f,#d4af37);color:#fff}
+select{width:100%;padding:12px;border-radius:12px;border:1.5px solid #e3e8f0;font-family:inherit;font-size:14px;background:#fff;margin-bottom:10px}
+select:focus{outline:none;border-color:#d4af37}
+.load-btn{width:100%;padding:12px;border:none;border-radius:12px;background:#1e3a5f;color:#d4af37;font-family:inherit;font-weight:900;font-size:14px;cursor:pointer;transition:.3s}
+.load-btn:hover{opacity:.9}
+.count-info{margin-top:10px;font-size:13px;font-weight:800;color:#1e3a5f;background:#eef4ff;border:1px solid #bcd4f5;border-radius:10px;padding:8px 12px;display:none}
 textarea{width:100%;height:150px;border:1.5px solid #e3e8f0;border-radius:12px;padding:12px;font-family:inherit;font-size:14px;resize:vertical;line-height:2}
 textarea:focus{outline:none;border-color:#d4af37}
-.btns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-button{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;font-weight:900;font-size:15px;cursor:pointer;transition:.3s}
+.btns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+button.act{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;font-weight:900;font-size:15px;cursor:pointer;transition:.3s}
 .gen{background:linear-gradient(135deg,#1e3a5f,#d4af37);color:#fff}
 .gen:hover{transform:translateY(-2px)}
 .prn{background:#14233f;color:#d4af37}
@@ -27,7 +36,8 @@ button{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;font
 .top img{width:32px;height:32px;object-fit:contain}
 .top b{font-size:14px;color:#d4af37}
 .top small{margin-right:auto;font-size:10px;color:#9fb3d1;font-weight:700}
-.name{font-size:17px;font-weight:900;position:relative}
+.name{font-size:16px;font-weight:900;position:relative}
+.name .hand{color:#9fb3d1;font-weight:700;font-size:12px;letter-spacing:1px}
 .code{background:rgba(212,175,55,.12);border:1px dashed rgba(212,175,55,.6);border-radius:8px;padding:5px 10px;text-align:center;font-size:21px;font-weight:900;letter-spacing:7px;color:#f5e6a8;direction:ltr;position:relative}
 .meta{display:flex;justify-content:space-between;font-size:10.5px;color:#cbd5e1;font-weight:700;position:relative}
 @media print{
@@ -43,33 +53,96 @@ button{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;font
 
 <div class="toolbar">
   <h1>🖨️ طباعة كارنيهات مشكاة</h1>
-  <p>كل سطر = كارنيه واحد. النظام: <b>الاسم | الكود | المحاضرة | المادة</b><br>
-  عدّل السطور اللي تحت، دوس <b>توليد</b>، وبعدين <b>طباعة</b> — الورقة A4 بتاخد 10 كارنيهات.</p>
-  <textarea id="data">أحمد محمد السيد | 12345678 | المحاضرة الأولى | رياضيات
-سارة علي حسن | 87654321 | المحاضرة الأولى | رياضيات
-محمود سمير | 11223344 | ملخص الباب الأول | فيزياء
-منى خالد | 55667788 | المحاضرة الثانية | كيمياء</textarea>
+  <p><b>من المنصة:</b> اختار المحاضرة → الأكواد تتسحب أوتوماتيك (لو الكود اتستخدم، اسم الطالب بيظهر لوحده).<br>
+  <b>يدوي:</b> كل سطر = كارنيه بالنظام: <b>الاسم | الكود | المحاضرة | المادة</b></p>
+
+  <div class="tabs">
+    <button class="tab on" data-m="platform" onclick="setMode('platform')">🎯 من المنصة</button>
+    <button class="tab" data-m="manual" onclick="setMode('manual')">✍️ إدخال يدوي</button>
+  </div>
+
+  <div id="panelPlatform">
+    <select id="lecSelect"><option value="">— اختار محاضرة —</option></select>
+    <button class="load-btn" id="loadCodes"><i class="fa-solid fa-download"></i> تحميل أكواد المحاضرة</button>
+    <div class="count-info" id="countInfo"></div>
+  </div>
+
+  <div id="panelManual" style="display:none">
+    <textarea id="data">أحمد محمد السيد | 12345678 | المحاضرة الأولى | رياضيات
+سارة علي حسن | 87654321 | المحاضرة الأولى | رياضيات</textarea>
+  </div>
+
   <div class="btns">
-    <button class="gen" onclick="gen()">⚡ توليد الكارنيهات</button>
-    <button class="prn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+    <button class="act gen" onclick="gen()">⚡ توليد الكارنيهات</button>
+    <button class="act prn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
   </div>
 </div>
 
 <div class="cards" id="cards"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="js/config.js"></script>
 <script>
+const $=id=>document.getElementById(id);
+const ADMIN_EMAIL="admin@benwael.com";
+let IS_ADMIN=false,MY_EMAIL='',CURRENT_LEC='',CODES=[],mode='platform';
+
+auth.onAuthStateChanged(async user=>{
+  if(!user){location.href='login.html';return;}
+  MY_EMAIL=user.email;IS_ADMIN=user.email===ADMIN_EMAIL;
+  let role='';
+  try{const s=await db.collection('profiles').doc(user.uid).get();if(s.exists)role=s.data().role||'';}catch(e){}
+  if(!IS_ADMIN&&role!=='teacher'){alert('⚠️ الصفحة دي للأدمن والمدرسين بس.');location.href='index.html';return;}
+  loadLectures();
+});
+
+async function loadLectures(){
+  try{
+    const snap=IS_ADMIN?await db.collection('lectures').get():await db.collection('lectures').where('teacherEmail','==',MY_EMAIL).get();
+    const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
+    arr.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    $('lecSelect').innerHTML='<option value="">— اختار محاضرة —</option>'+arr.map(l=>`<option value="${l.id}">${l.title} (${l.subject||'مادة'})</option>`).join('');
+  }catch(e){}
+}
+
+$('loadCodes').onclick=async()=>{
+  const id=$('lecSelect').value;
+  if(!id){alert('اختار محاضرة الأول.');return;}
+  CURRENT_LEC=$('lecSelect').selectedOptions[0].textContent;
+  const snap=await db.collection('lecture_codes').where('lectureId','==',id).get();
+  CODES=[];snap.forEach(d=>CODES.push(d.data()));
+  $('countInfo').style.display='block';
+  $('countInfo').textContent='✅ تم تحميل '+CODES.length+' كود من المحاضرة — دوس "توليد الكارنيهات".';
+  gen();
+};
+
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  $('panelPlatform').style.display=m==='platform'?'block':'none';
+  $('panelManual').style.display=m==='manual'?'block':'none';
+}
+
 function gen(){
-  const lines=document.getElementById('data').value.split('\n').map(l=>l.trim()).filter(Boolean);
-  document.getElementById('cards').innerHTML=lines.map(l=>{
-    const p=l.split('|').map(x=>x.trim());
-    const name=p[0]||'—',code=p[1]||'00000000',lec=p[2]||'',sub=p[3]||'';
-    return `<div class="id-card">
+  let items=[];
+  if(mode==='platform'){
+    items=CODES.map(c=>({name:c.usedByName||'',code:c.code,lec:CURRENT_LEC,sub:''}));
+  }else{
+    items=$('data').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+      const p=l.split('|').map(x=>x.trim());
+      return {name:p[0]||'',code:p[1]||'00000000',lec:p[2]||'',sub:p[3]||''};
+    });
+  }
+  if(!items.length){alert('مفيش بيانات — حمّل أكواد أو اكتب سطور.');return;}
+  $('cards').innerHTML=items.map(it=>`
+    <div class="id-card">
       <div class="top"><img src="logo.png" onerror="this.style.display='none'"><b>منصة مشكات</b><small>بطاقة وصول خاصة</small></div>
-      <div class="name">${name}</div>
-      <div class="code">${code}</div>
-      <div class="meta"><span>${lec}</span><span>${sub}</span></div>
-    </div>`;
-  }).join('');
+      <div class="name">${it.name||'<span class="hand">الاسم: ............................</span>'}</div>
+      <div class="code">${it.code}</div>
+      <div class="meta"><span>${it.lec}</span><span>${it.sub}</span></div>
+    </div>`).join('');
 }
 gen();
 </script>
