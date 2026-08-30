@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>انضم كمدرس | منصة مشكاة التعليمية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f4f6fb;--card:#fff;--line:#e3e8f0;--text:#14233f;--muted:#64748b;--navy:#1e3a5f;--navy-d:#14233f;--gold:#d4af37;--grad:linear-gradient(135deg,#1e3a5f,#d4af37);--shadow:0 10px 30px rgba(20,35,63,.08)}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+.container{max-width:1100px;margin:auto;padding:0 20px}
+section{padding:80px 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 34px;border-radius:14px;font-weight:900;font-size:16px;font-family:inherit;transition:.35s;cursor:pointer;border:none}
+.btn-wa{background:#25d366;color:#fff;box-shadow:0 10px 25px rgba(37,211,102,.35)}.btn-wa:hover{transform:translateY(-4px)}
+.btn-grad{background:var(--grad);color:#fff;box-shadow:0 10px 25px rgba(30,58,95,.3)}.btn-grad:hover{transform:translateY(-4px)}
+.top{position:sticky;top:0;z-index:10;background:var(--navy-d);border-bottom:1px solid rgba(212,175,55,.2)}
+.top-wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;gap:14px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px;color:#fff}
+.logo img{width:46px;height:46px;object-fit:contain}
+.logo b{background:linear-gradient(90deg,#d4af37,#f5e6a8);-webkit-background-clip:text;color:transparent}
+.hero{padding:110px 0 80px;background:linear-gradient(160deg,#0f1c33,#14233f 60%,#1a2f4f);text-align:center}
+.hero .tag{display:inline-flex;gap:8px;align-items:center;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.4);color:var(--gold);font-weight:900;padding:8px 20px;border-radius:50px;font-size:14px;margin-bottom:20px}
+.hero h1{font-size:clamp(30px,5vw,52px);font-weight:900;line-height:1.4;max-width:800px;margin:auto;color:#fff}
+.hero h1 span{background:linear-gradient(90deg,#d4af37,#f5e6a8);-webkit-background-clip:text;color:transparent}
+.hero p{color:#cbd5e1;font-size:18px;line-height:2;max-width:650px;margin:20px auto 30px}
+.hero .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero .note{margin-top:16px;color:#98a2b3;font-size:13.5px;font-weight:700}
+.section-head{text-align:center;margin-bottom:50px}
+.section-head h2{font-size:clamp(26px,4vw,38px);font-weight:900}
+.section-head h2 span{background:var(--grad);-webkit-background-clip:text;color:transparent}
+.section-head p{color:var(--muted);margin-top:10px;font-size:16px}
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.pain{background:#fff;border:1.5px solid #fecaca;border-radius:20px;padding:28px;text-align:center}
+.pain i{font-size:36px;color:#ef4444;margin-bottom:14px}
+.pain h3{font-size:17px;font-weight:900;margin-bottom:8px}
+.pain p{color:var(--muted);font-size:14px;line-height:1.9}
+.sols{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.sol{background:#fff;border:1.5px solid #abefc6;border-radius:20px;padding:28px;text-align:center;transition:.3s}
+.sol:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.sol i{font-size:34px;color:#12b76a;margin-bottom:14px}
+.sol h3{font-size:17px;font-weight:900;margin-bottom:8px}
+.sol p{color:var(--muted);font-size:14px;line-height:1.9}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.step{background:#fff;border:1px solid var(--line);border-radius:20px;padding:32px 24px;text-align:center}
+.step-num{width:56px;height:56px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;font-size:22px;font-weight:900;color:#fff;background:var(--grad)}
+.step h3{font-size:17px;font-weight:900;margin-bottom:8px}
+.step p{color:var(--muted);font-size:14px;line-height:1.9}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+.plan{background:#fff;border:2px solid var(--line);border-radius:24px;padding:34px 26px;text-align:center;position:relative;transition:.3s;display:flex;flex-direction:column}
+.plan:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(20,35,63,.12)}
+.plan.hot{border-color:var(--gold);box-shadow:0 20px 50px rgba(212,175,55,.2)}
+.plan .crown{position:absolute;top:-16px;right:50%;transform:translateX(50%);background:var(--grad);color:#fff;padding:5px 20px;border-radius:50px;font-size:12px;font-weight:900}
+.plan h3{font-size:19px;font-weight:900;margin-bottom:10px}
+.price{font-size:42px;font-weight:900;background:var(--grad);-webkit-background-clip:text;color:transparent}
+.price small{font-size:15px}
+.plan ul{list-style:none;margin:20px 0;text-align:right;flex:1}
+.plan li{padding:8px 0;font-size:14px;font-weight:700;color:var(--muted);display:flex;gap:10px;align-items:center}
+.plan li i{color:#12b76a}
+.cta{background:var(--grad);border-radius:30px;padding:60px 30px;text-align:center;color:#fff;position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1px);background-size:22px 22px}
+.cta h2{font-size:clamp(24px,4vw,36px);font-weight:900;position:relative;margin-bottom:12px}
+.cta p{opacity:.95;margin-bottom:26px;font-size:17px;position:relative}
+.cta .btn{position:relative}
+footer{background:var(--navy-d);color:#98a2b3;text-align:center;padding:26px 0;font-size:14px}
+footer b{color:var(--gold)}
+@media(max-width:900px){.pains,.sols,.steps,.plans{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="container top-wrap">
+    <a href="index.html" class="logo"><img src="logo.png" alt="مشكاة" onerror="this.style.display='none'"><span>منصة <b>مشكاة</b></span></a>
+    <a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20انضم%20كمدرس%20في%20منصة%20مشكاة" target="_blank" class="btn btn-wa" style="padding:10px 20px;font-size:14px"><i class="fa-brands fa-whatsapp"></i> تواصل معنا</a>
+  </div>
+</header>
+<section class="hero">
+  <div class="container">
+    <span class="tag"><i class="fa-solid fa-chalkboard-user"></i> عرض خاص للمدرسين</span>
+    <h1>محتواك ده <span>رأس مالك</span>…<br>حماه واكسب منه مع مشكاة</h1>
+    <p>منصة متكاملة بتديك صفحتك لوحدك، ولوحة تحكم بمادتك، وبتوصل محتواك لطلابك محمي بأكواد وعلامات مائية — وانت متفرغ للتدريس بس.</p>
+    <div class="btns">
+      <a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20انضم%20كمدرس%20في%20منصة%20مشكاة" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> انضم دلوقتي واتساب</a>
+      <a href="#plans" class="btn btn-grad"><i class="fa-solid fa-tags"></i> شوف الأسعار</a>
+    </div>
+    <p class="note">✅ تجربة مجانية أسبوع كامل قبل أي التزام</p>
+  </div>
+</section>
+<section>
+  <div class="container">
+    <div class="section-head"><h2>بتعاني من <span>ده؟</span></h2><p>كل مدرس قابلنا قالنا نفس الكلام…</p></div>
+    <div class="pains">
+      <div class="pain"><i class="fa-brands fa-youtube"></i><h3>محاضراتك بتتسرب</h3><p>بترفع فيديو على يوتيوب، اللينك بيتشارك في كل جروبات الدفع — واللي مش دافع بيتفرج ببلاش.</p></div>
+      <div class="pain"><i class="fa-solid fa-file-pdf"></i><h3>ملخصاتك بتتوزع</h3><p>بتبعت PDF، أول طالب يستلمه بينزله وينشره — تعبك بيوصل لغير طلابك من غير مقابل.</p></div>
+      <div class="pain"><i class="fa-solid fa-people-arrows"></i><h3>مفيش نظام</h3><p>جروبات واتساب وتليجرام ومذاكرة ضايعة — مش عارف تتابع مين حضر ومين حل ومين محتاج مراجعة.</p></div>
+    </div>
+  </div>
+</section>
+<section style="background:#fff;border-block:1px solid var(--line)">
+  <div class="container">
+    <div class="section-head"><h2>مشكاة <span>بتحلها</span></h2><p>كل مشكلة ليها حل جاهز شغال دلوقتي</p></div>
+    <div class="sols">
+      <div class="sol"><i class="fa-solid fa-key"></i><h3>أكواد وصول فردية</h3><p>كل طالب بياخد كود ٨ أرقام بيفتح مرة واحدة بس — مفيش لينك يتشارك، ومفيش فرجة ببلاش.</p></div>
+      <div class="sol"><i class="fa-solid fa-droplet"></i><h3>علامة مائية باسم الطالب</h3><p>ملخصاتك بتتعرض جوه المنصة فقط، وعليها اسم وإيميل كل طالب — أي تسريب يتعرف صاحبه فورًا.</p></div>
+      <div class="sol"><i class="fa-solid fa-gauge-high"></i><h3>لوحة خاصة بمادتك</h3><p>تضيف محاضراتك وملخصاتك واختباراتك، وتشوف أكوادك ومين استخدمها — من موبايلك في أي وقت.</p></div>
+      <div class="sol"><i class="fa-solid fa-file-pen"></i><h3>اختبارات بتصحيح فوري</h3><p>اعمل اختبار في دقايق، والطالب يعرف نتيجته لحظيًا — وانت تشوف مستوى طلابك من لوحاتك.</p></div>
+      <div class="sol"><i class="fa-solid fa-calendar-check"></i><h3>حجز الحصص</h3><p>طلابك يحجزوا مواعيدهم عندك بضغطة، وانت تأكد أو ترفض — من غير مكالمات وتنسيق.</p></div>
+      <div class="sol"><i class="fa-solid fa-bullhorn"></i><h3>أخبارك توصل للجميع</h3><p>انشر إعلان أو معاد امتحان — كل طلابك يوصلهم إشعار فوري بجرس المنصة.</p></div>
+    </div>
+  </div>
+</section>
+<section>
+  <div class="container">
+    <div class="section-head"><h2>تلت خطوات <span>وتبدأ</span></h2></div>
+    <div class="steps">
+      <div class="step"><div class="step-num">١</div><h3>كلمنا واتساب</h3><p>دوس على أي زرار واتساب في الصفحة دي — هنرد عليك من ٧ ص لـ ٩ م.</p></div>
+      <div class="step"><div class="step-num">٢</div><h3>نفتحلك حسابك</h3><p>صفحتك باسمك على الرئيسية + لوحة تحكم بمادتك + أسبوع تجربة مجاني.</p></div>
+      <div class="step"><div class="step-num">٣</div><h3>ارفع محتواك واكسب</h3><p>ضيف محاضراتك، ولّد أكواد لطلابك، وابدأ تحصّل أرباحك بأمان.</p></div>
+    </div>
+  </div>
+</section>
+<section id="plans">
+  <div class="container">
+    <div class="section-head"><h2>أسعار <span>على قد الإيد</span></h2><p>أقل من ثمن كشكول واحد من كل طالب — ومقابل حماية شغلك كله</p></div>
+    <div class="plans">
+      <div class="plan"><h3>شهري</h3><div class="price">200 <small>ج/شهر</small></div><ul><li><i class="fa-solid fa-check"></i> صفحتك على الرئيسية</li><li><i class="fa-solid fa-check"></i> لوحة تحكم كاملة بمادتك</li><li><i class="fa-solid fa-check"></i> أكواد وصول غير محدودة</li><li><i class="fa-solid fa-check"></i> ملخصات بعلامة مائية</li></ul><a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20أشترك%20في%20باقة%20الشهر%20كمدرس%20في%20مشكاة" target="_blank" class="btn btn-grad">اشترك شهري</a></div>
+      <div class="plan hot"><span class="crown">الأكثر اختيارًا 👑</span><h3>ترم كامل</h3><div class="price">500 <small>ج/٤ شهور</small></div><ul><li><i class="fa-solid fa-check"></i> كل مميزات الشهري</li><li><i class="fa-solid fa-check"></i> توفير 300ج عن الشهري</li><li><i class="fa-solid fa-check"></i> أولوية في الدعم</li><li><i class="fa-solid fa-check"></i> تدريب مجاني على المنصة</li></ul><a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20أشترك%20في%20باقة%20الترم%20كمدرس%20في%20مشكاة" target="_blank" class="btn btn-wa">اشترك ترم</a></div>
+      <div class="plan"><h3>سنة كاملة</h3><div class="price">1200 <small>ج/سنة</small></div><ul><li><i class="fa-solid fa-check"></i> كل مميزات الترم</li><li><i class="fa-solid fa-check"></i> ٨ شهور ببلاش</li><li><i class="fa-solid fa-check"></i> ظهورك أول مدرس في الرئيسية</li><li><i class="fa-solid fa-check"></i> شارة "مدرس معتمد"</li></ul><a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20أشترك%20في%20باقة%20السنة%20كمدرس%20في%20مشكاة" target="_blank" class="btn btn-grad">اشترك سنة</a></div>
+    </div>
+  </div>
+</section>
+<section>
+  <div class="container">
+    <div class="cta">
+      <h2>قررت تحمي شغلك؟ 🛡️</h2>
+      <p>ابعتلنا دلوقتي — وهنفتحلك حسابك خلال ٢٤ ساعة</p>
+      <a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20جاهز%20أنضم%20كمدرس%20في%20منصة%20مشكاة" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> ابدأ دلوقتي</a>
+    </div>
+  </div>
+</section>
+<footer>جميع الحقوق محفوظة © 2026 <b>منصة مشكاة التعليمية</b> 🕌</footer>
+</body>
+</html>
