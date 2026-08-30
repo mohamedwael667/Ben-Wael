@@ -32,11 +32,8 @@ button.act{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;
 /* ===== الكارنيه الاحترافي ===== */
 .cards{display:grid;grid-template-columns:repeat(2,8.6cm);gap:.5cm;justify-content:center}
 .id-card{width:8.6cm;height:5.4cm;border-radius:.35cm;background:linear-gradient(135deg,#0f1c33 0%,#14233f 45%,#1e3a5f 100%);color:#fff;position:relative;overflow:hidden;padding:.4cm .45cm .3cm;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 22px rgba(20,35,63,.3);outline:1px dashed #b9c4d6;outline-offset:5px}
-/* إطار ذهبي داخلي */
 .frame{position:absolute;inset:.14cm;border:1px solid rgba(212,175,55,.4);border-radius:.25cm;pointer-events:none}
-/* نقشة نقاط ذهبية خفيفة */
 .id-card::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(212,175,55,.09) 1px,transparent 1px);background-size:.35cm .35cm;pointer-events:none}
-/* لمعة هولوغرام */
 .id-card::after{content:'';position:absolute;top:-60%;right:-30%;width:70%;height:140%;background:linear-gradient(115deg,transparent 42%,rgba(245,230,168,.14) 50%,transparent 58%);pointer-events:none}
 .row{display:flex;align-items:center;gap:.2cm;position:relative}
 .logo-img{width:.85cm;height:.85cm;object-fit:contain}
@@ -48,13 +45,13 @@ button.act{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;
 .who small{display:block;font-size:7px;color:#9fb3d1;font-weight:700;margin-bottom:.02cm}
 .name{font-size:15px;font-weight:900;line-height:1.2}
 .name .hand{color:#9fb3d1;font-weight:700;font-size:11px;letter-spacing:1px}
-/* الشريحة الذكية */
 .chip{width:.95cm;height:.72cm;border-radius:.12cm;background:linear-gradient(135deg,#f5e6a8,#d4af37 55%,#b8941f);position:relative;flex-shrink:0;box-shadow:inset 0 0 .1cm rgba(20,35,63,.4)}
 .chip::before{content:'';position:absolute;inset:.13cm;border:1px solid rgba(20,35,63,.45);border-radius:.08cm}
 .chip::after{content:'';position:absolute;top:50%;left:.13cm;right:.13cm;height:1px;background:rgba(20,35,63,.45)}
 .code{background:rgba(212,175,55,.1);border:1px dashed rgba(212,175,55,.65);border-radius:.15cm;padding:.1cm .2cm;text-align:center;font-size:19px;font-weight:900;letter-spacing:6px;color:#f5e6a8;direction:ltr;position:relative}
 .bottom{justify-content:space-between;align-items:flex-end}
 .lec{font-size:8.5px;color:#cbd5e1;font-weight:700}
+.lec b{color:#d4af37;font-weight:900}
 .by{font-size:8px;color:#9fb3d1;font-weight:700;direction:ltr;letter-spacing:.5px}
 .by b{color:#d4af37;font-weight:900}
 
@@ -71,8 +68,8 @@ button.act{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;
 
 <div class="toolbar">
   <h1>🖨️ طباعة كارنيهات مشكاة</h1>
-  <p><b>من المنصة:</b> اختار المحاضرة → الأكواد تتسحب أوتوماتيك (لو الكود اتستخدم، اسم الطالب بيظهر لوحده).<br>
-  <b>يدوي:</b> كل سطر = كارنيه بالنظام: <b>الاسم | الكود | المحاضرة | المادة</b></p>
+  <p><b>من المنصة:</b> اختار المحاضرة → الأكواد + اسم المدرس بيتسحبوا أوتوماتيك.<br>
+  <b>يدوي:</b> كل سطر = كارنيه بالنظام: <b>الاسم | الكود | المحاضرة | المادة | اسم المدرس</b></p>
 
   <div class="tabs">
     <button class="tab on" data-m="platform" onclick="setMode('platform')">🎯 من المنصة</button>
@@ -86,8 +83,8 @@ button.act{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;
   </div>
 
   <div id="panelManual" style="display:none">
-    <textarea id="data">أحمد محمد السيد | 12345678 | المحاضرة الأولى | رياضيات
-سارة علي حسن | 87654321 | المحاضرة الأولى | رياضيات</textarea>
+    <textarea id="data">أحمد محمد السيد | 12345678 | المحاضرة الأولى | رياضيات | أ. محمد أحمد
+سارة علي حسن | 87654321 | المحاضرة الأولى | رياضيات | أ. محمد أحمد</textarea>
   </div>
 
   <div class="btns">
@@ -105,7 +102,7 @@ button.act{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;
 <script>
 const $=id=>document.getElementById(id);
 const ADMIN_EMAIL="admin@benwael.com";
-let IS_ADMIN=false,MY_EMAIL='',CURRENT_LEC='',CODES=[],mode='platform';
+let IS_ADMIN=false,MY_EMAIL='',LECS=[],CURRENT={},CODES=[],mode='platform';
 
 auth.onAuthStateChanged(async user=>{
   if(!user){location.href='login.html';return;}
@@ -119,20 +116,21 @@ auth.onAuthStateChanged(async user=>{
 async function loadLectures(){
   try{
     const snap=IS_ADMIN?await db.collection('lectures').get():await db.collection('lectures').where('teacherEmail','==',MY_EMAIL).get();
-    const arr=[];snap.forEach(d=>arr.push(Object.assign({id:d.id},d.data())));
-    arr.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-    $('lecSelect').innerHTML='<option value="">— اختار محاضرة —</option>'+arr.map(l=>`<option value="${l.id}">${l.title} (${l.subject||'مادة'})</option>`).join('');
+    LECS=[];snap.forEach(d=>LECS.push(Object.assign({id:d.id},d.data())));
+    LECS.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    $('lecSelect').innerHTML='<option value="">— اختار محاضرة —</option>'+LECS.map(l=>`<option value="${l.id}">${l.title} (${l.subject||'مادة'}) — ${l.teacherName||''}</option>`).join('');
   }catch(e){}
 }
 
 $('loadCodes').onclick=async()=>{
   const id=$('lecSelect').value;
   if(!id){alert('اختار محاضرة الأول.');return;}
-  CURRENT_LEC=$('lecSelect').selectedOptions[0].textContent;
+  const lec=LECS.find(l=>l.id===id)||{};
+  CURRENT={lec:lec.title||'',sub:lec.subject||'',teacher:lec.teacherName||''};
   const snap=await db.collection('lecture_codes').where('lectureId','==',id).get();
   CODES=[];snap.forEach(d=>CODES.push(d.data()));
   $('countInfo').style.display='block';
-  $('countInfo').textContent='✅ تم تحميل '+CODES.length+' كود من المحاضرة — دوس "توليد الكارنيهات".';
+  $('countInfo').textContent='✅ تم تحميل '+CODES.length+' كود — المدرس: '+ (CURRENT.teacher||'—') +' — دوس "توليد".';
   gen();
 };
 
@@ -146,11 +144,11 @@ function setMode(m){
 function gen(){
   let items=[];
   if(mode==='platform'){
-    items=CODES.map(c=>({name:c.usedByName||'',code:c.code,lec:CURRENT_LEC,sub:''}));
+    items=CODES.map(c=>({name:c.usedByName||'',code:c.code,lec:CURRENT.lec,sub:CURRENT.sub,teacher:CURRENT.teacher}));
   }else{
     items=$('data').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
       const p=l.split('|').map(x=>x.trim());
-      return {name:p[0]||'',code:p[1]||'00000000',lec:p[2]||'',sub:p[3]||''};
+      return {name:p[0]||'',code:p[1]||'00000000',lec:p[2]||'',sub:p[3]||'',teacher:p[4]||''};
     });
   }
   if(!items.length){alert('مفيش بيانات — حمّل أكواد أو اكتب سطور.');return;}
@@ -171,7 +169,7 @@ function gen(){
       </div>
       <div class="code">${it.code}</div>
       <div class="row bottom">
-        <span class="lec">${it.lec}${it.sub?' • '+it.sub:''}</span>
+        <span class="lec">${it.teacher?'<b>'+it.teacher+'</b> • ':''}${it.lec}${it.sub?' • '+it.sub:''}</span>
         <span class="by">by <b>Ben Wael</b></span>
       </div>
     </div>`).join('');
