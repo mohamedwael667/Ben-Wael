@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>طباعة كارنيهات مشكاة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Cairo',sans-serif;background:#eef1f7;padding:20px}
+.toolbar{max-width:900px;margin:0 auto 24px;background:#fff;border:1px solid #e3e8f0;border-radius:16px;padding:20px;box-shadow:0 10px 30px rgba(20,35,63,.08)}
+.toolbar h1{font-size:20px;margin-bottom:6px;color:#14233f}
+.toolbar p{color:#64748b;font-size:13px;margin-bottom:12px;line-height:1.9}
+.toolbar p b{color:#1e3a5f}
+textarea{width:100%;height:150px;border:1.5px solid #e3e8f0;border-radius:12px;padding:12px;font-family:inherit;font-size:14px;resize:vertical;line-height:2}
+textarea:focus{outline:none;border-color:#d4af37}
+.btns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+button{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;font-weight:900;font-size:15px;cursor:pointer;transition:.3s}
+.gen{background:linear-gradient(135deg,#1e3a5f,#d4af37);color:#fff}
+.gen:hover{transform:translateY(-2px)}
+.prn{background:#14233f;color:#d4af37}
+.prn:hover{transform:translateY(-2px)}
+.cards{display:grid;grid-template-columns:repeat(2,8.6cm);gap:.5cm;justify-content:center}
+.id-card{width:8.6cm;height:5.4cm;border-radius:.3cm;background:linear-gradient(135deg,#14233f 0%,#1e3a5f 70%,#274b7a 100%);color:#fff;position:relative;overflow:hidden;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 6px 18px rgba(20,35,63,.25);outline:1px dashed #b9c4d6;outline-offset:5px}
+.id-card::before{content:'';position:absolute;top:-40%;left:-20%;width:70%;height:120%;background:radial-gradient(circle,rgba(212,175,55,.18),transparent 70%)}
+.id-card::after{content:'مشكاة';position:absolute;bottom:-22px;left:-8px;font-size:80px;font-weight:900;color:rgba(212,175,55,.07);pointer-events:none}
+.top{display:flex;align-items:center;gap:8px;position:relative}
+.top img{width:32px;height:32px;object-fit:contain}
+.top b{font-size:14px;color:#d4af37}
+.top small{margin-right:auto;font-size:10px;color:#9fb3d1;font-weight:700}
+.name{font-size:17px;font-weight:900;position:relative}
+.code{background:rgba(212,175,55,.12);border:1px dashed rgba(212,175,55,.6);border-radius:8px;padding:5px 10px;text-align:center;font-size:21px;font-weight:900;letter-spacing:7px;color:#f5e6a8;direction:ltr;position:relative}
+.meta{display:flex;justify-content:space-between;font-size:10.5px;color:#cbd5e1;font-weight:700;position:relative}
+@media print{
+  body{background:#fff;padding:0}
+  .toolbar{display:none}
+  .cards{gap:.45cm}
+  .id-card{box-shadow:none;page-break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@page{size:A4;margin:1cm}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <h1>🖨️ طباعة كارنيهات مشكاة</h1>
+  <p>كل سطر = كارنيه واحد. النظام: <b>الاسم | الكود | المحاضرة | المادة</b><br>
+  عدّل السطور اللي تحت، دوس <b>توليد</b>، وبعدين <b>طباعة</b> — الورقة A4 بتاخد 10 كارنيهات.</p>
+  <textarea id="data">أحمد محمد السيد | 12345678 | المحاضرة الأولى | رياضيات
+سارة علي حسن | 87654321 | المحاضرة الأولى | رياضيات
+محمود سمير | 11223344 | ملخص الباب الأول | فيزياء
+منى خالد | 55667788 | المحاضرة الثانية | كيمياء</textarea>
+  <div class="btns">
+    <button class="gen" onclick="gen()">⚡ توليد الكارنيهات</button>
+    <button class="prn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+  </div>
+</div>
+
+<div class="cards" id="cards"></div>
+
+<script>
+function gen(){
+  const lines=document.getElementById('data').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  document.getElementById('cards').innerHTML=lines.map(l=>{
+    const p=l.split('|').map(x=>x.trim());
+    const name=p[0]||'—',code=p[1]||'00000000',lec=p[2]||'',sub=p[3]||'';
+    return `<div class="id-card">
+      <div class="top"><img src="logo.png" onerror="this.style.display='none'"><b>منصة مشكات</b><small>بطاقة وصول خاصة</small></div>
+      <div class="name">${name}</div>
+      <div class="code">${code}</div>
+      <div class="meta"><span>${lec}</span><span>${sub}</span></div>
+    </div>`;
+  }).join('');
+}
+gen();
+</script>
+</body>
+</html>
