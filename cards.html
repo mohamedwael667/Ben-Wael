@@ -41,14 +41,13 @@ button.act{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;
 .brand b{font-size:12.5px;color:#d4af37;font-weight:900}
 .brand small{font-size:6.5px;color:#9fb3d1;font-weight:700;letter-spacing:1.5px;direction:ltr;text-align:right}
 .badge{margin-right:auto;font-size:7.5px;font-weight:900;color:#14233f;background:linear-gradient(135deg,#f5e6a8,#d4af37);padding:.08cm .25cm;border-radius:.5cm}
-.mid{justify-content:space-between;margin-top:.1cm}
-.who small{display:block;font-size:7px;color:#9fb3d1;font-weight:700;margin-bottom:.02cm}
-.name{font-size:15px;font-weight:900;line-height:1.2}
-.name .hand{color:#9fb3d1;font-weight:700;font-size:11px;letter-spacing:1px}
+.mid{justify-content:space-between;margin-top:.15cm}
+.who{flex:1}
+.who small{display:block;font-size:7px;color:#9fb3d1;font-weight:700;margin-bottom:.05cm}
+.code{background:rgba(212,175,55,.1);border:1px dashed rgba(212,175,55,.65);border-radius:.15cm;padding:.15cm .2cm;text-align:center;font-size:24px;font-weight:900;letter-spacing:7px;color:#f5e6a8;direction:ltr}
 .chip{width:.95cm;height:.72cm;border-radius:.12cm;background:linear-gradient(135deg,#f5e6a8,#d4af37 55%,#b8941f);position:relative;flex-shrink:0;box-shadow:inset 0 0 .1cm rgba(20,35,63,.4)}
 .chip::before{content:'';position:absolute;inset:.13cm;border:1px solid rgba(20,35,63,.45);border-radius:.08cm}
 .chip::after{content:'';position:absolute;top:50%;left:.13cm;right:.13cm;height:1px;background:rgba(20,35,63,.45)}
-.code{background:rgba(212,175,55,.1);border:1px dashed rgba(212,175,55,.65);border-radius:.15cm;padding:.1cm .2cm;text-align:center;font-size:19px;font-weight:900;letter-spacing:6px;color:#f5e6a8;direction:ltr;position:relative}
 .bottom{justify-content:space-between;align-items:flex-end}
 .lec{font-size:8.5px;color:#cbd5e1;font-weight:700}
 .lec b{color:#d4af37;font-weight:900}
@@ -68,8 +67,8 @@ button.act{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;
 
 <div class="toolbar">
   <h1>🖨️ طباعة كارنيهات مشكاة</h1>
-  <p><b>من المنصة:</b> اختار المحاضرة → الأكواد + اسم المدرس بيتسحبوا أوتوماتيك.<br>
-  <b>يدوي:</b> كل سطر = كارنيه بالنظام: <b>الاسم | الكود | المحاضرة | المادة | اسم المدرس</b></p>
+  <p><b>من المنصة:</b> اختار المحاضرة → كل أكوادها تتطبع على كارنيهات جاهزة للتوزيع (من غير أسماء).<br>
+  <b>يدوي:</b> كل سطر = كارنيه بالنظام: <b>الكود | المحاضرة | المادة | اسم المدرس</b></p>
 
   <div class="tabs">
     <button class="tab on" data-m="platform" onclick="setMode('platform')">🎯 من المنصة</button>
@@ -83,8 +82,9 @@ button.act{padding:12px 26px;border:none;border-radius:12px;font-family:inherit;
   </div>
 
   <div id="panelManual" style="display:none">
-    <textarea id="data">أحمد محمد السيد | 12345678 | المحاضرة الأولى | رياضيات | أ. محمد أحمد
-سارة علي حسن | 87654321 | المحاضرة الأولى | رياضيات | أ. محمد أحمد</textarea>
+    <textarea id="data">12345678 | المحاضرة الأولى | رياضيات | أ. محمد أحمد
+87654321 | المحاضرة الأولى | رياضيات | أ. محمد أحمد
+11223344 | ملخص الباب الأول | فيزياء | أ. خالد سعيد</textarea>
   </div>
 
   <div class="btns">
@@ -130,7 +130,7 @@ $('loadCodes').onclick=async()=>{
   const snap=await db.collection('lecture_codes').where('lectureId','==',id).get();
   CODES=[];snap.forEach(d=>CODES.push(d.data()));
   $('countInfo').style.display='block';
-  $('countInfo').textContent='✅ تم تحميل '+CODES.length+' كود — المدرس: '+ (CURRENT.teacher||'—') +' — دوس "توليد".';
+  $('countInfo').textContent='✅ تم تحميل '+CODES.length+' كود — دوس "توليد" وبعدين اطبع ووزّع.';
   gen();
 };
 
@@ -144,11 +144,11 @@ function setMode(m){
 function gen(){
   let items=[];
   if(mode==='platform'){
-    items=CODES.map(c=>({name:c.usedByName||'',code:c.code,lec:CURRENT.lec,sub:CURRENT.sub,teacher:CURRENT.teacher}));
+    items=CODES.map(c=>({code:c.code,lec:CURRENT.lec,sub:CURRENT.sub,teacher:CURRENT.teacher}));
   }else{
     items=$('data').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
       const p=l.split('|').map(x=>x.trim());
-      return {name:p[0]||'',code:p[1]||'00000000',lec:p[2]||'',sub:p[3]||'',teacher:p[4]||''};
+      return {code:p[0]||'00000000',lec:p[1]||'',sub:p[2]||'',teacher:p[3]||''};
     });
   }
   if(!items.length){alert('مفيش بيانات — حمّل أكواد أو اكتب سطور.');return;}
@@ -162,12 +162,11 @@ function gen(){
       </div>
       <div class="row mid">
         <div class="who">
-          <small>اسم الطالب</small>
-          <div class="name">${it.name||'<span class="hand">............................</span>'}</div>
+          <small>كود الوصول الخاص بيك</small>
+          <div class="code">${it.code}</div>
         </div>
         <div class="chip"></div>
       </div>
-      <div class="code">${it.code}</div>
       <div class="row bottom">
         <span class="lec">${it.teacher?'<b>'+it.teacher+'</b> • ':''}${it.lec}${it.sub?' • '+it.sub:''}</span>
         <span class="by">by <b>Ben Wael</b></span>
