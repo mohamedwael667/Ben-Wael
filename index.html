@@ -1,1 +1,616 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="logo.png">
+<title>منصة مشكاة التعليمية | نور العلم</title>
+<meta name="description" content="منصة مشكاة — محاضرات بأكواد وصول، ملخصات محمية بعلامة مائية، اختبارات ذكية وحجز حصص">
+  <meta property="og:title" content="منصة مشكاة التعليمية | نور العلم">
+<meta property="og:description" content="محاضرات بأكواد وصول، ملخصات محمية بعلامة مائية، اختبارات ذكية وحجز حصص">
+<meta property="og:image" content="https://mes-hkat.vercel.app/logo.png">
+<meta property="og:url" content="https://mes-hkat.vercel.app">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f4f6fb;--card:#fff;--line:#e3e8f0;--text:#14233f;--muted:#64748b;--navy:#1e3a5f;--navy-d:#14233f;--navy-x:#0f1c33;--gold:#d4af37;--gold-l:#f5e6a8;--grad:linear-gradient(135deg,#1e3a5f,#d4af37);--shadow:0 10px 30px rgba(20,35,63,.08)}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+::selection{background:var(--gold);color:var(--navy-x)}
+.container{max-width:1200px;margin:auto;padding:0 20px}
+section{padding:90px 0;position:relative}
+a{text-decoration:none;color:inherit}
 
+/* Preloader */
+#loader{position:fixed;inset:0;background:var(--navy-x);z-index:3000;display:grid;place-items:center;transition:opacity .7s,visibility .7s}
+#loader.done{opacity:0;visibility:hidden}
+.loader-box{text-align:center}
+.loader-box img{width:110px;height:110px;object-fit:contain;animation:pulse 1.6s ease-in-out infinite}
+.loader-name{margin-top:10px;font-size:28px;font-weight:900;background:linear-gradient(90deg,#d4af37,#f5e6a8,#d4af37);background-size:200%;-webkit-background-clip:text;color:transparent;animation:shine 2s linear infinite}
+.loader-sub{color:#9fb3d1;font-size:12px;font-weight:700;letter-spacing:3px;margin-top:4px}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes shine{to{background-position:200%}}
+
+/* شريط التقدم */
+#progress{position:fixed;top:0;right:0;height:3px;background:linear-gradient(90deg,#d4af37,#f5e6a8);z-index:2500;width:0;box-shadow:0 0 10px rgba(212,175,55,.6)}
+
+/* النافبار */
+.navbar{position:fixed;top:0;right:0;left:0;z-index:1000;background:rgba(15,28,51,.85);backdrop-filter:blur(14px);border-bottom:1px solid rgba(212,175,55,.15);transition:.3s}
+.navbar.scrolled{background:rgba(15,28,51,.97);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+.logo{display:flex;align-items:center;gap:12px}
+.logo img{width:50px;height:50px;object-fit:contain}
+.logo-text{display:flex;flex-direction:column;line-height:1.2;font-weight:900;font-size:18px;color:#fff}
+.logo-text b{background:linear-gradient(90deg,#d4af37,#f5e6a8);-webkit-background-clip:text;color:transparent}
+.logo-text small{color:#98a2b3;font-size:11px;font-weight:700}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{color:#cbd5e1;font-weight:800;font-size:14.5px;padding:9px 14px;border-radius:10px;transition:.3s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);background:rgba(212,175,55,.1)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:1001}
+.hamburger span{width:26px;height:3px;background:#fff;border-radius:3px;transition:.35s}
+.hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+
+/* الأزرار */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border-radius:14px;font-weight:900;font-size:16px;font-family:inherit;transition:.35s;cursor:pointer;border:none;position:relative;overflow:hidden}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 10px 25px rgba(30,58,95,.4)}
+.btn-primary:hover{transform:translateY(-4px);box-shadow:0 16px 35px rgba(30,58,95,.5)}
+.btn-outline{border:2px solid rgba(212,175,55,.5);color:var(--gold);background:transparent}
+.btn-outline:hover{border-color:var(--gold);background:rgba(212,175,55,.1);transform:translateY(-4px)}
+.btn-sm{padding:10px 22px;font-size:14px;border-radius:12px}
+.btn-wa{background:#25d366;color:#fff;box-shadow:0 10px 25px rgba(37,211,102,.3)}
+.btn-wa:hover{transform:translateY(-4px)}
+
+/* عداد المتصلين */
+.live-counter{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:50px;background:rgba(18,183,106,.12);border:1px solid rgba(18,183,106,.4);font-size:13px;font-weight:900;color:#6ee7b7}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#12b76a;animation:livePulse 2s infinite}
+.live-text{color:#98a2b3;font-size:12px}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(18,183,106,.6)}70%{box-shadow:0 0 0 9px rgba(18,183,106,0)}100%{box-shadow:0 0 0 0 rgba(18,183,106,0)}}
+
+/* الهيرو */
+.hero{min-height:100vh;display:flex;align-items:center;padding:150px 0 90px;overflow:hidden;background:linear-gradient(160deg,#0f1c33,#14233f 55%,#1a2f4f)}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(212,175,55,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,.04) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.25;animation:blobMove 18s ease-in-out infinite alternate}
+.blob-1{width:520px;height:520px;background:radial-gradient(circle,#1e3a5f,transparent 65%);top:-140px;right:-120px}
+.blob-2{width:420px;height:420px;background:radial-gradient(circle,#d4af37,transparent 65%);bottom:-120px;left:-100px;animation-delay:-9s;opacity:.14}
+@keyframes blobMove{to{transform:translate(60px,40px) scale(1.15)}}
+.spark{position:absolute;color:var(--gold);opacity:.5;animation:tw 3s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.8;transform:scale(1.2)}}
+.hero .container{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:9px 22px;border-radius:50px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.4);color:var(--gold);font-weight:900;font-size:14px;margin-bottom:22px;animation:fadeUp .8s .1s both}
+.hero h1{font-size:clamp(34px,5vw,58px);font-weight:900;line-height:1.35;animation:fadeUp .8s .25s both;color:#fff}
+.grad-text{background:linear-gradient(90deg,#d4af37,#f5e6a8,#d4af37);background-size:200%;-webkit-background-clip:text;color:transparent;animation:shine 5s linear infinite}
+.hero-sub{color:#cbd5e1;font-size:18px;line-height:1.9;margin:18px 0 30px;max-width:560px;animation:fadeUp .8s .4s both}
+.typed-wrap{color:var(--gold);font-weight:900}
+.cursor{animation:blink 1s steps(1) infinite;color:var(--gold)}
+@keyframes blink{50%{opacity:0}}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;animation:fadeUp .8s .55s both}
+.hero-trust{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px;animation:fadeUp .8s .7s both}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:50px;background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.25);font-size:13px;font-weight:800;color:#cbd5e1}
+.chip i{color:var(--gold)}
+.hero-stats{display:flex;gap:26px;margin-top:34px;animation:fadeUp .8s .85s both}
+.hstat b{display:block;font-size:24px;font-weight:900;color:var(--gold)}
+.hstat span{color:#98a2b3;font-size:12px;font-weight:700}
+.hstat{border-right:1px solid rgba(212,175,55,.2);padding-right:18px}
+.hstat:first-child{border-right:none;padding-right:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.hero-visual{position:relative;display:grid;place-items:center;animation:fadeUp 1s .4s both}
+.glow-ring{position:absolute;width:130%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.15),transparent 60%);filter:blur(10px)}
+.seal{width:min(370px,86%);aspect-ratio:1;border-radius:50%;padding:20px;background:rgba(255,255,255,.04);border:1px solid rgba(212,175,55,.25);display:grid;place-items:center;box-shadow:0 30px 80px rgba(0,0,0,.45),0 0 60px rgba(212,175,55,.12);animation:float 7s ease-in-out infinite;position:relative;z-index:2}
+.seal img{width:100%;height:100%;object-fit:contain}
+.orbit{position:absolute;width:118%;aspect-ratio:1;border:1.5px dashed rgba(212,175,55,.25);border-radius:50%;animation:spin 30s linear infinite}
+.orbit.o2{width:92%;border-color:rgba(212,175,55,.18);animation:spin 22s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.float-card{position:absolute;z-index:3;display:flex;align-items:center;gap:10px;background:rgba(15,28,51,.92);border:1px solid rgba(212,175,55,.25);border-radius:16px;padding:12px 18px;box-shadow:0 15px 35px rgba(0,0,0,.4);animation:float 6s ease-in-out infinite}
+.fc-1{top:6%;right:-2%}.fc-2{bottom:10%;left:-4%;animation-delay:-2s}.fc-3{top:46%;left:-10%;animation-delay:-4s}
+.float-card i{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:16px;background:var(--grad)}
+.fc-2 i{background:linear-gradient(135deg,#12b76a,#067647)}.fc-3 i{background:linear-gradient(135deg,#d4af37,#b8941f)}
+.float-card b{display:block;font-size:14px;line-height:1.2;color:#fff}
+.float-card small{color:#98a2b3;font-size:11px;font-weight:700}
+.scroll-down{position:absolute;bottom:26px;right:50%;transform:translateX(50%);color:var(--gold);font-size:20px;animation:bob 2s ease-in-out infinite;z-index:3}
+@keyframes bob{0%,100%{transform:translate(50%,0)}50%{transform:translate(50%,8px)}}
+
+/* Marquee */
+.marquee{background:linear-gradient(90deg,#14233f,#1e3a5f);border-block:1px solid rgba(212,175,55,.25);overflow:hidden;padding:14px 0}
+.mq-track{display:flex;width:max-content;animation:mq 30s linear infinite}
+.mq-group{display:flex;align-items:center;gap:44px;padding-left:44px;white-space:nowrap}
+.mq-group span{color:var(--gold-l);font-weight:800;font-size:14px}
+.mq-group i{color:var(--gold);font-size:10px}
+@keyframes mq{to{transform:translateX(50%)}}
+
+/* عناوين الأقسام */
+.section-head{text-align:center;margin-bottom:56px}
+.section-tag{display:inline-flex;align-items:center;gap:8px;padding:8px 22px;border-radius:50px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.35);color:#92400e;font-weight:900;font-size:14px;margin-bottom:16px}
+.section-tag i{color:var(--gold)}
+.section-head h2{font-size:clamp(28px,4vw,42px);font-weight:900}
+.section-head h2 span{background:var(--grad);-webkit-background-clip:text;color:transparent}
+.section-head p{color:var(--muted);max-width:600px;margin:14px auto 0;font-size:17px}
+.section-head .line{width:110px;height:4px;border-radius:4px;background:var(--grad);margin:20px auto 0}
+
+/* الخدمات */
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px 26px;transition:.3s;display:block;will-change:transform}
+.card:hover{border-color:var(--gold);box-shadow:0 25px 60px rgba(20,35,63,.15)}
+.card-icon{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:26px;color:#fff;background:var(--grad);box-shadow:0 10px 25px rgba(30,58,95,.3);margin-bottom:22px;transition:.45s}
+.card:hover .card-icon{transform:rotate(-8deg) scale(1.1)}
+.card h3{font-size:19px;font-weight:900;margin-bottom:10px}
+.card p{color:var(--muted);font-size:14.5px;line-height:1.9}
+.card-tag{position:absolute;top:18px;left:20px;font-size:11px;font-weight:900;color:#92400e;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3);padding:4px 12px;border-radius:50px}
+
+/* ليه مشكاة */
+#why{background:#fff;border-block:1px solid var(--line)}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.why-list{display:flex;flex-direction:column;gap:18px}
+.why-item{display:flex;gap:16px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:18px;transition:.3s}
+.why-item:hover{border-color:var(--gold);transform:translateX(-6px)}
+.why-item i{width:44px;height:44px;flex-shrink:0;border-radius:12px;display:grid;place-items:center;color:#fff;background:var(--grad);font-size:17px}
+.why-item b{font-size:16px;font-weight:900;display:block;margin-bottom:4px}
+.why-item p{color:var(--muted);font-size:13.5px;line-height:1.8}
+.why-visual{position:relative;display:grid;place-items:center;padding:30px 0}
+.demo-card{width:min(340px,90%);border-radius:18px;background:linear-gradient(135deg,#0f1c33,#1e3a5f);color:#fff;padding:22px;position:relative;box-shadow:0 30px 70px rgba(20,35,63,.35);animation:float 7s ease-in-out infinite}
+.demo-card .frame{position:absolute;inset:8px;border:1px solid rgba(212,175,55,.4);border-radius:12px;pointer-events:none}
+.dc-top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.dc-top img{width:36px;height:36px;object-fit:contain}
+.dc-top b{color:var(--gold);font-size:15px}
+.dc-top small{margin-right:auto;font-size:9px;color:#9fb3d1;font-weight:800;background:linear-gradient(135deg,#f5e6a8,#d4af37);color:#14233f;padding:3px 10px;border-radius:50px}
+.dc-code{background:rgba(212,175,55,.1);border:1px dashed rgba(212,175,55,.65);border-radius:10px;padding:10px;text-align:center;font-size:26px;font-weight:900;letter-spacing:8px;color:var(--gold-l);direction:ltr;margin-bottom:14px}
+.dc-bottom{display:flex;justify-content:space-between;font-size:10px;color:#cbd5e1;font-weight:700}
+.dc-bottom b{color:var(--gold)}
+.demo-badge{position:absolute;background:#fff;border:1px solid var(--line);border-radius:50px;padding:8px 18px;font-size:12px;font-weight:900;color:var(--navy);box-shadow:0 12px 30px rgba(20,35,63,.15);display:flex;gap:8px;align-items:center;animation:float 5s ease-in-out infinite}
+.demo-badge i{color:var(--gold)}
+.db-1{top:6%;right:2%}
+.db-2{bottom:8%;left:0;animation-delay:-2.5s}
+
+/* كيف تعمل */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;position:relative}
+.steps::before{content:'';position:absolute;top:60px;right:12%;left:12%;border-top:2px dashed rgba(212,175,55,.35);z-index:0}
+.step{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:36px 26px;text-align:center;position:relative;z-index:1;transition:.4s}
+.step:hover{transform:translateY(-8px);box-shadow:var(--shadow);border-color:var(--gold)}
+.step-num{width:64px;height:64px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:24px;font-weight:900;color:#fff;background:var(--grad);box-shadow:0 10px 25px rgba(30,58,95,.3);border:4px solid var(--bg)}
+.step h3{font-size:19px;font-weight:900;margin-bottom:10px}
+.step p{color:var(--muted);font-size:14.5px;line-height:1.9}
+
+/* المدرسون */
+.t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.t-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px 26px;text-align:center;transition:.4s}
+.t-card:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(20,35,63,.12);border-color:var(--gold)}
+.t-ava{width:90px;height:90px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;font-size:36px;font-weight:900;color:#fff;background:var(--grad);box-shadow:0 10px 25px rgba(30,58,95,.3);overflow:hidden;border:3px solid rgba(212,175,55,.4)}
+.t-card h3{font-size:19px;font-weight:900}
+.t-sub{display:inline-block;margin:8px 0 10px;font-size:12px;font-weight:900;color:#92400e;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3);padding:4px 14px;border-radius:50px}
+.t-card p{color:var(--muted);font-size:14px;line-height:1.8}
+.teachers-empty{display:none;text-align:center;padding:40px 20px;background:var(--card);border:1px dashed var(--gold);border-radius:22px}
+.teachers-empty i{font-size:44px;color:var(--gold);margin-bottom:14px}
+.teachers-empty h3{font-size:20px;font-weight:900;margin-bottom:8px}
+.teachers-empty p{color:var(--muted);margin-bottom:20px}
+
+/* آراء */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.testi{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px;position:relative;transition:.3s}
+.testi:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:var(--shadow)}
+.testi .quote{position:absolute;top:18px;left:22px;font-size:44px;color:rgba(212,175,55,.2);font-weight:900}
+.stars{color:var(--gold);font-size:13px;margin-bottom:14px}
+.testi p{color:var(--muted);font-size:14.5px;line-height:2;margin-bottom:18px}
+.testi-who{display:flex;gap:12px;align-items:center}
+.testi-who .av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:#fff;background:var(--grad)}
+.testi-who b{font-size:14px;display:block}
+.testi-who small{color:var(--muted);font-size:12px;font-weight:700}
+
+/* الأسعار */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;align-items:stretch}
+.plan{background:#fff;border:2px solid var(--line);border-radius:24px;padding:36px 28px;text-align:center;position:relative;transition:.3s;display:flex;flex-direction:column}
+.plan:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(20,35,63,.12)}
+.plan.hot{border-color:var(--gold);box-shadow:0 20px 50px rgba(212,175,55,.2);transform:scale(1.03)}
+.plan .crown{position:absolute;top:-16px;right:50%;transform:translateX(50%);background:var(--grad);color:#fff;padding:5px 20px;border-radius:50px;font-size:12px;font-weight:900}
+.plan h3{font-size:19px;font-weight:900;margin-bottom:10px}
+.price{font-size:44px;font-weight:900;background:var(--grad);-webkit-background-clip:text;color:transparent}
+.price small{font-size:15px}
+.plan ul{list-style:none;margin:20px 0;text-align:right;flex:1}
+.plan li{padding:8px 0;font-size:14px;font-weight:700;color:var(--muted);display:flex;gap:10px;align-items:center}
+.plan li i{color:#12b76a}
+
+/* أسئلة */
+.faq-wrap{max-width:800px;margin:auto;display:flex;flex-direction:column;gap:14px}
+.faq-item{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.3s}
+.faq-item.open{border-color:var(--gold)}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;background:none;border:none;font-family:inherit;font-size:15.5px;font-weight:900;color:var(--text);cursor:pointer;text-align:right}
+.faq-q i{color:var(--gold);transition:.3s}
+.faq-item.open .faq-q i{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.faq-a p{padding:0 22px 20px;color:var(--muted);font-size:14px;line-height:2}
+
+/* انضم */
+.join-box{border-radius:30px;padding:60px 40px;background:var(--grad);color:#fff;text-align:center;position:relative;overflow:hidden;box-shadow:0 25px 60px rgba(30,58,95,.35)}
+.join-box::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1px);background-size:22px 22px}
+.join-box h2{font-size:clamp(24px,3.5vw,38px);font-weight:900;margin-bottom:14px;position:relative}
+.join-box p{max-width:600px;margin:0 auto 28px;font-size:17px;line-height:1.9;opacity:.95;position:relative}
+.join-box .btn{position:relative}
+
+/* الإحصائيات */
+.stats-panel{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:50px 40px;box-shadow:var(--shadow)}
+.stat{text-align:center}
+.stat i{font-size:30px;color:var(--gold);margin-bottom:12px;display:block}
+.stat .num{font-size:42px;font-weight:900;background:var(--grad);-webkit-background-clip:text;color:transparent}
+.stat p{color:var(--muted);font-weight:800;margin-top:6px}
+
+/* الفوتر */
+footer{background:var(--navy-x);color:#98a2b3;padding:60px 0 0}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1.2fr;gap:40px;padding-bottom:44px}
+.footer-grid h4{color:#fff;font-size:17px;font-weight:900;margin-bottom:18px}
+.f-about p{line-height:1.9;margin:14px 0;font-size:14.5px}
+.f-links a{display:block;padding:6px 0;font-size:14.5px;transition:.3s}
+.f-links a:hover{color:var(--gold);padding-right:6px}
+.f-contact li{list-style:none;display:flex;align-items:center;gap:12px;padding:7px 0;font-size:14.5px}
+.f-contact i{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(212,175,55,.15);color:var(--gold)}
+.f-contact a{color:inherit;transition:.3s}.f-contact a:hover{color:var(--gold)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding:20px 0;text-align:center;font-size:14px}
+.footer-bottom b{color:var(--gold)}
+
+/* عام */
+.reveal{opacity:0;transform:translateY(45px);transition:opacity .9s,transform .9s}
+.reveal.active{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+#backTop{position:fixed;bottom:28px;left:28px;width:50px;height:50px;border-radius:14px;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:18px;opacity:0;visibility:hidden;transform:translateY(20px);transition:.4s;z-index:900;cursor:pointer;border:none;box-shadow:0 10px 25px rgba(30,58,95,.4)}
+#backTop.show{opacity:1;visibility:visible;transform:none}
+.wa-float{position:fixed;bottom:90px;left:28px;width:60px;height:60px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;font-size:30px;z-index:950;box-shadow:0 10px 30px rgba(37,211,102,.4);transition:.3s;animation:waFloat 2.5s ease-in-out infinite}
+.wa-float:hover{transform:scale(1.1)}
+@keyframes waFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+@media(max-width:1024px){.services-grid,.t-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}.plans{grid-template-columns:1fr;max-width:500px;margin:auto}.plan.hot{transform:none}.steps{grid-template-columns:1fr}.steps::before{display:none}.stats-panel{grid-template-columns:repeat(2,1fr);gap:36px}.footer-grid{grid-template-columns:1fr 1fr}.why-grid{grid-template-columns:1fr;gap:40px}}
+@media(max-width:992px){.hero .container{grid-template-columns:1fr;text-align:center}.hero-sub{margin-inline:auto}.hero-btns,.hero-trust,.hero-stats{justify-content:center}.hero-visual{margin-top:50px}.fc-3{display:none}}
+@media(max-width:900px){.nav-links{position:fixed;top:0;right:-100%;width:min(320px,80vw);height:100vh;background:var(--navy-x);flex-direction:column;align-items:stretch;padding:100px 26px;gap:8px;transition:right .45s;z-index:950;box-shadow:-20px 0 60px rgba(0,0,0,.4)}.nav-links.open{right:0}.nav-links a{font-size:17px;padding:14px;text-align:center}.hamburger{display:flex}}
+@media(max-width:640px){.services-grid,.t-grid,.testi-grid,.stats-panel,.footer-grid{grid-template-columns:1fr}.nav-actions .btn{display:none}.live-text{display:none}.hstat{border-right:none;padding-right:0}}
+</style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="loader">
+  <div class="loader-box">
+    <img src="logo.png" alt="مشكاة" onerror="this.style.display='none'">
+    <div class="loader-name">مشكاة</div>
+    <div class="loader-sub">MESHKAT EDUCATION</div>
+  </div>
+</div>
+<div id="progress"></div>
+
+<header class="navbar" id="navbar">
+  <div class="container nav-wrap">
+    <a href="#hero" class="logo"><img src="logo.png" alt="مشكاة" data-fallback><span class="logo-text"><b>مشكاة</b><small>نور العلم</small></span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#hero" class="active">الرئيسية</a>
+      <a href="#services">خدماتنا</a>
+      <a href="#why">ليه مشكاة؟</a>
+      <a href="#teachers">المدرسون</a>
+      <a href="#pricing">الأسعار</a>
+      <a href="#faq">أسئلة شائعة</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="live-counter" id="liveCounter" style="display:none"><span class="live-dot"></span><span id="onlineCount">0</span><span class="live-text">متصل الآن</span></div>
+      <a href="login.html" class="btn btn-outline btn-sm">تسجيل الدخول</a>
+      <a href="register.html" class="btn btn-primary btn-sm">ابدأ الآن</a>
+      <button class="hamburger" id="hamburger" aria-label="القائمة"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <i class="spark" style="top:20%;right:12%">✦</i><i class="spark" style="top:35%;right:6%;animation-delay:1s">✦</i><i class="spark" style="top:60%;left:8%;animation-delay:2s">✦</i><i class="spark" style="top:15%;left:20%;animation-delay:.5s">✦</i>
+  <div class="container">
+    <div>
+      <span class="hero-badge"><i class="fa-solid fa-mosque"></i> منصة تعليمية بنور العلم</span>
+      <h1>التعليم الأذكى يبدأ<br>من <span class="grad-text">مشكاة</span></h1>
+      <p class="hero-sub">محتواك التعليمي محمي، وتعلمك منظم: <span class="typed-wrap"><span id="typed"></span><span class="cursor">|</span></span></p>
+      <div class="hero-btns">
+        <a href="register.html" class="btn btn-primary">أنشئ حسابك مجانًا <i class="fa-solid fa-rocket"></i></a>
+        <a href="#why" class="btn btn-outline">اكتشف ليه مشكاة</a>
+      </div>
+      <div class="hero-trust">
+        <span class="chip"><i class="fa-solid fa-key"></i> أكواد وصول فردية</span>
+        <span class="chip"><i class="fa-solid fa-droplet"></i> علامة مائية</span>
+        <span class="chip"><i class="fa-solid fa-bolt"></i> تصحيح فوري</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><b>+5000</b><span>طالب</span></div>
+        <div class="hstat"><b>+800</b><span>محاضرة محمية</span></div>
+        <div class="hstat"><b>+40</b><span>مدرس معتمد</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="glow-ring"></div>
+      <div class="orbit"></div><div class="orbit o2"></div>
+      <div class="seal"><img src="logo.png" alt="شعار مشكاة" data-fallback></div>
+      <div class="float-card fc-1"><i class="fa-solid fa-video"></i><div><b>محاضرات بأكواد وصول</b><small>لكل محاضرة كود خاص</small></div></div>
+      <div class="float-card fc-2"><i class="fa-solid fa-file-shield"></i><div><b>ملخصات محمية</b><small>تُعرض ولا تُسرّب</small></div></div>
+      <div class="float-card fc-3"><i class="fa-solid fa-chart-line"></i><div><b>متابعة النتائج</b><small>اعرف مستواك فورًا</small></div></div>
+    </div>
+  </div>
+  <a href="#services" class="scroll-down"><i class="fa-solid fa-chevron-down"></i></a>
+</section>
+
+<div class="marquee">
+  <div class="mq-track">
+    <div class="mq-group"><span>محاضرات بأكواد وصول</span><i class="fa-solid fa-star"></i><span>ملخصات بعلامة مائية</span><i class="fa-solid fa-star"></i><span>اختبارات بتصحيح فوري</span><i class="fa-solid fa-star"></i><span>حجز حصص أونلاين</span><i class="fa-solid fa-star"></i><span>لوحة تحكم للمدرس</span><i class="fa-solid fa-star"></i><span>حماية من التسريب</span><i class="fa-solid fa-star"></i></div>
+    <div class="mq-group"><span>محاضرات بأكواد وصول</span><i class="fa-solid fa-star"></i><span>ملخصات بعلامة مائية</span><i class="fa-solid fa-star"></i><span>اختبارات بتصحيح فوري</span><i class="fa-solid fa-star"></i><span>حجز حصص أونلاين</span><i class="fa-solid fa-star"></i><span>لوحة تحكم للمدرس</span><i class="fa-solid fa-star"></i><span>حماية من التسريب</span><i class="fa-solid fa-star"></i></div>
+  </div>
+</div>
+
+<section id="services">
+  <div class="container">
+    <div class="section-head reveal"><span class="section-tag"><i class="fa-solid fa-shapes"></i> خدماتنا</span><h2>ليه <span>مشكاة</span> مختلفة؟</h2><p>منصة مبنية على الحماية والاحترافية — محتواك حقك، وإحنا بنحميه</p><div class="line"></div></div>
+    <div class="services-grid">
+      <a href="lectures.html" class="card tilt reveal d1"><span class="card-tag">حماية كاملة</span><div class="card-icon"><i class="fa-solid fa-key"></i></div><h3>محاضرات بأكواد وصول</h3><p>كل محاضرة تفتح بكود من ٨ أرقام بيسلّمه المدرس لطلابه فقط — وتقبل أي رابط فيديو مش يوتيوب بس.</p></a>
+      <a href="summaries.html" class="card tilt reveal d2"><span class="card-tag">ضد التسريب</span><div class="card-icon"><i class="fa-solid fa-file-shield"></i></div><h3>ملخصات محمية</h3><p>الملخصات بتتعرض جوه المنصة فقط وعليها علامة مائية باسمك — أي تسريب يتعرف صاحبه فورًا.</p></a>
+      <a href="quizzes.html" class="card tilt reveal d3"><span class="card-tag">تصحيح فوري</span><div class="card-icon"><i class="fa-solid fa-file-pen"></i></div><h3>اختبارات ذكية</h3><p>اختبارات إلكترونية بتصحيح تلقائي ونتيجة فورية بتتحفظ في ملفك وتتابع منها مستواك.</p></a>
+      <a href="booking.html" class="card tilt reveal d4"><span class="card-tag">بضغطة زر</span><div class="card-icon"><i class="fa-solid fa-calendar-check"></i></div><h3>حجز الحصص</h3><p>احجز حصة مع مدرسك في ثواني، والمدرس بيأكد أو يرفض من لوحته الخاصة.</p></a>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="container">
+    <div class="section-head reveal"><span class="section-tag"><i class="fa-solid fa-shield-halved"></i> الحماية</span><h2>ليه المدرسين <span>بيختاروا مشكاة؟</span></h2><div class="line"></div></div>
+    <div class="why-grid">
+      <div class="why-list reveal">
+        <div class="why-item"><i class="fa-solid fa-key"></i><div><b>كود لكل طالب</b><p>كل محاضرة بتتفتح بكود فريد بيشتغل مرة واحدة — مفيش لينك يتشارك ولا فرجة ببلاش.</p></div></div>
+        <div class="why-item"><i class="fa-solid fa-droplet"></i><div><b>علامة مائية باسم الطالب</b><p>كل ملخص بيتعرض عليه اسم وإيميل الطالب — أي تسريب يتعرف صاحبه فورًا.</p></div></div>
+        <div class="why-item"><i class="fa-solid fa-id-card"></i><div><b>كارنيهات أكواد مطبوعة</b><p>نظام جاهز لطباعة كارنيهات احترافية بالأكواد — وزّعها على طلابك في ثواني.</p></div></div>
+        <div class="why-item"><i class="fa-solid fa-gauge-high"></i><div><b>لوحة تحكم للمدرس</b><p>كل مدرس بيدير محاضراته وملخصاته واختباراته من موبايله — من غير تدخل منك.</p></div></div>
+        <div class="why-item"><i class="fa-solid fa-bell"></i><div><b>إشعارات فورية</b><p>انشر خبر أو معاد امتحان — كل طلابك يوصلهم إشعار بجرس المنصة لحظيًا.</p></div></div>
+      </div>
+      <div class="why-visual reveal">
+        <div class="demo-card">
+          <div class="frame"></div>
+          <div class="dc-top"><img src="logo.png" onerror="this.style.display='none'"><b>منصة مشكات</b><small>بطاقة وصول</small></div>
+          <div class="dc-code">1 2 3 4 5 6 7 8</div>
+          <div class="dc-bottom"><span><b>أ. محمد أحمد</b> • المحاضرة الأولى</span><span>by <b>Ben Wael</b></span></div>
+        </div>
+        <span class="demo-badge db-1"><i class="fa-solid fa-lock"></i> ضد التسريب</span>
+        <span class="demo-badge db-2"><i class="fa-solid fa-fingerprint"></i> كود فريد لكل طالب</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="container">
+    <div class="section-head reveal"><span class="section-tag"><i class="fa-solid fa-route"></i> كيف تعمل؟</span><h2>تلت خطوات <span>وتبدأ</span></h2><div class="line"></div></div>
+    <div class="steps">
+      <div class="step reveal d1"><div class="step-num">١</div><h3>أنشئ حسابك</h3><p>سجّل مجانًا باسمك وبريدك الإلكتروني في أقل من دقيقة.</p></div>
+      <div class="step reveal d2"><div class="step-num">٢</div><h3>استلم كارنيهك</h3><p>مدرسك بيسلّمك كارنيه عليه كود من ٨ أرقام — ده مفتاحك الخاص للمحاضرة.</p></div>
+      <div class="step reveal d3"><div class="step-num">٣</div><h3>ابدأ التعلم</h3><p>شاهد المحاضرات، راجع الملخصات، حل الاختبارات وتابع نتايجك أول بأول.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="stats">
+  <div class="container">
+    <div class="stats-panel reveal">
+      <div class="stat"><i class="fa-solid fa-users"></i><span class="num"><span class="counter" data-target="5000">0</span>+</span><p>طالب</p></div>
+      <div class="stat"><i class="fa-solid fa-video"></i><span class="num"><span class="counter" data-target="800">0</span>+</span><p>محاضرة محمية</p></div>
+      <div class="stat"><i class="fa-solid fa-file-pen"></i><span class="num"><span class="counter" data-target="350">0</span>+</span><p>اختبار ذكي</p></div>
+      <div class="stat"><i class="fa-solid fa-chalkboard-user"></i><span class="num"><span class="counter" data-target="40">0</span>+</span><p>مدرس معتمد</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="teachers">
+  <div class="container">
+    <div class="section-head reveal"><span class="section-tag"><i class="fa-solid fa-chalkboard-user"></i> المدرسون</span><h2>نخبة <span>المدرسين</span></h2><p>مدرسون معتمدون بيقدّموا محتواهم حصريًا عبر المنصة</p><div class="line"></div></div>
+    <div class="t-grid" id="teachersGrid"></div>
+    <div class="teachers-empty" id="teachersEmpty"><i class="fa-solid fa-user-plus"></i><h3>نستقبل مدرسين جدد</h3><p>هل أنت مدرس وتريد توصيل محتواك لآلاف الطلاب بحماية كاملة؟ تواصل معنا وانضم للمنصة.</p><a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20انضم%20كمدرس%20في%20منصة%20مشكاة" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> تواصل معنا واتساب</a></div>
+  </div>
+</section>
+
+<section id="testimonials" style="background:#fff;border-block:1px solid var(--line)">
+  <div class="container">
+    <div class="section-head reveal"><span class="section-tag"><i class="fa-solid fa-comments"></i> آراء عملائنا</span><h2>قالوا عن <span>مشكاة</span></h2><div class="line"></div></div>
+    <div class="testi-grid">
+      <div class="testi reveal d1"><span class="quote">"</span><div class="stars">★★★★★</div><p>أول مرة محاضراتي متتسربش. نظام الأكواد شغال فعلاً، وكل طالب ليه مفتاحه الخاص.</p><div class="testi-who"><div class="av">م</div><div><b>أ. محمود س.</b><small>مدرس فيزياء</small></div></div></div>
+      <div class="testi reveal d2"><span class="quote">"</span><div class="stars">★★★★★</div><p>بتابع مستوى ابني من النتايج أول بأول، والكارنيه المطبوع خلّى الموضوع أسهل بكتير.</p><div class="testi-who"><div class="av">ه</div><div><b>أم أحمد</b><small>ولية أمر</small></div></div></div>
+      <div class="testi reveal d3"><span class="quote">"</span><div class="stars">★★★★★</div><p>المنصة سهلة جدًا، والكود بيفتح مرة واحدة فعلاً — مفيش غش ولا تسريب.</p><div class="testi-who"><div class="av">أ</div><div><b>أحمد م.</b><small>طالب ثانوي</small></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <div class="section-head reveal"><span class="section-tag"><i class="fa-solid fa-tags"></i> أسعار المدرسين</span><h2>استثمر في <span>حماية محتواك</span></h2><p>أقل من ثمن كشكول واحد من كل طالب — ومقابل حماية شغلك كله</p><div class="line"></div></div>
+    <div class="plans">
+      <div class="plan reveal d1"><h3>شهري</h3><div class="price">200 <small>ج/شهر</small></div><ul><li><i class="fa-solid fa-check"></i> صفحتك على الرئيسية</li><li><i class="fa-solid fa-check"></i> لوحة تحكم كاملة بمادتك</li><li><i class="fa-solid fa-check"></i> أكواد وصول غير محدودة</li><li><i class="fa-solid fa-check"></i> كارنيهات مطبوعة جاهزة</li></ul><a href="offer.html" class="btn btn-outline" style="justify-content:center">اشترك شهري</a></div>
+      <div class="plan hot reveal d2"><span class="crown">الأكثر اختيارًا 👑</span><h3>ترم كامل</h3><div class="price">500 <small>ج/٤ شهور</small></div><ul><li><i class="fa-solid fa-check"></i> كل مميزات الشهري</li><li><i class="fa-solid fa-check"></i> توفير 300ج عن الشهري</li><li><i class="fa-solid fa-check"></i> أولوية في الدعم</li><li><i class="fa-solid fa-check"></i> تدريب مجاني على المنصة</li></ul><a href="offer.html" class="btn btn-primary" style="justify-content:center">اشترك ترم</a></div>
+      <div class="plan reveal d3"><h3>سنة كاملة</h3><div class="price">1200 <small>ج/سنة</small></div><ul><li><i class="fa-solid fa-check"></i> كل مميزات الترم</li><li><i class="fa-solid fa-check"></i> ٨ شهور ببلاش</li><li><i class="fa-solid fa-check"></i> ظهورك أول مدرس في الرئيسية</li><li><i class="fa-solid fa-check"></i> شارة "مدرس معتمد"</li></ul><a href="offer.html" class="btn btn-outline" style="justify-content:center">اشترك سنة</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="background:#fff;border-block:1px solid var(--line)">
+  <div class="container">
+    <div class="section-head reveal"><span class="section-tag"><i class="fa-solid fa-circle-question"></i> أسئلة شائعة</span><h2>عندك <span>سؤال؟</span></h2><div class="line"></div></div>
+    <div class="faq-wrap reveal">
+      <div class="faq-item"><button class="faq-q">إزاي بستلم كود الوصول للمحاضرة؟ <i class="fa-solid fa-chevron-down"></i></button><div class="faq-a"><p>مدرسك بيسلّمك كارنيه مطبوع عليه كود من ٨ أرقام، بتكتبه في صفحة المحاضرات وبتتفتحلك فورًا.</p></div></div>
+      <div class="faq-item"><button class="faq-q">هل الكود بيشتغل لأكثر من طالب؟ <i class="fa-solid fa-chevron-down"></i></button><div class="faq-a"><p>لأ — كل كود بيشتغل مرة واحدة بس وبيتربط بحسابك، عشان كده مفيش تسريب ولا مشاركة.</p></div></div>
+      <div class="faq-item"><button class="faq-q">إزاي الملخصات بتتحمل من التسريب؟ <i class="fa-solid fa-chevron-down"></i></button><div class="faq-a"><p>الملخص بيتعرض جوه المنصة فقط من غير تحميل، وعليه علامة مائية باسمك وإيميلك — فأي نسخة تتسرب يتعرف صاحبها.</p></div></div>
+      <div class="faq-item"><button class="faq-q">أنا مدرس، إزاي أنضم للمنصة؟ <i class="fa-solid fa-chevron-down"></i></button><div class="faq-a"><p>دوس على "انضم كمدرس" وكلمنا واتساب — هنفتحلك حسابك ولوحة التحكم بتاعتك خلال ٢٤ ساعة، ومعاك أسبوع تجربة مجاني.</p></div></div>
+      <div class="faq-item"><button class="faq-q">إيه هو الاشتراك الذهبي؟ <i class="fa-solid fa-chevron-down"></i></button><div class="faq-a"><p>اشتراك بيخلي كل المحاضرات والملخصات مفتوحة ليك من غير أكواد — تدفع مرة وتستفيد طول المدة.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="container">
+    <div class="join-box reveal">
+      <h2>هل أنت مدرس؟ 🎓</h2>
+      <p>انضم لمنصة مشكاة وقدّم محاضراتك وملخصاتك لآلاف الطلاب — محتواك محمي بأكواد وصول وعلامات مائية، وإنت متفرغ تمامًا للتدريس.</p>
+      <a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20انضم%20كمدرس%20في%20منصة%20مشكاة" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> انضم الآن عبر واتساب</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#hero" class="logo"><img src="logo.png" alt="مشكاة" data-fallback style="width:48px;height:48px;object-fit:contain"><span class="logo-text"><b>مشكاة</b><small>نور العلم</small></span></a>
+        <p class="f-about">منصة مشكاة التعليمية — نورٌ يهدي طالب العلم. محتوى محمي، اختبارات ذكية، ومتابعة مستمرة لمستوى الطالب.</p>
+      </div>
+      <div class="f-links">
+        <h4>روابط سريعة</h4>
+        <a href="lectures.html">المحاضرات</a><a href="summaries.html">الملخصات</a><a href="quizzes.html">الاختبارات</a><a href="booking.html">حجز حصة</a><a href="news.html">الأخبار</a><a href="subscribe.html">الاشتراك الذهبي 👑</a>
+      </div>
+      <div>
+        <h4>تواصل معنا</h4>
+        <ul class="f-contact">
+          <li><i class="fa-solid fa-phone"></i> <a href="tel:01032850095">01032850095</a></li>
+          <li><i class="fa-brands fa-whatsapp"></i> <a href="https://wa.me/201032850095" target="_blank">01032850095</a></li>
+          <li><i class="fa-solid fa-envelope"></i> <a href="mailto:admin@benwael.com">admin@benwael.com</a></li>
+          <li><i class="fa-solid fa-clock"></i> من 7 صباحًا لـ 9 مساءً</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">جميع الحقوق محفوظة © 2026 <b>منصة مشكات التعليمية</b> — by <b>Ben Wael</b> 🕌</div>
+  </div>
+</footer>
+
+<button id="backTop" aria-label="للأعلى"><i class="fa-solid fa-arrow-up"></i></button>
+<a href="https://wa.me/201032850095?text=السلام%20عليكم%20—%20عايز%20استفسر%20عن%20منصة%20مشكاة" target="_blank" class="wa-float" aria-label="واتساب"><i class="fa-brands fa-whatsapp"></i></a>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="js/config.js"></script>
+<script>
+// Preloader
+window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('done')},700)});
+
+// لوجو بديل
+const LOGO_FALLBACK="data:image/svg+xml,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='#14233f'/><text x='50' y='68' font-family='Arial' font-size='40' font-weight='bold' text-anchor='middle' fill='#d4af37'>مشكاة</text></svg>");
+document.querySelectorAll('img[data-fallback]').forEach(im=>im.addEventListener('error',()=>{im.src=LOGO_FALLBACK},{once:true}));
+
+// النافبار + التقدم + الرجوع
+const navbar=document.getElementById('navbar'),backTop=document.getElementById('backTop'),progress=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  progress.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  navbar.classList.toggle('scrolled',scrollY>30);
+  backTop.classList.toggle('show',scrollY>600);
+});
+backTop.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+
+// الموبايل
+const hamburger=document.getElementById('hamburger'),navLinks=document.getElementById('navLinks');
+hamburger.onclick=()=>{navLinks.classList.toggle('open');hamburger.classList.toggle('active')};
+navLinks.querySelectorAll('a').forEach(a=>a.onclick=()=>{navLinks.classList.remove('open');hamburger.classList.remove('active')});
+
+// الظهور عند السكرول
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('active');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// Tilt ثلاثي الأبعاد
+document.querySelectorAll('.tilt').forEach(c=>{
+  c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;c.style.transform='perspective(900px) rotateY('+(x*7)+'deg) rotateX('+(-y*7)+'deg) translateY(-6px)';});
+  c.addEventListener('mouseleave',()=>{c.style.transform='';});
+});
+
+// الأسئلة الشائعة
+document.querySelectorAll('.faq-q').forEach(b=>b.onclick=()=>{
+  const item=b.parentElement,open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').style.maxHeight=null;});
+  if(!open){item.classList.add('open');const a=item.querySelector('.faq-a');a.style.maxHeight=a.scrollHeight+'px';}
+});
+
+// العدادات
+const cio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target,target=+el.dataset.target,dur=2000,start=performance.now();
+  (function step(now){const p=Math.min((now-start)/dur,1);el.textContent=Math.floor(target*(1-Math.pow(1-p,3))).toLocaleString('en-US');if(p<1)requestAnimationFrame(step)})(start);
+  cio.unobserve(el);
+}),{threshold:.5});
+document.querySelectorAll('.counter').forEach(el=>cio.observe(el));
+
+// الكتابة
+const words=['محاضرات بأكواد وصول','ملخصات محمية بعلامة مائية','اختبارات ذكية','حجز حصص مع مدرسك'];
+let wi=0,ci=0,del=false;const typedEl=document.getElementById('typed');
+(function type(){const w=words[wi];if(!del){typedEl.textContent=w.slice(0,++ci);if(ci===w.length){del=true;setTimeout(type,1600);return}}else{typedEl.textContent=w.slice(0,--ci);if(ci===0){del=false;wi=(wi+1)%words.length}}setTimeout(type,del?45:110)})();
+
+// الرابط النشط
+const secs=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{let cur='hero';secs.forEach(s=>{if(scrollY>=s.offsetTop-150)cur=s.id});navLinks.querySelectorAll('a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur))});
+
+// المدرسين من قاعدة البيانات
+if(typeof firebase!=='undefined'&&firebase.firestore){
+  firebase.firestore().collection('teachers').get().then(snap=>{
+    if(snap.empty){document.getElementById('teachersEmpty').style.display='block';return;}
+    const arr=[];snap.forEach(d=>arr.push(d.data()));
+    document.getElementById('teachersGrid').innerHTML=arr.map(t=>`
+      <div class="t-card reveal active">
+        <div class="t-ava">${t.photo?`<img src="${t.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.outerHTML='${(t.name||'م').trim().charAt(0)}'">`:(t.name||'م').trim().charAt(0)}</div>
+        <h3>${t.name}</h3><span class="t-sub">${t.subject||'مدرس'}</span><p>${t.bio||''}</p>
+      </div>`).join('');
+  }).catch(()=>{document.getElementById('teachersEmpty').style.display='block'});
+}
+
+// عداد المتصلين
+(function(){
+  const counter=document.getElementById('liveCounter'),countEl=document.getElementById('onlineCount');
+  if(typeof firebase!=='undefined'&&firebase.firestore){
+    const db=firebase.firestore(),ref=db.collection('presence');
+    const sid='s_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);
+    const me=ref.doc(sid);
+    me.set({lastActive:Date.now()}).then(()=>counter.style.display='inline-flex').catch(()=>{counter.style.display='inline-flex';countEl.textContent=Math.floor(Math.random()*20)+5});
+    setInterval(()=>me.update({lastActive:Date.now()}).catch(()=>{}),60000);
+    window.addEventListener('beforeunload',()=>me.delete().catch(()=>{}));
+    const upd=()=>ref.where('lastActive','>=',Date.now()-600000).get().then(s=>countEl.textContent=s.size).catch(()=>{});
+    upd();setInterval(upd,30000);
+  }
+})();
+
+// شريط المستخدم + زرار لوحة الأدمن
+(function(){
+  const raw=localStorage.getItem('bw_user');if(!raw)return;
+  let u;try{u=JSON.parse(raw)}catch(e){return}
+  const first=String(u.name||'طالب').split(' ')[0];
+  const ADMIN_EMAIL="admin@benwael.com";
+  const isAdmin=(u.email===ADMIN_EMAIL||u.role==='admin');
+  const st=document.createElement('style');
+  st.textContent='.user-chip{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:12px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.45);color:#d4af37;font-weight:900;font-size:14px;transition:.3s}.user-chip:hover{background:rgba(212,175,55,.22)}.admin-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:12px;background:linear-gradient(135deg,#1e3a5f,#d4af37);color:#fff;font-weight:900;font-size:14px;transition:.3s;box-shadow:0 6px 18px rgba(30,58,95,.35)}.admin-btn:hover{transform:translateY(-2px)}#logoutBtn{background:transparent;border:1px solid rgba(239,68,68,.4);color:#fca5a5;border-radius:12px;padding:9px 16px;font-family:inherit;font-weight:900;font-size:14px;cursor:pointer;transition:.3s}#logoutBtn:hover{background:rgba(239,68,68,.12)}';
+  document.head.appendChild(st);
+  const dest=isAdmin?'admin.html':(u.role==='teacher'?'teacher.html':'dashboard.html');
+  let html='<a class="user-chip" href="'+dest+'"><i class="fa-solid fa-gauge-high"></i> أهلاً، '+first+'</a>';
+  if(isAdmin)html+='<a class="admin-btn" href="admin.html"><i class="fa-solid fa-user-shield"></i> لوحة الأدمن</a>';
+  html+='<button id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>';
+  const nav=document.querySelector('.nav-actions');
+  nav.innerHTML=html+nav.innerHTML;
+  nav.querySelectorAll('a[href="login.html"],a[href="register.html"]').forEach(a=>a.style.display='none');
+  document.getElementById('logoutBtn').onclick=()=>{localStorage.removeItem('bw_user');if(typeof firebase!=='undefined')firebase.auth().signOut();location.reload()};
+})();
+</script>
+
+<!-- جرس الأخبار -->
+<script>
+(function(){
+  if(!localStorage.getItem('bw_user'))return;
+  const last=+(localStorage.getItem('bw_lastNewsRead')||0);
+  const st=document.createElement('style');
+  st.textContent='#newsBell{position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1e3a5f,#d4af37);color:#fff;display:grid;place-items:center;font-size:20px;cursor:pointer;z-index:950;box-shadow:0 10px 30px rgba(30,58,95,.4);border:none;transition:.3s}#newsBell:hover{transform:translateY(-4px)}#newsBell .badge{position:absolute;top:-4px;left:-4px;min-width:22px;height:22px;border-radius:50px;background:#ef4444;color:#fff;font-size:12px;font-weight:900;display:none;place-items:center;padding:0 6px;border:2px solid #fff}#newsToast{position:fixed;bottom:96px;right:28px;max-width:320px;background:#fff;border:1px solid #d4af37;border-radius:16px;padding:14px 18px;z-index:950;box-shadow:0 20px 50px rgba(20,35,63,.2);display:none;cursor:pointer}#newsToast b{color:#1e3a5f;font-size:14px;display:block;margin-bottom:4px}#newsToast p{color:#14233f;font-size:13px;font-weight:700}';
+  document.head.appendChild(st);
+  const bell=document.createElement('button');bell.id='newsBell';bell.innerHTML='<i class="fa-solid fa-bell"></i><span class="badge">0</span>';document.body.appendChild(bell);bell.onclick=()=>{location.href='news.html'};
+  const toast=document.createElement('div');toast.id='newsToast';document.body.appendChild(toast);toast.onclick=()=>{location.href='news.html'};
+  if(typeof firebase!=='undefined'&&firebase.firestore){
+    firebase.firestore().collection('news').get().then(snap=>{
+      let unread=0,latest=null;
+      snap.forEach(d=>{const n=d.data(),t=new Date(n.createdAt).getTime();if(t>last){unread++;if(!latest||t>new Date(latest.createdAt).getTime())latest=n}});
+      if(unread>0){const b=bell.querySelector('.badge');b.style.display='grid';b.textContent=unread;if(latest){toast.innerHTML='<b>📢 خبر جديد من مشكاة</b><p>'+latest.title+'</p>';toast.style.display='block';setTimeout(()=>{toast.style.display='none'},8000)}}
+    }).catch(()=>{});
+  }
+})();
+</script>
+</body>
+</html>
